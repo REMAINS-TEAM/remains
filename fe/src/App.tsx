@@ -1,19 +1,24 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import { Menu as MenuIcon } from "@mui/icons-material";
 
 import Container from "./components/Container";
 import { createTheme, ThemeProvider } from "@mui/material";
 import AppHeader from "./components/AppHeader";
 import MainLayout from "./components/MainLayout";
+import { useEffect } from "react";
+import { categories } from "./api";
 
 const theme = createTheme();
 
 function App() {
+  useEffect(() => {
+    const fetch = async () => {
+      const { data } = await categories.getAll();
+      console.log("res", data);
+    };
+
+    fetch();
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <div>

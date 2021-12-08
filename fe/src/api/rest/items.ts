@@ -1,6 +1,6 @@
 import makeRequest from "../makeRequest";
 
-export const getAllItems = () =>
+export const getAll = () =>
   makeRequest({
     url: "/api/items",
   });

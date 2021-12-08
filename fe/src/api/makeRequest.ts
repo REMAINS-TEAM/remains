@@ -1,5 +1,7 @@
 import axios, { Method } from "axios";
 
+const API_URL = "http://localhost:8080"; // TODO: move to ENV VARS
+
 export default ({
   url = "",
   method = "GET",
@@ -14,7 +16,7 @@ export default ({
   headers?: Record<string, any>;
 }) =>
   axios({
-    url,
+    url: API_URL + url,
     method,
     params,
     data,

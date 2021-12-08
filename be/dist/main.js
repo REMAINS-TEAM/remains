@@ -5,7 +5,8 @@ const app_module_1 = require("./app.module");
 const prisma_service_1 = require("./prisma.service");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
-    app.setGlobalPrefix('api');
+    app.setGlobalPrefix("api");
+    app.enableCors();
     await app.listen(8080);
     const prismaService = app.get(prisma_service_1.PrismaService);
     prismaService.enableShutdownHooks(app);
