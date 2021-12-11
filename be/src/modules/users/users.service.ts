@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
-import { Prisma, User } from '@prisma/client';
-import { PrismaException } from '../exceptions/prismaException';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { PrismaService } from "../../prisma.service";
+import { Prisma, User } from "@prisma/client";
+import { PrismaException } from "../../exceptions/prismaException";
 
 @Injectable()
 export class UsersService {
@@ -9,10 +9,15 @@ export class UsersService {
 
   create(data: Prisma.UserCreateInput) {
     return this.prisma.user.create({ data });
+    // TODO errors handles
   }
 
   async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      include: {
+        company: true,
+      },
+    });
   }
 
   async findOne(id: number): Promise<User> {
