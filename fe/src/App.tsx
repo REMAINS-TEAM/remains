@@ -6,8 +6,11 @@ import AppHeader from "./components/AppHeader";
 import MainLayout from "./components/MainLayout";
 import { useEffect } from "react";
 import { categories } from "./api";
+import CategoriesTree from "./components/CategoriesTree";
 
 const theme = createTheme();
+
+// TODO: routes
 
 function App() {
   useEffect(() => {
@@ -24,16 +27,9 @@ function App() {
       <div>
         <AppHeader />
         <MainLayout>
-          <Container>Some content</Container>
-          <Container>Some content2</Container>
-          <Container>Some content3</Container>
-          <Container>Some content4</Container>
-          <Container>Some content4</Container>
-          <Container>Some content4</Container>
-          <Container>Some content4</Container>
-          <Container>Some content4</Container>
-          <Container>Some content4</Container>
-          <Container>Some content4</Container>
+          <Container>
+            <CategoriesTree />
+          </Container>
         </MainLayout>
       </div>
     </ThemeProvider>
