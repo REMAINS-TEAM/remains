@@ -1,16 +1,13 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../../prisma.service";
-import { Prisma, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { PrismaException } from "../../exceptions/prismaException";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
-
-  create(data: Prisma.UserCreateInput) {
-    return this.prisma.user.create({ data });
-    // TODO errors handles
-  }
 
   async findAll(): Promise<User[]> {
     return this.prisma.user.findMany({
@@ -32,6 +29,28 @@ export class UsersService {
 
     if (!result) {
       throw new NotFoundException(`User with id ${id} does not exist`);
+    }
+
+    return result;
+  }
+
+  async create(data: CreateUserDto) {
+    let result;
+    try {
+      result = await this.prisma.user.create({ data });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    return result;
+  }
+
+  async update(id: number, data: UpdateUserDto) {
+    let result;
+    try {
+      result = await this.prisma.user.update({ where: { id }, data });
+    } catch (err) {
+      throw new PrismaException(err as Error);
     }
 
     return result;
