@@ -3,6 +3,7 @@ import { Prisma, User } from "@prisma/client";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { Roles } from "../../decorators/roles.decorator";
 
 @Controller("users")
 export class UsersController {
@@ -19,6 +20,7 @@ export class UsersController {
   }
 
   @Post()
+  @Roles("admin")
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
   }
