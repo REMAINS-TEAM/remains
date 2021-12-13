@@ -1,10 +1,19 @@
 import React, { ReactNode } from "react";
-import useStyles from "./styles";
+import { Box, SxProps } from "@mui/material";
 
-function Component({ children }: { children: ReactNode }) {
-  const classes = useStyles();
+import * as styles from "./styles";
 
-  return <div className={classes.container}>{children}</div>;
+function Component({ children, sx }: { children: ReactNode; sx?: SxProps }) {
+  return (
+    <Box
+      sx={{
+        ...styles.container,
+        ...sx,
+      }}
+    >
+      {children}
+    </Box>
+  );
 }
 
 export default React.memo(Component);

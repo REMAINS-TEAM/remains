@@ -9,12 +9,7 @@ import Button from "@mui/material/Button";
 
 function AppHeader() {
   return (
-    <AppBar
-      position="static"
-      sx={{
-        mb: 2,
-      }}
-    >
+    <AppBar position="static">
       <Toolbar>
         <IconButton
           size="large"
