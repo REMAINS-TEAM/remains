@@ -9,8 +9,9 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import TreeItem from "./units/TreeItem";
+import { CategoriesTreeType } from "./types";
 
-export default function CategoriesTree() {
+export default function CategoriesTree({ categories }: CategoriesTreeType) {
   return (
     <TreeView
       aria-label="gmail"
@@ -30,7 +31,34 @@ export default function CategoriesTree() {
           labelInfo="90"
           color="#1a73e8"
           bgColor="#e8f0fe"
-        />
+        >
+          <TreeItem
+            nodeId="11"
+            labelText="Social"
+            labelIcon={SupervisorAccountIcon}
+            labelInfo="90"
+            color="#1a73e8"
+            bgColor="#e8f0fe"
+          >
+            <TreeItem
+              nodeId="12"
+              labelText="Social"
+              labelIcon={SupervisorAccountIcon}
+              labelInfo="90"
+              color="#1a73e8"
+              bgColor="#e8f0fe"
+            >
+              <TreeItem
+                nodeId="13"
+                labelText="Social"
+                labelIcon={SupervisorAccountIcon}
+                labelInfo="90"
+                color="#1a73e8"
+                bgColor="#e8f0fe"
+              />
+            </TreeItem>
+          </TreeItem>
+        </TreeItem>
         <TreeItem
           nodeId="6"
           labelText="Updates"

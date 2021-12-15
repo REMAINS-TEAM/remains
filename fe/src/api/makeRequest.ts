@@ -1,8 +1,8 @@
-import axios, { Method } from "axios";
+import axios, { AxiosPromise, Method } from "axios";
 
-const API_URL = "http://localhost:8080"; // TODO: move to ENV VARS
+const API_URL = "http://localhost:8080/api"; // TODO: move to ENV VARS
 
-export default ({
+export default <T>({
   url = "",
   method = "GET",
   params = {},
@@ -14,7 +14,7 @@ export default ({
   params?: Record<string, any>;
   data?: Record<string, any>;
   headers?: Record<string, any>;
-}) =>
+}): AxiosPromise<T> =>
   axios({
     url: API_URL + url,
     method,

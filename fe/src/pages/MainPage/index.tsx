@@ -1,23 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as styles from "./styles";
 import Container from "../../components/Container";
 import CategoriesTree from "../../components/CategoriesTree";
 import MainLayout from "../../layouts/MainLayout";
 import { Box } from "@mui/material";
+import api from "../../api";
+import { Category } from "../../api/rest/categories";
 
 // TODO linter
+// TODO loader
+// TODO redux
 
 function MainPage() {
-  // const navigate = useNavigate();
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await api.categories.getAll();
+      if (data.length > 0) {
+        setCategories(data);
+      }
+    })();
+  }, []);
 
   return (
     <MainLayout>
       <Box sx={styles.mainContainer}>
         <Container>
-          <CategoriesTree />
+          <CategoriesTree categories={categories} />
         </Container>
         <Container sx={styles.contentContainer}>
-          <p>Content</p>
+          <p>Тут сразу карточки товара (не категорий) как в днс</p>
         </Container>
       </Box>
     </MainLayout>
