@@ -3,25 +3,30 @@ import * as styles from "./styles";
 import Container from "../../components/Container";
 import CategoriesTree from "../../components/CategoriesTree";
 import MainLayout from "../../layouts/MainLayout";
-import { Box } from "@mui/material";
-import api from "../../api";
-import { Category } from "../../api/rest/categories";
+import { Box, Button } from "@mui/material";
+// import api from "../../api";
+// import { Category } from "../../api/rest/categories";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 // TODO linter
-// TODO loader
-// TODO redux
+// TODO RTK query
+// TODO: избавиться от точек в импорте
 
 function MainPage() {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const categories = useSelector((state: RootState) => state.categories);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await api.categories.getAll();
-      if (data.length > 0) {
-        setCategories(data);
-      }
-    })();
-  }, []);
+  // const [categories, setCategories] = useState<Category[]>([]);
+  //
+  // useEffect(() => {
+  //   (async () => {
+  //     const { data } = await api.categories.getAll();
+  //     if (data.length > 0) {
+  //       setCategories(data);
+  //     }
+  //   })();
+  // }, []);
 
   return (
     <MainLayout>

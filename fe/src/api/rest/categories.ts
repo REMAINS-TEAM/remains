@@ -1,14 +1,5 @@
 import makeRequest from "../makeRequest";
-import { Item } from "./items";
-
-export interface Category {
-  id: number;
-  title: string;
-  description?: string;
-  sort: string;
-  parentId: string;
-  items?: Item[];
-}
+import { Category } from "../../store/slices/categories";
 
 export const getAll = () =>
   makeRequest<Category[]>({

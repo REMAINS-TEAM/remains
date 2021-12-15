@@ -1,23 +1,18 @@
 import * as React from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import AppLayout from "./layouts/AppLayout";
+import { store } from "./store";
+import { Provider as ReduxProvider } from "react-redux";
 
 const theme = createTheme();
 
 function App() {
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     const { data } = await categories.getAll();
-  //     console.log("res", data);
-  //   };
-  //
-  //   fetch();
-  // }, []);
-
   return (
-    <ThemeProvider theme={theme}>
-      <AppLayout />
-    </ThemeProvider>
+    <ReduxProvider store={store}>
+      <ThemeProvider theme={theme}>
+        <AppLayout />
+      </ThemeProvider>
+    </ReduxProvider>
   );
 }
 
