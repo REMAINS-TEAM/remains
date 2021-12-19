@@ -1,17 +1,17 @@
-import TreeView from "@mui/lab/TreeView";
-import MailIcon from "@mui/icons-material/Mail";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Label from "@mui/icons-material/Label";
-import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
-import InfoIcon from "@mui/icons-material/Info";
-import ForumIcon from "@mui/icons-material/Forum";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import TreeItem from "./units/TreeItem";
-import { CategoriesTreeType } from "./types";
-import { Skeleton } from "@mui/lab";
-import React from "react";
+import TreeView from '@mui/lab/TreeView';
+import MailIcon from '@mui/icons-material/Mail';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Label from '@mui/icons-material/Label';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import InfoIcon from '@mui/icons-material/Info';
+import ForumIcon from '@mui/icons-material/Forum';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import TreeItem from './units/TreeItem';
+import { CategoriesTreeType } from './types';
+import { Skeleton } from '@mui/lab';
+import React from 'react';
 
 export default function CategoriesTree({
   categories,
@@ -21,7 +21,7 @@ export default function CategoriesTree({
     return (
       <>
         {Array.from(new Array(10)).map((_, i) => (
-          <Skeleton key={i} sx={{ height: "40px" }} />
+          <Skeleton key={i} sx={{ height: '40px' }} />
         ))}
       </>
     );
@@ -30,13 +30,18 @@ export default function CategoriesTree({
   return (
     <TreeView
       aria-label="gmail"
-      defaultExpanded={["3"]}
+      defaultExpanded={['3']}
       defaultCollapseIcon={<ArrowDropDownIcon />}
       defaultExpandIcon={<ArrowRightIcon />}
       defaultEndIcon={<div style={{ width: 24 }} />}
-      sx={{ height: 264, flexGrow: 1, maxWidth: 400, overflowY: "auto" }}
+      sx={{ height: 264, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
     >
-      <TreeItem nodeId="1" labelText="All Mail" labelIcon={MailIcon} />
+      <TreeItem
+        nodeId="1"
+        labelText="All Mail"
+        labelIcon={MailIcon}
+        onClick={(e) => console.log('e', (e.target as any).value)}
+      />
       <TreeItem nodeId="2" labelText="Trash" labelIcon={DeleteIcon} />
       <TreeItem nodeId="3" labelText="Categories" labelIcon={Label}>
         <TreeItem

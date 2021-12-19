@@ -10,11 +10,13 @@ import categoriesApi from "../../store/api/categories";
 // TODO linter
 // TODO: избавиться от точек в импорте
 
+// TODO: загружать в начале только категории верхнего уровня, а потом подгружать при клике с бэка
+
 function MainPage() {
   const {
     data: categories,
     isLoading,
-  } = categoriesApi.useGetAllCategoriesQuery();
+  } = categoriesApi.useGetAllCategoriesQuery({ parentId: 0 });
 
   return (
     <MainLayout>

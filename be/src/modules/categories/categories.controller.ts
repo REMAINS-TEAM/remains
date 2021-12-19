@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { Prisma, Category } from '@prisma/client';
 import { CategoriesService } from './categories.service';
 
@@ -13,9 +13,10 @@ export class CategoriesController {
     return this.categoriesService.create(createCategoryDto);
   }
 
+  //TODO: тут вернуть еще количество подкатегорий
   @Get()
-  async findAll(): Promise<Category[]> {
-    return this.categoriesService.findAll();
+  async findAll(@Query('parentId') parentId: number): Promise<Category[]> {
+    return this.categoriesService.findAll({ parentId: parentId || undefined });
   }
 
   @Get(':id')

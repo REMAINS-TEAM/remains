@@ -11,8 +11,12 @@ export class CategoriesService {
     return this.prisma.category.create({ data });
   }
 
-  async findAll(): Promise<Category[]> {
-    return this.prisma.category.findMany();
+  async findAll({ parentId }: { parentId?: number }): Promise<Category[]> {
+    return this.prisma.category.findMany({
+      where: {
+        parentId,
+      },
+    });
   }
 
   async findOne(id: number): Promise<Category> {
