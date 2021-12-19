@@ -9,30 +9,22 @@ import { Box, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 
+import { useGetCategoryByIdQuery } from "../../store/api/categories";
+
 // TODO linter
-// TODO RTK query
 // TODO: избавиться от точек в импорте
 
 function MainPage() {
-  const categories = useSelector((state: RootState) => state.categories);
-  const dispatch = useDispatch();
+  const { data: data1 } = useGetCategoryByIdQuery(3);
+  // const { data, error, isLoading } = useGetCategoryByIdQuery(data1?.parentId);
 
-  // const [categories, setCategories] = useState<Category[]>([]);
-  //
-  // useEffect(() => {
-  //   (async () => {
-  //     const { data } = await api.categories.getAll();
-  //     if (data.length > 0) {
-  //       setCategories(data);
-  //     }
-  //   })();
-  // }, []);
+  console.log("categories", data1);
 
   return (
     <MainLayout>
       <Box sx={styles.mainContainer}>
         <Container>
-          <CategoriesTree categories={categories} />
+          <CategoriesTree categories={[]} />
         </Container>
         <Container sx={styles.contentContainer}>
           <p>Тут сразу карточки товара (не категорий) как в днс</p>
