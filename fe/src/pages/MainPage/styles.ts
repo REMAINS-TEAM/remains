@@ -1,4 +1,6 @@
-export const mainContainer = {
+import { SxProps } from "@mui/system";
+
+export const mainContainer: SxProps = {
   display: "flex",
   width: "100%",
   height: "100%",
@@ -6,6 +8,12 @@ export const mainContainer = {
   columnGap: 2,
 };
 
-export const contentContainer = {
+export const menuContainer: SxProps = {
+  display: "flex",
+  flexDirection: "column",
+  minWidth: "250px",
+};
+
+export const contentContainer: SxProps = {
   width: "100%",
 };

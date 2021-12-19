@@ -10,8 +10,23 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import TreeItem from "./units/TreeItem";
 import { CategoriesTreeType } from "./types";
+import { Skeleton } from "@mui/lab";
+import React from "react";
 
-export default function CategoriesTree({ categories }: CategoriesTreeType) {
+export default function CategoriesTree({
+  categories,
+  isLoading,
+}: CategoriesTreeType) {
+  if (isLoading) {
+    return (
+      <>
+        {Array.from(new Array(10)).map((_, i) => (
+          <Skeleton key={i} sx={{ height: "40px" }} />
+        ))}
+      </>
+    );
+  }
+
   return (
     <TreeView
       aria-label="gmail"

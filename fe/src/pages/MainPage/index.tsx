@@ -11,26 +11,16 @@ import categoriesApi from "../../store/api/categories";
 // TODO: избавиться от точек в импорте
 
 function MainPage() {
-  const { data: allCategories } = categoriesApi.useGetAllCategoriesQuery();
-
-  const { data: data1 } = categoriesApi.useGetCategoryByIdQuery(3);
   const {
-    data,
-    error,
+    data: categories,
     isLoading,
-    refetch,
-  } = categoriesApi.useGetCategoryByIdQuery(data1?.parentId as number, {
-    skip: !data1,
-  });
-
-  console.log("allCategories", allCategories);
+  } = categoriesApi.useGetAllCategoriesQuery();
 
   return (
     <MainLayout>
-      <Button onClick={() => refetch()}>Update</Button>
       <Box sx={styles.mainContainer}>
-        <Container>
-          <CategoriesTree categories={[]} />
+        <Container sx={styles.menuContainer}>
+          <CategoriesTree categories={categories} isLoading={isLoading} />
         </Container>
         <Container sx={styles.contentContainer}>
           <p>Тут сразу карточки товара (не категорий) как в днс</p>
