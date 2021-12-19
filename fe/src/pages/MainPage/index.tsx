@@ -4,24 +4,30 @@ import Container from "../../components/Container";
 import CategoriesTree from "../../components/CategoriesTree";
 import MainLayout from "../../layouts/MainLayout";
 import { Box, Button } from "@mui/material";
-// import api from "../../api";
-// import { Category } from "../../api/rest/categories";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
 
-import { useGetCategoryByIdQuery } from "../../store/api/categories";
+import categoriesApi from "../../store/api/categories";
 
 // TODO linter
 // TODO: избавиться от точек в импорте
 
 function MainPage() {
-  const { data: data1 } = useGetCategoryByIdQuery(3);
-  // const { data, error, isLoading } = useGetCategoryByIdQuery(data1?.parentId);
+  const { data: allCategories } = categoriesApi.useGetAllCategoriesQuery();
 
-  console.log("categories", data1);
+  const { data: data1 } = categoriesApi.useGetCategoryByIdQuery(3);
+  const {
+    data,
+    error,
+    isLoading,
+    refetch,
+  } = categoriesApi.useGetCategoryByIdQuery(data1?.parentId as number, {
+    skip: !data1,
+  });
+
+  console.log("allCategories", allCategories);
 
   return (
     <MainLayout>
+      <Button onClick={() => refetch()}>Update</Button>
       <Box sx={styles.mainContainer}>
         <Container>
           <CategoriesTree categories={[]} />
