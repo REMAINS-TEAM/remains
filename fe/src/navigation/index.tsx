@@ -1,10 +1,10 @@
-import { createBrowserHistory } from "history";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import routes from "../routes";
-import MainPage from "../pages/MainPage";
-import React from "react";
-import AppHeader from "../components/AppHeader";
-import NotFoundPage from "../pages/NotFoundPage";
+import { createBrowserHistory } from 'history';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React from 'react';
+import AppHeader from 'components/AppHeader';
+import routes from 'routes';
+import MainPage from 'pages/MainPage';
+import NotFoundPage from 'pages/NotFoundPage';
 
 export const history = createBrowserHistory();
 

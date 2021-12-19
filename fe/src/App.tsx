@@ -1,8 +1,8 @@
-import * as React from "react";
-import { createTheme, ThemeProvider } from "@mui/material";
-import AppLayout from "./layouts/AppLayout";
-import { store } from "./store";
-import { Provider as ReduxProvider } from "react-redux";
+import * as React from 'react';
+import { createTheme, ThemeProvider } from '@mui/material';
+import { Provider as ReduxProvider } from 'react-redux';
+import { store } from 'store';
+import AppLayout from 'layouts/AppLayout';
 
 const theme = createTheme();
 
