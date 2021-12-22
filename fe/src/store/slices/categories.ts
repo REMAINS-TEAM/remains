@@ -7,6 +7,7 @@ export interface Category {
   description?: string;
   sort: number;
   parentId: number;
+  countSubCategories?: number;
   // items?: Item[];
 }
 

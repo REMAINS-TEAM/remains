@@ -24,9 +24,7 @@ export default function CategoriesTree({
   >({});
 
   useEffect(() => {
-    setCategories({
-      0: initCategories,
-    });
+    setCategories({ 0: initCategories });
   }, [initCategories]);
 
   useEffect(() => {
