@@ -2,17 +2,20 @@ import { Category } from 'store/slices/categories';
 import TreeItem from 'components/CategoriesTree/units/TreeItem';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import React from 'react';
+import { Skeleton } from '@mui/lab';
 
 export function RecursiveTreeItem({
   category,
   subCategories,
   getSubCategories,
   onClick,
+  isFetching,
 }: {
   category: Category;
   subCategories: Category[] | undefined;
   getSubCategories: (id: number) => Category[];
   onClick: (id: number) => void;
+  isFetching: boolean;
 }) {
   return (
     <TreeItem
@@ -24,17 +27,24 @@ export function RecursiveTreeItem({
       bgColor="#e8f0fe"
       onClick={() => onClick(category.id)}
     >
-      {subCategories?.length
-        ? subCategories.map((sub) => (
-            <RecursiveTreeItem
-              category={sub}
-              subCategories={getSubCategories(sub.id)}
-              getSubCategories={getSubCategories}
-              onClick={onClick}
-              key={sub.id}
-            />
-          ))
-        : null}
+      {!subCategories?.length && isFetching && !!category.countSubCategories && (
+        <>
+          {Array.from(new Array(category.countSubCategories)).map((_, i) => (
+            <Skeleton key={i} sx={{ height: '32px', marginLeft: 2 }} />
+          ))}
+        </>
+      )}
+      {!!subCategories?.length &&
+        subCategories.map((sub) => (
+          <RecursiveTreeItem
+            category={sub}
+            subCategories={getSubCategories(sub.id)}
+            getSubCategories={getSubCategories}
+            onClick={onClick}
+            isFetching={isFetching}
+            key={sub.id}
+          />
+        ))}
     </TreeItem>
   );
 }
