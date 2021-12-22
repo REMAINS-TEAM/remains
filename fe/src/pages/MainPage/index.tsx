@@ -20,7 +20,7 @@ function MainPage() {
     <MainLayout>
       <Box sx={styles.mainContainer}>
         <Container sx={styles.menuContainer}>
-          <CategoriesTree categories={categories} isLoading={isLoading} />
+          <CategoriesTree initCategories={categories} isLoading={isLoading} />
         </Container>
         <Container sx={styles.contentContainer}>
           <p>Тут сразу карточки товара (не категорий) как в днс</p>

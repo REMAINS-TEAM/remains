@@ -13,10 +13,10 @@ export class CategoriesController {
     return this.categoriesService.create(createCategoryDto);
   }
 
-  //TODO: тут вернуть еще количество подкатегорий
+  //TODO: тут вернуть еще количество подкатегорий и/или товаров
   @Get()
   async findAll(@Query('parentId') parentId: number): Promise<Category[]> {
-    return this.categoriesService.findAll({ parentId: parentId || undefined });
+    return this.categoriesService.findAll({ parentId: parentId ?? undefined });
   }
 
   @Get(':id')

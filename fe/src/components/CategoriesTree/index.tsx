@@ -1,22 +1,43 @@
 import TreeView from '@mui/lab/TreeView';
-import MailIcon from '@mui/icons-material/Mail';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Label from '@mui/icons-material/Label';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
-import InfoIcon from '@mui/icons-material/Info';
-import ForumIcon from '@mui/icons-material/Forum';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import TreeItem from './units/TreeItem';
 import { CategoriesTreeType } from './types';
 import { Skeleton } from '@mui/lab';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import categoriesApi from 'store/api/categories';
+import { Category } from 'store/slices/categories';
 
 export default function CategoriesTree({
-  categories,
+  initCategories,
   isLoading,
 }: CategoriesTreeType) {
+  const [currentId, setCurrentId] = useState<number | undefined>();
+  const [expanded, setExpanded] = useState<string[]>([]);
+
+  const { data } = categoriesApi.useGetAllCategoriesQuery(
+    { parentId: currentId },
+    { skip: currentId === undefined },
+  );
+
+  const [categories, setCategories] = useState<
+    Record<number, Category[] | undefined>
+  >({});
+
+  useEffect(() => {
+    setCategories({
+      0: initCategories,
+    });
+  }, [initCategories]);
+
+  useEffect(() => {
+    if (currentId !== undefined) {
+      setCategories((prev) => ({ ...prev, [currentId]: data }));
+      setExpanded((prev) => [...prev, String(currentId)]);
+    }
+  }, [data]);
+
   if (isLoading) {
     return (
       <>
@@ -27,84 +48,59 @@ export default function CategoriesTree({
     );
   }
 
+  const handleToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
+    setExpanded(nodeIds);
+  };
+
+  function RecursiveTreeItem({
+    category,
+    subCategories,
+  }: {
+    category: Category;
+    subCategories: Category[] | undefined;
+  }) {
+    return (
+      <TreeItem
+        nodeId={String(category.id)}
+        labelText={category.title}
+        labelIcon={SupervisorAccountIcon}
+        labelInfo={String(0)}
+        color="#1a73e8"
+        bgColor="#e8f0fe"
+        onClick={() => setCurrentId(category.id)}
+      >
+        {subCategories?.length
+          ? subCategories.map((sub) => (
+              <RecursiveTreeItem
+                category={sub}
+                subCategories={categories[sub.id]}
+                key={sub.id}
+              />
+            ))
+          : null}
+      </TreeItem>
+    );
+  }
+
   return (
     <TreeView
-      aria-label="gmail"
+      aria-label="categories"
       defaultExpanded={['3']}
       defaultCollapseIcon={<ArrowDropDownIcon />}
       defaultExpandIcon={<ArrowRightIcon />}
       defaultEndIcon={<div style={{ width: 24 }} />}
-      sx={{ height: 264, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+      expanded={expanded}
+      onNodeToggle={handleToggle}
+      sx={{ height: '100%', flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
     >
-      <TreeItem
-        nodeId="1"
-        labelText="All Mail"
-        labelIcon={MailIcon}
-        onClick={(e) => console.log('e', (e.target as any).value)}
-      />
-      <TreeItem nodeId="2" labelText="Trash" labelIcon={DeleteIcon} />
-      <TreeItem nodeId="3" labelText="Categories" labelIcon={Label}>
-        <TreeItem
-          nodeId="5"
-          labelText="Social"
-          labelIcon={SupervisorAccountIcon}
-          labelInfo="90"
-          color="#1a73e8"
-          bgColor="#e8f0fe"
-        >
-          <TreeItem
-            nodeId="11"
-            labelText="Social"
-            labelIcon={SupervisorAccountIcon}
-            labelInfo="90"
-            color="#1a73e8"
-            bgColor="#e8f0fe"
-          >
-            <TreeItem
-              nodeId="12"
-              labelText="Social"
-              labelIcon={SupervisorAccountIcon}
-              labelInfo="90"
-              color="#1a73e8"
-              bgColor="#e8f0fe"
-            >
-              <TreeItem
-                nodeId="13"
-                labelText="Social"
-                labelIcon={SupervisorAccountIcon}
-                labelInfo="90"
-                color="#1a73e8"
-                bgColor="#e8f0fe"
-              />
-            </TreeItem>
-          </TreeItem>
-        </TreeItem>
-        <TreeItem
-          nodeId="6"
-          labelText="Updates"
-          labelIcon={InfoIcon}
-          labelInfo="2,294"
-          color="#e3742f"
-          bgColor="#fcefe3"
-        />
-        <TreeItem
-          nodeId="7"
-          labelText="Forums"
-          labelIcon={ForumIcon}
-          labelInfo="3,566"
-          color="#a250f5"
-          bgColor="#f3e8fd"
-        />
-        <TreeItem
-          nodeId="8"
-          labelText="Promotions"
-          labelIcon={LocalOfferIcon}
-          labelInfo="733"
-          color="#3c8039"
-          bgColor="#e6f4ea"
-        />
-      </TreeItem>
-      <TreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      {categories[0] &&
+        categories[0].map((category) => (
+          <RecursiveTreeItem
+            key={category.id}
+            category={category}
+            subCategories={categories[category.id]}
+          />
+        ))}
     </TreeView>
   );
 }
