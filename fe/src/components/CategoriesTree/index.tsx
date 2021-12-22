@@ -8,6 +8,7 @@ import { Skeleton } from '@mui/lab';
 import React, { useEffect, useState } from 'react';
 import categoriesApi from 'store/api/categories';
 import { Category } from 'store/slices/categories';
+import { RecursiveTreeItem } from 'components/CategoriesTree/units/RecursiveTreeItem';
 
 export default function CategoriesTree({
   initCategories,
@@ -38,49 +39,21 @@ export default function CategoriesTree({
     }
   }, [data]);
 
-  if (isLoading) {
-    return (
-      <>
-        {Array.from(new Array(10)).map((_, i) => (
-          <Skeleton key={i} sx={{ height: '40px' }} />
-        ))}
-      </>
-    );
-  }
+  // TODO: показывать внутри каждой категории
+  // if (isLoading) {
+  //   return (
+  //     <>
+  //       {Array.from(new Array(10)).map((_, i) => (
+  //         <Skeleton key={i} sx={{ height: '40px' }} />
+  //       ))}
+  //     </>
+  //   );
+  // }
 
-  const handleToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
+  const handleToggle = (_: React.SyntheticEvent, nodeIds: string[]) =>
     setExpanded(nodeIds);
-  };
 
-  function RecursiveTreeItem({
-    category,
-    subCategories,
-  }: {
-    category: Category;
-    subCategories: Category[] | undefined;
-  }) {
-    return (
-      <TreeItem
-        nodeId={String(category.id)}
-        labelText={category.title}
-        labelIcon={SupervisorAccountIcon}
-        labelInfo={String(0)}
-        color="#1a73e8"
-        bgColor="#e8f0fe"
-        onClick={() => setCurrentId(category.id)}
-      >
-        {subCategories?.length
-          ? subCategories.map((sub) => (
-              <RecursiveTreeItem
-                category={sub}
-                subCategories={categories[sub.id]}
-                key={sub.id}
-              />
-            ))
-          : null}
-      </TreeItem>
-    );
-  }
+  const getSubCategories = (id: number) => categories[id] || [];
 
   return (
     <TreeView
@@ -93,14 +66,15 @@ export default function CategoriesTree({
       onNodeToggle={handleToggle}
       sx={{ height: '100%', flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
     >
-      {categories[0] &&
-        categories[0].map((category) => (
-          <RecursiveTreeItem
-            key={category.id}
-            category={category}
-            subCategories={categories[category.id]}
-          />
-        ))}
+      {categories[0]?.map((category) => (
+        <RecursiveTreeItem
+          key={category.id}
+          category={category}
+          subCategories={getSubCategories(category.id)}
+          getSubCategories={getSubCategories}
+          onClick={setCurrentId}
+        />
+      ))}
     </TreeView>
   );
 }
