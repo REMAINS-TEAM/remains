@@ -1,10 +1,7 @@
 import TreeView from '@mui/lab/TreeView';
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import TreeItem from './units/TreeItem';
 import { CategoriesTreeType } from './types';
-import { Skeleton } from '@mui/lab';
 import React, { useEffect, useState } from 'react';
 import categoriesApi from 'store/api/categories';
 import { Category } from 'store/slices/categories';
@@ -17,7 +14,7 @@ export default function CategoriesTree({
   const [currentId, setCurrentId] = useState<number | undefined>();
   const [expanded, setExpanded] = useState<string[]>([]);
 
-  const { data } = categoriesApi.useGetAllCategoriesQuery(
+  const { data, isFetching } = categoriesApi.useGetAllCategoriesQuery(
     { parentId: currentId },
     { skip: currentId === undefined },
   );
@@ -33,11 +30,11 @@ export default function CategoriesTree({
   }, [initCategories]);
 
   useEffect(() => {
-    if (currentId !== undefined) {
+    if (currentId !== undefined && !isFetching) {
       setCategories((prev) => ({ ...prev, [currentId]: data }));
       setExpanded((prev) => [...prev, String(currentId)]);
     }
-  }, [data]);
+  }, [data, isFetching, currentId]);
 
   // TODO: показывать внутри каждой категории
   // if (isLoading) {

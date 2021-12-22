@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import categoriesApi from "../api/categories";
+import { createSlice } from '@reduxjs/toolkit';
+import categoriesApi from '../api/categories';
 
 export interface Category {
   id: number;
@@ -19,13 +19,13 @@ const initialState: {
 };
 
 export const categoriesSlice = createSlice({
-  name: "categories",
+  name: 'categories',
   initialState,
   reducers: {
     setNew: (state) => {
       state.list.push({
         id: 1,
-        title: "test",
+        title: 'test',
         sort: 1,
         parentId: 1,
       });
@@ -36,13 +36,13 @@ export const categoriesSlice = createSlice({
       categoriesApi.endpoints.getCategoryById.matchFulfilled,
       (state, { payload }) => {
         state.current = payload;
-      }
+      },
     );
     builder.addMatcher(
       categoriesApi.endpoints.getAllCategories.matchFulfilled,
       (state, { payload }) => {
         state.list = payload;
-      }
+      },
     );
   },
 });

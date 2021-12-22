@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import * as styles from './styles';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import categoriesApi from 'store/api/categories';
 import CategoriesTree from 'components/CategoriesTree';
 import MainLayout from 'layouts/MainLayout';
