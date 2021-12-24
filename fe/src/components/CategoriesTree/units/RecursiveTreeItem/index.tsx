@@ -1,6 +1,9 @@
 import { Category } from 'store/slices/categories';
 import TreeItem from 'components/CategoriesTree/units/TreeItem';
-import { Notes as OneIcon, Folder as ManyIcon } from '@mui/icons-material';
+import {
+  FiberManualRecord as OneIcon,
+  FiberSmartRecord as ManyIcon,
+} from '@mui/icons-material';
 import React from 'react';
 import { Skeleton } from '@mui/lab';
 
@@ -20,7 +23,7 @@ export function RecursiveTreeItem({
       nodeId={String(category.id)}
       labelText={category.title}
       labelIcon={category.countSubCategories ? ManyIcon : OneIcon}
-      labelInfo={String(category.countSubCategories || '')}
+      labelInfo={String(category.itemsCount || '')}
       color="#1a73e8"
       bgColor="#e8f0fe"
     >

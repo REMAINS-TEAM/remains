@@ -8,6 +8,7 @@ export interface Category {
   sort: number;
   parentId: number;
   countSubCategories?: number;
+  itemsCount: number;
   // items?: Item[];
 }
 
@@ -23,14 +24,7 @@ export const categoriesSlice = createSlice({
   name: 'categories',
   initialState,
   reducers: {
-    setNew: (state) => {
-      state.list.push({
-        id: 1,
-        title: 'test',
-        sort: 1,
-        parentId: 1,
-      });
-    },
+    setNew: (state) => state,
   },
   extraReducers: (builder) => {
     builder.addMatcher(

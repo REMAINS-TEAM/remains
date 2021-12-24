@@ -14,9 +14,12 @@ export class CategoriesService {
   async findAll({ parentId }: { parentId?: number }): Promise<Category[]> {
     let countSubCategories;
     let categoriesWithCountSub = [];
-    const categories = await this.prisma.category.findMany({
+    let categories = await this.prisma.category.findMany({
       where: {
         parentId,
+      },
+      include: {
+        _count: { select: { items: true } },
       },
     });
     if (categories.length) {
@@ -26,8 +29,12 @@ export class CategoriesService {
         });
         categoriesWithCountSub.push({ ...category, countSubCategories });
       }
+      categories = categoriesWithCountSub.map((category) => ({
+        ...category,
+        itemsCount: category._count.items,
+      }));
     }
-    return categoriesWithCountSub.length ? categoriesWithCountSub : categories;
+    return categories;
   }
 
   async findOne(
