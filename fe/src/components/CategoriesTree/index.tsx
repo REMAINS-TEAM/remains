@@ -8,8 +8,6 @@ import { Category } from 'store/slices/categories';
 import { RecursiveTreeItem } from 'components/CategoriesTree/units/RecursiveTreeItem';
 import { Skeleton } from '@mui/lab';
 
-//TODO: починить повторное раскрытие
-
 export default function CategoriesTree({
   initCategories,
   isLoading,
@@ -25,16 +23,29 @@ export default function CategoriesTree({
     { skip: currentId === undefined },
   );
 
+  // set level up categories (with parentId === 0)
   useEffect(() => {
     setCategories({ 0: initCategories });
   }, [initCategories]);
 
+  // add loaded data to categories state
   useEffect(() => {
     if (currentId !== undefined && !isFetching) {
       setCategories((prev) => ({ ...prev, [currentId]: data }));
-      setExpanded((prev) => [...prev, String(currentId)]);
     }
   }, [data, isFetching, currentId]);
+
+  // if new category is opened load data for it
+  const handleToggle = (_: React.SyntheticEvent, nodeIds: string[]) => {
+    if (nodeIds.length > expanded.length) {
+      const newExpanded = nodeIds.find((e) => !expanded.includes(e));
+      if (newExpanded) setCurrentId(+newExpanded);
+    }
+
+    setExpanded(nodeIds);
+  };
+
+  const getSubCategories = (id: number) => categories[id] || [];
 
   if (isLoading) {
     return (
@@ -46,15 +57,9 @@ export default function CategoriesTree({
     );
   }
 
-  const handleToggle = (_: React.SyntheticEvent, nodeIds: string[]) =>
-    setExpanded(nodeIds);
-
-  const getSubCategories = (id: number) => categories[id] || [];
-
   return (
     <TreeView
       aria-label="categories"
-      defaultExpanded={['3']}
       defaultCollapseIcon={<ArrowDropDownIcon />}
       defaultExpandIcon={<ArrowRightIcon />}
       defaultEndIcon={<div style={{ width: 24 }} />}
@@ -68,7 +73,6 @@ export default function CategoriesTree({
           category={category}
           subCategories={getSubCategories(category.id)}
           getSubCategories={getSubCategories}
-          onClick={setCurrentId}
           isFetching={isFetching}
         />
       ))}

@@ -8,13 +8,11 @@ export function RecursiveTreeItem({
   category,
   subCategories,
   getSubCategories,
-  onClick,
   isFetching,
 }: {
   category: Category;
   subCategories: Category[] | undefined;
   getSubCategories: (id: number) => Category[];
-  onClick: (id: number) => void;
   isFetching: boolean;
 }) {
   return (
@@ -25,7 +23,6 @@ export function RecursiveTreeItem({
       labelInfo={String(category.countSubCategories || 0)}
       color="#1a73e8"
       bgColor="#e8f0fe"
-      onClick={() => onClick(category.id)}
     >
       {!subCategories?.length && isFetching && !!category.countSubCategories && (
         <>
@@ -40,7 +37,6 @@ export function RecursiveTreeItem({
             category={sub}
             subCategories={getSubCategories(sub.id)}
             getSubCategories={getSubCategories}
-            onClick={onClick}
             isFetching={isFetching}
             key={sub.id}
           />
