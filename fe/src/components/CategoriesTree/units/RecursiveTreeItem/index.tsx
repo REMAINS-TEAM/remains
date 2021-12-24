@@ -20,7 +20,7 @@ export function RecursiveTreeItem({
       nodeId={String(category.id)}
       labelText={category.title}
       labelIcon={SupervisorAccountIcon}
-      labelInfo={String(category.countSubCategories || 0)}
+      labelInfo={String(category.countSubCategories || '')}
       color="#1a73e8"
       bgColor="#e8f0fe"
     >
