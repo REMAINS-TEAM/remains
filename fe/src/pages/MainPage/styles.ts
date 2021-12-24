@@ -36,12 +36,6 @@ export const itemsContainer: SxProps = {
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
-  rowGap: 2,
+  rowGap: 1,
   paddingBottom: 4,
-};
-
-export const itemContainer: SxProps = {
-  width: '100%',
-  display: 'flex',
-  height: '200px',
 };
