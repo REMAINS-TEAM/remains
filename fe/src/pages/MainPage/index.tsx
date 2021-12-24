@@ -6,6 +6,7 @@ import CategoriesTree from 'components/CategoriesTree';
 import MainLayout from 'layouts/MainLayout';
 import Container from 'components/Container';
 import BreadCrumbs from 'components/BreadCrumbs';
+import ItemCard from 'components/ItemCard';
 
 // TODO linter
 
@@ -32,10 +33,10 @@ function MainPage() {
             <BreadCrumbs />
           </Box>
           <Box sx={styles.itemsContainer}>
-            <Container sx={styles.itemContainer}>Карточка товара 1</Container>
-            <Container sx={styles.itemContainer}>Карточка товара 2</Container>
-            <Container sx={styles.itemContainer}>Карточка товара 3</Container>
-            <Container sx={styles.itemContainer}>Карточка товара 4</Container>
+            <ItemCard />
+            <ItemCard />
+            <ItemCard />
+            <ItemCard />
           </Box>
         </Box>
       </Box>
