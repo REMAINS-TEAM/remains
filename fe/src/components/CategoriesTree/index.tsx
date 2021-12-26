@@ -1,21 +1,18 @@
 import TreeView from '@mui/lab/TreeView';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { CategoriesTreeType } from './types';
+import { CategoriesTreeProps } from './types';
 import React, { useEffect, useState } from 'react';
 import categoriesApi from 'store/api/categories';
 import { Category } from 'store/slices/categories';
 import { RecursiveTreeItem } from 'components/CategoriesTree/units/RecursiveTreeItem';
 import Skeleton from '@mui/material/Skeleton';
-import { generatePath, useNavigate } from 'react-router-dom';
-import routes from 'routes';
 
 export default function CategoriesTree({
   initCategories,
   isLoading,
-}: CategoriesTreeType) {
-  const navigate = useNavigate();
-
+  onSelect,
+}: CategoriesTreeProps) {
   const [categories, setCategories] = useState<
     Record<number, Category[] | undefined>
   >({});
@@ -26,6 +23,8 @@ export default function CategoriesTree({
     { parentId: currentId },
     { skip: currentId === undefined },
   );
+
+  console.log('categories', categories);
 
   // set level up categories (with parentId === 0)
   useEffect(() => {
@@ -50,7 +49,7 @@ export default function CategoriesTree({
   };
 
   const handleSelect = (_: React.SyntheticEvent, categoryId: string) => {
-    navigate(generatePath(routes.category, { categoryId }));
+    onSelect && onSelect(+categoryId);
   };
 
   const getSubCategories = (id: number) => categories[id] || [];

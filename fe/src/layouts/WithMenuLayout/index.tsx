@@ -5,7 +5,13 @@ import Container from 'components/Container';
 import CategoriesTree from 'components/CategoriesTree';
 import categoriesApi from 'store/api/categories';
 
-function WithMenuLayout({ children }: { children: ReactNode }) {
+function WithMenuLayout({
+  children,
+  onSelect,
+}: {
+  children: ReactNode;
+  onSelect?: (id: number) => void;
+}) {
   const {
     data: categories,
     isLoading,
@@ -18,7 +24,11 @@ function WithMenuLayout({ children }: { children: ReactNode }) {
           <Typography>Категории</Typography>
         </Box>
         <Container sx={styles.menuContainer}>
-          <CategoriesTree initCategories={categories} isLoading={isLoading} />
+          <CategoriesTree
+            initCategories={categories}
+            isLoading={isLoading}
+            onSelect={onSelect}
+          />
         </Container>
       </Box>
       {children}

@@ -1,16 +1,16 @@
 import React from 'react';
 import MainLayout from 'layouts/MainLayout';
 import WithMenuLayout from 'layouts/WithMenuLayout';
-import { useParams } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import * as styles from './styles';
 import { Box } from '@mui/material';
 import BreadCrumbs from 'components/BreadCrumbs';
 import ItemCard from 'components/ItemCard';
 import itemsApi from 'store/api/items';
-
-// TODO: загружать только если в категории есть элементы
+import routes from 'routes';
 
 function Categories() {
+  const navigate = useNavigate();
   const { categoryId } = useParams();
   const { data, isFetching } = itemsApi.useGetCategoryItemsQuery({
     categoryId,
@@ -18,9 +18,13 @@ function Categories() {
 
   console.log('data', data);
 
+  const selectCategoryHandler = (categoryId: number) => {
+    navigate(generatePath(routes.category, { categoryId: String(categoryId) }));
+  };
+
   return (
     <MainLayout>
-      <WithMenuLayout>
+      <WithMenuLayout onSelect={selectCategoryHandler}>
         <Box sx={styles.contentContainer}>
           {!categoryId ? (
             <Box>Выберите категорию (здесь компонент как в МФ был)</Box>
