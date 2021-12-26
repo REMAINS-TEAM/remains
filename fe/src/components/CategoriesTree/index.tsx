@@ -24,8 +24,6 @@ export default function CategoriesTree({
     { skip: currentId === undefined },
   );
 
-  console.log('categories', categories);
-
   // set level up categories (with parentId === 0)
   useEffect(() => {
     setCategories({ 0: initCategories });

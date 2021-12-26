@@ -10,9 +10,12 @@ export const contentContainer: SxProps = {
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
+  position: 'relative',
 };
 
 export const itemsContainer: SxProps = {
+  position: 'relative',
+  height: '100%',
   width: '100%',
   display: 'flex',
   flexDirection: 'column',

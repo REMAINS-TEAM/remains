@@ -5,10 +5,10 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import * as styles from './styles';
 import { Box } from '@mui/material';
 import BreadCrumbs from 'components/BreadCrumbs';
-import ItemCard from 'components/ItemCard';
 import itemsApi from 'store/api/items';
 import routes from 'routes';
 import ItemCards from 'pages/Categories/units/ItemCards';
+import EmptyState from 'components/EmptyState';
 
 function Categories() {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ function Categories() {
       <WithMenuLayout onSelect={selectCategoryHandler}>
         <Box sx={styles.contentContainer}>
           {!categoryId ? (
-            <Box>Выберите категорию (здесь компонент как в МФ был)</Box>
+            <EmptyState text={'Выберите категорию'} />
           ) : (
             <>
               <Box sx={styles.header}>
