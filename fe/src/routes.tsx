@@ -1,8 +1,8 @@
 export default {
   main: `/`,
   categories: `/categories`,
-  categoryItems: `/categories/:categoryId/items`,
-  item: `/categories/:categoryId/items/:itemId`,
+  category: `/categories/:categoryId`,
+  item: `/categories/items/:itemId`,
   /*Other*/
-  adminPanel: "/admin",
+  adminPanel: '/admin',
 };

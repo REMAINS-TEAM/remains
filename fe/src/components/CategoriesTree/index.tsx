@@ -6,12 +6,16 @@ import React, { useEffect, useState } from 'react';
 import categoriesApi from 'store/api/categories';
 import { Category } from 'store/slices/categories';
 import { RecursiveTreeItem } from 'components/CategoriesTree/units/RecursiveTreeItem';
-import { Skeleton } from '@mui/lab';
+import Skeleton from '@mui/material/Skeleton';
+import { generatePath, useNavigate } from 'react-router-dom';
+import routes from 'routes';
 
 export default function CategoriesTree({
   initCategories,
   isLoading,
 }: CategoriesTreeType) {
+  const navigate = useNavigate();
+
   const [categories, setCategories] = useState<
     Record<number, Category[] | undefined>
   >({});
@@ -45,6 +49,10 @@ export default function CategoriesTree({
     setExpanded(nodeIds);
   };
 
+  const handleSelect = (_: React.SyntheticEvent, categoryId: string) => {
+    navigate(generatePath(routes.category, { categoryId }));
+  };
+
   const getSubCategories = (id: number) => categories[id] || [];
 
   if (isLoading) {
@@ -65,6 +73,7 @@ export default function CategoriesTree({
       defaultEndIcon={<div style={{ width: 24 }} />}
       expanded={expanded}
       onNodeToggle={handleToggle}
+      onNodeSelect={handleSelect}
       sx={{ height: '100%', flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
     >
       {categories[0]?.map((category) => (
