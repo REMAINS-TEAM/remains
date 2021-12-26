@@ -4,4 +4,5 @@ export const itemContainer: SxProps = {
   width: '100%',
   display: 'flex',
   height: '200px',
+  columnGap: 2,
 };
