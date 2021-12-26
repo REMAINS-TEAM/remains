@@ -1,17 +1,27 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, Item } from '@prisma/client';
-import { PrismaException } from '../../exceptions/prismaException';
+import { PrismaException } from 'exceptions/prismaException';
 
 @Injectable()
 export class ItemsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll({ categoryId }: { categoryId?: number }): Promise<Item[]> {
+  async findAll({
+    categoryId,
+    limit = 10,
+    offset = 0,
+  }: {
+    categoryId?: number;
+    limit?: number;
+    offset?: number;
+  }): Promise<Item[]> {
     return await this.prisma.item.findMany({
       where: {
         categoryId,
       },
+      take: limit,
+      skip: offset,
     });
   }
 

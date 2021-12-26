@@ -6,9 +6,17 @@ import * as styles from './styles';
 import { Box } from '@mui/material';
 import BreadCrumbs from 'components/BreadCrumbs';
 import ItemCard from 'components/ItemCard';
+import itemsApi from 'store/api/items';
+
+// TODO: загружать только если в категории есть элементы
 
 function Categories() {
   const { categoryId } = useParams();
+  const { data, isFetching } = itemsApi.useGetCategoryItemsQuery({
+    categoryId,
+  });
+
+  console.log('data', data);
 
   return (
     <MainLayout>

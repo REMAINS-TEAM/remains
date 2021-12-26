@@ -1,10 +1,10 @@
-import { NestFactory, Reflector } from "@nestjs/core";
-import { AppModule } from "./app.module";
-import { PrismaService } from "./modules/prisma/prisma.service";
-import { ValidationPipe } from "@nestjs/common";
-import helmet from "helmet";
-import authMiddleware from "./middlewares/auth.middleware";
-import { RolesGuard } from "./guards/roles.guard";
+import { NestFactory, Reflector } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { PrismaService } from './modules/prisma/prisma.service';
+import { ValidationPipe } from '@nestjs/common';
+import helmet from 'helmet';
+import authMiddleware from './middlewares/auth.middleware';
+import { RolesGuard } from './guards/roles.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,14 +13,16 @@ async function bootstrap() {
   app.use(helmet());
 
   // Prefix
-  app.setGlobalPrefix("api");
+  app.setGlobalPrefix('api');
 
   // Validation
   app.useGlobalPipes(
     new ValidationPipe({
-      disableErrorMessages: process.env.NODE_ENV === "prod",
+      disableErrorMessages: process.env.NODE_ENV === 'prod',
       transform: true,
-    })
+      skipMissingProperties: true,
+      skipUndefinedProperties: true,
+    }),
   );
 
   // CORS

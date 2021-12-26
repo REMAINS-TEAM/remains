@@ -1,6 +1,6 @@
-import api from "./";
-import { Category } from "../slices/categories";
-import { getQueryString } from "../../utils";
+import api from './';
+import { Category } from '../slices/categories';
+import { getQueryString } from 'utils';
 
 export const categoriesApi = api.injectEndpoints({
   endpoints: (build) => ({
