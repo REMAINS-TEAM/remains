@@ -14,15 +14,9 @@ export const header: SxProps = {
   px: 1,
 };
 
-export const layoutContainer: SxProps = {
-  display: 'flex',
-  width: '100%',
-  height: '100%',
-  columnGap: 2,
-};
-
 export const menuContainer: SxProps = {
   width: '100%',
   height: '100%',
   display: 'flex',
+  flexDirection: 'column',
 };

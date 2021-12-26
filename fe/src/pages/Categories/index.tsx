@@ -8,15 +8,16 @@ import BreadCrumbs from 'components/BreadCrumbs';
 import ItemCard from 'components/ItemCard';
 import itemsApi from 'store/api/items';
 import routes from 'routes';
+import ItemCards from 'pages/Categories/units/ItemCards';
 
 function Categories() {
   const navigate = useNavigate();
   const { categoryId } = useParams();
-  const { data, isFetching } = itemsApi.useGetCategoryItemsQuery({
+  const { data: fetchedItems, isFetching } = itemsApi.useGetCategoryItemsQuery({
     categoryId,
+    limit: 10,
+    offset: 0,
   });
-
-  console.log('data', data);
 
   const selectCategoryHandler = (categoryId: number) => {
     navigate(generatePath(routes.category, { categoryId: String(categoryId) }));
@@ -34,10 +35,7 @@ function Categories() {
                 <BreadCrumbs />
               </Box>
               <Box sx={styles.itemsContainer}>
-                <ItemCard />
-                <ItemCard />
-                <ItemCard />
-                <ItemCard />
+                <ItemCards items={fetchedItems} isLoading={isFetching} />
               </Box>
             </>
           )}
