@@ -2,6 +2,7 @@ import React from 'react';
 import { Item } from 'store/slices/items';
 import ItemCard from 'components/ItemCard';
 import EmptyState from 'components/EmptyState';
+import { Button } from '@mui/material';
 
 function ItemCards({
   items,
@@ -24,7 +25,14 @@ function ItemCards({
 
   if (items.length === 0)
     return (
-      <EmptyState text={'Здесь пусто. Выберите подкатегорию, если есть'} />
+      <EmptyState
+        text={'Здесь пока нет товаров'}
+        description={'Выберите подкатегорию или добавьте сюда что-нибудь'}
+      >
+        <Button variant={'contained'} onClick={() => null}>
+          Добавить
+        </Button>
+      </EmptyState>
     );
 
   return (

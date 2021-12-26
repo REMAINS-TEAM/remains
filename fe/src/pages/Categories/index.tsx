@@ -28,7 +28,12 @@ function Categories() {
       <WithMenuLayout onSelect={selectCategoryHandler}>
         <Box sx={styles.contentContainer}>
           {!categoryId ? (
-            <EmptyState text={'Выберите категорию'} />
+            <EmptyState
+              text={'Выберите категорию'}
+              description={
+                'Посмотрите, что тут есть, переключая категории слева'
+              }
+            />
           ) : (
             <>
               <Box sx={styles.header}>
