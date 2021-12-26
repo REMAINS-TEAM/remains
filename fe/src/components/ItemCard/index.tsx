@@ -20,7 +20,9 @@ function ItemCard({ item }: { item: Item }) {
 
       <Box sx={styles.rightSide}>
         <Box sx={styles.rightTop}>
-          <Typography variant="h5">{item.price} ₽</Typography>
+          <Typography variant="h5">
+            {item.price.toLocaleString('ru')} ₽
+          </Typography>
           <Button variant="outlined">Просмотреть</Button>
         </Box>
         <Box sx={styles.rightBottom}>
