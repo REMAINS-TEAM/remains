@@ -3,7 +3,7 @@ import { SxProps } from '@mui/system';
 export const menuWithHeaderContainer: SxProps = {
   display: 'flex',
   flex: 'none',
-  width: '300px',
+  width: '320px',
   height: '100%',
   flexDirection: 'column',
 };
