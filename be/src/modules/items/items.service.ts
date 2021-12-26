@@ -22,6 +22,14 @@ export class ItemsService {
       },
       take: limit,
       skip: offset,
+      orderBy: [
+        {
+          updatedAt: 'desc',
+        },
+        {
+          createdAt: 'desc',
+        },
+      ],
     });
   }
 

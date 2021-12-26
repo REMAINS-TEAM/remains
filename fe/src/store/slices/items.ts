@@ -11,6 +11,8 @@ export interface Item {
   categoryId: number;
   countSubCategories?: number;
   itemsCount: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const initialState: {

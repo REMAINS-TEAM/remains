@@ -3,15 +3,16 @@ import { CSSProperties } from 'react';
 
 export const imageContainer: SxProps = {
   height: '100%',
-  width: '168px',
+  width: '150px',
+  minWidth: '150px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   borderRadius: '4px',
+  overflow: 'hidden',
   // boxShadow: '0 1px 2px #ccc',
 };
 
 export const image: CSSProperties = {
   height: '100%',
-  width: '100%',
 };
