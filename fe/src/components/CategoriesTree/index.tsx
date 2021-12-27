@@ -71,7 +71,7 @@ export default function CategoriesTree({
       expanded={expanded}
       onNodeToggle={handleToggle}
       onNodeSelect={handleSelect}
-      sx={{ height: '100%', flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+      sx={{ height: '100%', maxWidth: 400, overflowY: 'auto' }}
     >
       {categories[0]?.map((category) => (
         <RecursiveTreeItem

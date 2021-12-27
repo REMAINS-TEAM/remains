@@ -16,7 +16,7 @@ export class CategoriesService {
     let categoriesWithCountSub = [];
     let categories = await this.prisma.category.findMany({
       where: {
-        parentId,
+        parentId: parentId ? +parentId : undefined,
       },
       include: {
         _count: { select: { items: true } },

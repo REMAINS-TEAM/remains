@@ -14,8 +14,10 @@ export class CategoriesController {
   }
 
   @Get()
-  async findAll(@Query('parentId') parentId: number): Promise<Category[]> {
-    return this.categoriesService.findAll({ parentId: parentId ?? undefined });
+  async findAll(
+    @Query('parentId') parentId: number | undefined,
+  ): Promise<Category[]> {
+    return this.categoriesService.findAll({ parentId });
   }
 
   @Get(':id')

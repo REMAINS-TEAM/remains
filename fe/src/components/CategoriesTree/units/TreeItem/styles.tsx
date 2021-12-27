@@ -1,31 +1,31 @@
-import { styled } from "@mui/material/styles";
-import TreeItem, { treeItemClasses } from "@mui/lab/TreeItem";
+import { styled } from '@mui/material/styles';
+import TreeItem, { treeItemClasses } from '@mui/lab/TreeItem';
 
 export const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
   color: theme.palette.text.secondary,
   [`& .${treeItemClasses.content}`]: {
     color: theme.palette.text.secondary,
-    borderTopRightRadius: theme.spacing(2),
-    borderBottomRightRadius: theme.spacing(2),
+    borderTopRightRadius: theme.spacing(1),
+    borderBottomRightRadius: theme.spacing(1),
     paddingRight: theme.spacing(1),
     fontWeight: theme.typography.fontWeightMedium,
-    "&.Mui-expanded": {
+    '&.Mui-expanded': {
       fontWeight: theme.typography.fontWeightRegular,
     },
-    "&:hover": {
+    '&:hover': {
       backgroundColor: theme.palette.action.hover,
     },
-    "&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused": {
+    '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
       backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
-      color: "var(--tree-view-color)",
+      color: 'var(--tree-view-color)',
     },
     [`& .${treeItemClasses.label}`]: {
-      fontWeight: "inherit",
-      color: "inherit",
+      fontWeight: 'inherit',
+      color: 'inherit',
     },
   },
   [`& .${treeItemClasses.group}`]: {
-    marginLeft: 0,
+    marginLeft: 6,
     [`& .${treeItemClasses.content}`]: {
       paddingLeft: theme.spacing(2),
     },
