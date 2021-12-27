@@ -10,12 +10,15 @@ export const categoriesApi = api.injectEndpoints({
     >({
       query: (params) => `categories` + getQueryString(params),
     }),
-    getCategoryById: build.query<Category, number>({
+    getCategoryById: build.query<
+      { category: Category; tree: Category[] },
+      number | string
+    >({
       query: (id) => `categories/${id}`,
-      transformResponse: (response: Category, meta, arg) => ({
-        ...response,
-        test: 1,
-      }),
+      // transformResponse: (response: Category, meta, arg) => ({
+      //   ...response,
+      //   test: 1,
+      // }),
     }),
   }),
 });

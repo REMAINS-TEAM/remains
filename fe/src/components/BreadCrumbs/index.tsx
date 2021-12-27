@@ -1,40 +1,32 @@
 import * as React from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { Category } from 'store/slices/categories';
+import { generatePath, useNavigate } from 'react-router-dom';
+import routes from 'routes';
 
-function handleClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-  event.preventDefault();
-  console.info('You clicked a breadcrumb.');
-}
+export default function BreadCrumbs({ data }: { data?: Category[] }) {
+  const navigate = useNavigate();
+  if (!data) return null;
 
-// TODO (now only design)
-export default function BreadCrumbs() {
-  const breadcrumbs = [
+  const breadcrumbs = data.map((category) => (
     <Link
       underline="hover"
-      key="1"
+      key={category.id}
       color="inherit"
-      href="/"
-      onClick={handleClick}
+      href="#"
+      onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault();
+        navigate(
+          generatePath(routes.category, { categoryId: String(category.id) }),
+        );
+      }}
     >
-      Длинномеры
-    </Link>,
-    <Link
-      underline="hover"
-      key="2"
-      color="inherit"
-      href="/getting-started/installation/"
-      onClick={handleClick}
-    >
-      Столешница
-    </Link>,
-    <Typography key="3" color="text.primary">
-      Пластик
-    </Typography>,
-  ];
+      {category.title}
+    </Link>
+  ));
 
   return (
     <Stack spacing={2}>

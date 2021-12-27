@@ -2,7 +2,8 @@ import React from 'react';
 import { Item } from 'store/slices/items';
 import ItemCard from 'components/ItemCard';
 import EmptyState from 'components/EmptyState';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
+import * as styles from './styles';
 
 function ItemCards({
   items,
@@ -36,11 +37,11 @@ function ItemCards({
     );
 
   return (
-    <>
+    <Box sx={styles.itemsContainer}>
       {items.map((item) => (
         <ItemCard key={item.id} item={item} />
       ))}
-    </>
+    </Box>
   );
 }
 

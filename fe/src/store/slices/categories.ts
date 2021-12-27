@@ -30,7 +30,7 @@ export const categoriesSlice = createSlice({
     builder.addMatcher(
       categoriesApi.endpoints.getCategoryById.matchFulfilled,
       (state, { payload }) => {
-        state.current = payload;
+        state.current = payload.category;
       },
     );
     builder.addMatcher(
