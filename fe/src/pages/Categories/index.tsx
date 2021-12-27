@@ -44,9 +44,7 @@ function Categories() {
             />
           ) : (
             <>
-              <Box sx={styles.header}>
-                <BreadCrumbs data={category?.tree} />
-              </Box>
+              <BreadCrumbs data={category?.tree} sx={styles.header} />
               <ItemCards items={fetchedItems} isLoading={isFetching} />
             </>
           )}
