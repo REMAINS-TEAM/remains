@@ -19,7 +19,9 @@ export class CategoriesController {
   }
 
   @Get(':id')
-  async findOne(@Param() params: { id: string }): Promise<Category> {
+  async findOne(
+    @Param() params: { id: string },
+  ): Promise<{ category: Category; tree: Category[] }> {
     return this.categoriesService.findOne(+params.id);
   }
 }

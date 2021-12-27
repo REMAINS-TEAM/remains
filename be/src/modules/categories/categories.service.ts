@@ -37,21 +37,12 @@ export class CategoriesService {
     return categories;
   }
 
-  async findOne(
-    id: number,
-  ): Promise<Category & { countSubCategories: number }> {
+  async findOne(id: number): Promise<{ category: Category; tree: Category[] }> {
     let result;
-    let countSubCategories;
     try {
       result = await this.prisma.category.findUnique({
         where: { id },
-        include: { items: true },
       });
-      if (result) {
-        countSubCategories = await this.prisma.category.count({
-          where: { parentId: result.id },
-        });
-      }
     } catch (err) {
       throw new PrismaException(err as Error);
     }
@@ -60,6 +51,22 @@ export class CategoriesService {
       throw new NotFoundException(`Category with id ${id} does not exist`);
     }
 
-    return { ...result, countSubCategories: countSubCategories || 0 };
+    let tree = [result];
+    let parentId = result.parentId;
+    try {
+      while (parentId !== 0) {
+        const category = await this.prisma.category.findUnique({
+          where: { id: parentId },
+        });
+        if (category) {
+          parentId = category.parentId;
+          tree.unshift(category);
+        }
+      }
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    return { category: result, tree };
   }
 }
