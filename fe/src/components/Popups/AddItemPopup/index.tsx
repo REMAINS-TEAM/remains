@@ -47,6 +47,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
           endAdornment: <InputAdornment position="end">₽</InputAdornment>,
         }}
       />
+      {/*TODO: добавить добавление картинок*/}
     </Popup>
   );
 }

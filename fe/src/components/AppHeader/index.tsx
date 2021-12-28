@@ -10,10 +10,11 @@ import { Box } from '@mui/material';
 import Search from 'components/Search';
 
 import * as styles from './styles';
+import { APP_HEADER_HEIGHT } from 'global/constants';
 
 function AppHeader() {
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" sx={{ height: APP_HEADER_HEIGHT }}>
       <Toolbar sx={styles.toolbar}>
         <Box sx={styles.leftSide}>
           <IconButton
