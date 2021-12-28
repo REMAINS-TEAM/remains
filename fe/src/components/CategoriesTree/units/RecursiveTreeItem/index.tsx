@@ -26,6 +26,7 @@ export function RecursiveTreeItem({
       labelInfo={String(category.itemsCount || '')}
       color="#1a73e8"
       bgColor="#e8f0fe"
+      title={category.description}
     >
       {!subCategories?.length && isFetching && !!category.countSubCategories && (
         <>

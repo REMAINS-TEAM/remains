@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, Category } from '@prisma/client';
 import { PrismaException } from '../../exceptions/prismaException';
@@ -61,6 +65,9 @@ export class CategoriesService {
         if (category) {
           parentId = category.parentId;
           tree.unshift(category);
+        } else {
+          // TODO: может вызвать исключение? Произойдет если одна из категорий удалена например
+          break;
         }
       }
     } catch (err) {

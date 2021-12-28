@@ -15,7 +15,6 @@ export default function MainNavigation() {
       <Routes>
         <Route path={routes.main} element={<Categories />} />
         <Route path={routes.category} element={<Categories />} />
-
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
