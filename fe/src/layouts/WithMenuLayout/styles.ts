@@ -16,7 +16,7 @@ export const header: SxProps = {
 
 export const menuContainer: SxProps = {
   width: '100%',
-  height: '100%',
+  minHeight: '400px',
   display: 'flex',
   flexDirection: 'column',
 };
