@@ -1,7 +1,10 @@
 import React from 'react';
 import Popup from 'components/Popups/index';
 import { AddItemPopupProps } from 'components/Popups/AddItemPopup/types';
-import { InputAdornment, TextField } from '@mui/material';
+import { Box, InputAdornment, TextField, Typography } from '@mui/material';
+import UploadedImage from './units/UploadedImage';
+import * as styles from './styles';
+import { padding } from '@mui/system';
 
 function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
   if (!category) return null;
@@ -21,7 +24,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
         fullWidth
         variant="outlined"
         InputProps={{
-          endAdornment: <InputAdornment position="end">100</InputAdornment>,
+          endAdornment: <InputAdornment position="end">80</InputAdornment>,
         }}
       />
       <TextField
@@ -34,7 +37,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
         variant="outlined"
         rows={3}
         InputProps={{
-          endAdornment: <InputAdornment position="end">300</InputAdornment>,
+          endAdornment: <InputAdornment position="end">200</InputAdornment>,
         }}
       />
       <TextField
@@ -47,7 +50,17 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
           endAdornment: <InputAdornment position="end">₽</InputAdornment>,
         }}
       />
-      {/*TODO: добавить добавление картинок*/}
+      <Typography variant="subtitle1" color="secondary" sx={{ p: 1.5 }}>
+        Фото:
+      </Typography>
+      <Box sx={styles.imagesContainer}>
+        {/*<UploadedImage*/}
+        {/*  src={*/}
+        {/*    'https://www.worldofquartz.ru/upload/iblock/ee4/ee458489521e9bc9a3aec4692fd365ec.jpg'*/}
+        {/*  }*/}
+        {/*/>*/}
+        <UploadedImage />
+      </Box>
     </Popup>
   );
 }

@@ -11,7 +11,9 @@ function ItemCard({ item }: { item: Item }) {
       <Box sx={styles.leftSide}>
         <ItemImage src={item.images[0]} />
         <Box>
-          <Typography variant="body1">{item.title}</Typography>
+          <Typography variant="body1" sx={{ mb: 1 }}>
+            {item.title}
+          </Typography>
           <Typography variant="body2" color={'secondary'}>
             {item.description}
           </Typography>
