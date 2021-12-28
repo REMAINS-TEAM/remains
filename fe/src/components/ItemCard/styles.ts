@@ -3,6 +3,7 @@ import { SxProps } from '@mui/system';
 export const itemContainer: SxProps = {
   width: '100%',
   display: 'flex',
+  minHeight: '200px',
   height: '200px',
   columnGap: 1,
   justifyContent: 'space-between',

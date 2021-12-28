@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { PopupProps } from './types';
 
@@ -32,9 +31,11 @@ export default function Popup({
         {title && <DialogTitle id="scroll-dialog-title">{title}</DialogTitle>}
         <DialogContent dividers={true}>{children}</DialogContent>
         {!hideActionButtons && (
-          <DialogActions>
+          <DialogActions sx={{ p: 3 }}>
             <Button onClick={handleCancelClick}>{cancelButtonText}</Button>
-            <Button onClick={handleOkClick}>{okButtonText}</Button>
+            <Button variant={'contained'} onClick={handleOkClick}>
+              {okButtonText}
+            </Button>
           </DialogActions>
         )}
       </Dialog>

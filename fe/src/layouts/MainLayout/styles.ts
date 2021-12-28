@@ -8,6 +8,7 @@ export const root = {
 };
 
 export const center = {
+  position: 'relative',
   display: 'flex',
   padding: 2,
   maxWidth: '1180px',
