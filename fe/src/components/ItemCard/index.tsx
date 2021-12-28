@@ -28,10 +28,15 @@ function ItemCard({ item }: { item: Item }) {
           <IconButton color="secondary" sx={styles.dotsButton}>
             <DotsIcon />
           </IconButton>
-          <Typography variant="h5" sx={{ fontFamily: 'inherit' }}>
+          <Typography
+            variant="h5"
+            sx={{ fontFamily: 'inherit', lineHeight: 1 }}
+          >
             {item.price.toLocaleString('ru')} ₽
           </Typography>
-          <Button variant="outlined">Просмотреть</Button>
+          <Button variant="contained" size={'small'}>
+            Подробнее
+          </Button>
         </Box>
         <Box sx={styles.rightBottom}>
           <Typography variant="caption" color="secondary">

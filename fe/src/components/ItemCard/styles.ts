@@ -10,7 +10,7 @@ export const itemContainer: SxProps = {
   justifyContent: 'space-between',
   overflow: 'hidden',
   px: 2,
-  py: 3,
+  py: 4,
 };
 
 export const leftSide: SxProps = {
@@ -30,7 +30,6 @@ export const rightSide: SxProps = {
   height: '100%',
   columnGap: 2,
   rowGap: 1,
-  mt: 1,
 };
 
 export const rightTop: SxProps = {
@@ -49,6 +48,6 @@ export const rightBottom: SxProps = {
 export const dotsButton: SxProps = {
   position: 'absolute',
   right: '4px',
-  top: '0px',
+  top: '-2px',
   p: 1,
 };
