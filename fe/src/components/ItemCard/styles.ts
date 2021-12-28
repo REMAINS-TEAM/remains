@@ -29,13 +29,12 @@ export const rightSide: SxProps = {
   flexDirection: 'column',
   height: '100%',
   columnGap: 2,
-  rowGap: 1,
 };
 
 export const rightTop: SxProps = {
   display: 'flex',
   alignItems: 'flex-end',
-  rowGap: 1,
+  rowGap: 1.5,
   flexDirection: 'column',
 };
 

@@ -25,7 +25,7 @@ export const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
     },
   },
   [`& .${treeItemClasses.group}`]: {
-    marginLeft: 6,
+    marginLeft: 10,
     [`& .${treeItemClasses.content}`]: {
       paddingLeft: theme.spacing(2),
     },

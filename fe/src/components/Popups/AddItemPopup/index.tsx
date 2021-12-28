@@ -54,11 +54,11 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
         Фото:
       </Typography>
       <Box sx={styles.imagesContainer}>
-        {/*<UploadedImage*/}
-        {/*  src={*/}
-        {/*    'https://www.worldofquartz.ru/upload/iblock/ee4/ee458489521e9bc9a3aec4692fd365ec.jpg'*/}
-        {/*  }*/}
-        {/*/>*/}
+        <UploadedImage
+          src={
+            'https://www.worldofquartz.ru/upload/iblock/ee4/ee458489521e9bc9a3aec4692fd365ec.jpg'
+          }
+        />
         <UploadedImage />
       </Box>
     </Popup>
