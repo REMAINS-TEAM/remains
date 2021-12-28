@@ -24,10 +24,11 @@ function ItemCard({ item }: { item: Item }) {
 
       <Box sx={styles.rightSide}>
         <Box sx={styles.rightTop}>
+          {/*TODO: показывать только для владельца товара*/}
           <IconButton color="secondary" sx={styles.dotsButton}>
             <DotsIcon />
           </IconButton>
-          <Typography variant="h5">
+          <Typography variant="h5" sx={{ fontFamily: 'inherit' }}>
             {item.price.toLocaleString('ru')} ₽
           </Typography>
           <Button variant="outlined">Просмотреть</Button>

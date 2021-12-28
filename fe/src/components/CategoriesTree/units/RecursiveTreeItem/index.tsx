@@ -6,6 +6,7 @@ import {
 } from '@mui/icons-material';
 import React from 'react';
 import { Skeleton } from '@mui/lab';
+import { useTheme } from '@mui/material';
 
 export function RecursiveTreeItem({
   category,
@@ -18,14 +19,16 @@ export function RecursiveTreeItem({
   getSubCategories: (id: number) => Category[];
   isFetching: boolean;
 }) {
+  const theme = useTheme();
+
   return (
     <TreeItem
       nodeId={String(category.id)}
       labelText={category.title}
       labelIcon={category.countSubCategories ? ManyIcon : OneIcon}
       labelInfo={String(category.itemsCount || '')}
-      color="#1a73e8"
-      bgColor="#e8f0fe"
+      color={theme.palette.getContrastText(theme.palette.primary.main)}
+      bgColor={theme.palette.primary.main}
       title={category.description}
     >
       {!subCategories?.length && isFetching && !!category.countSubCategories && (
