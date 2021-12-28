@@ -4,6 +4,8 @@ import Container from 'components/Container';
 import { Item } from 'store/slices/items';
 import ItemImage from 'components/ItemCard/units/ItemImage';
 import { Box, Button, Typography } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import { MoreHoriz as DotsIcon } from '@mui/icons-material';
 
 function ItemCard({ item }: { item: Item }) {
   return (
@@ -22,6 +24,9 @@ function ItemCard({ item }: { item: Item }) {
 
       <Box sx={styles.rightSide}>
         <Box sx={styles.rightTop}>
+          <IconButton color="secondary" sx={styles.dotsButton}>
+            <DotsIcon />
+          </IconButton>
           <Typography variant="h5">
             {item.price.toLocaleString('ru')} ₽
           </Typography>

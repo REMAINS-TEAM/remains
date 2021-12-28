@@ -1,6 +1,7 @@
 import { SxProps } from '@mui/system';
 
 export const itemContainer: SxProps = {
+  position: 'relative',
   width: '100%',
   display: 'flex',
   minHeight: '200px',
@@ -29,6 +30,7 @@ export const rightSide: SxProps = {
   height: '100%',
   columnGap: 2,
   rowGap: 1,
+  mt: 1,
 };
 
 export const rightTop: SxProps = {
@@ -42,4 +44,11 @@ export const rightBottom: SxProps = {
   display: 'flex',
   alignItems: 'flex-end',
   rowGap: 1,
+};
+
+export const dotsButton: SxProps = {
+  position: 'absolute',
+  right: '4px',
+  top: '0px',
+  p: 1,
 };
