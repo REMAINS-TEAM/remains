@@ -12,6 +12,7 @@ import EmptyState from 'components/EmptyState';
 import categoriesApi from 'store/api/categories';
 import AddItemPopup from 'components/Popups/AddItemPopup';
 import ActionsButtons from 'pages/Categories/units/ActionsButtons';
+import NotFoundPage from 'pages/NotFoundPage';
 
 function Categories() {
   const navigate = useNavigate();
@@ -19,18 +20,34 @@ function Categories() {
 
   const [addItemPopupOpen, setAddItemPopupOpen] = useState(false);
 
-  const { data: fetchedItems, isFetching } = itemsApi.useGetCategoryItemsQuery({
+  const {
+    data: fetchedItems,
+    isFetching,
+    error: getCategoryItemsError,
+  } = itemsApi.useGetCategoryItemsQuery({
     categoryId,
-    limit: 10,
+    limit: 10, // TODO: lazy loading
     offset: 0,
   });
 
-  const { data: category } = categoriesApi.useGetCategoryByIdQuery(
-    categoryId || 0,
-    {
-      skip: !categoryId,
-    },
-  );
+  const {
+    data: category,
+    error: getCategoryByIdError,
+  } = categoriesApi.useGetCategoryByIdQuery(categoryId || 0, {
+    skip: !categoryId,
+  });
+
+  const error = (getCategoryItemsError || getCategoryByIdError) as {
+    status: number;
+  };
+
+  if (error) {
+    switch (error.status) {
+      case 404:
+        return <NotFoundPage />;
+      // TODO: Сделать всплывающую нотификацию об ошибке
+    }
+  }
 
   const selectCategoryHandler = (categoryId: number) => {
     navigate(generatePath(routes.category, { categoryId: String(categoryId) }));
@@ -47,9 +64,7 @@ function Categories() {
           {!categoryId ? (
             <EmptyState
               text={'Выберите категорию'}
-              description={
-                'Посмотрите, что тут есть, переключая категории слева'
-              }
+              description={'Посмотрите, что тут есть, переключая категории'}
             />
           ) : (
             <>
@@ -57,7 +72,6 @@ function Categories() {
                 <BreadCrumbs data={category?.tree} />
                 <IconButton
                   sx={{ p: 0 }}
-                  aria-label="add item"
                   title="Добавить товар в эту категорию"
                   onClick={addItemHandler}
                 >

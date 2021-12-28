@@ -1,13 +1,13 @@
 import { SxProps } from '@mui/system';
 
-export const root = {
+export const root: SxProps = {
   display: 'flex',
   width: '100%',
   height: 'calc(100vh - 64px - 16px)',
   justifyContent: 'center',
 };
 
-export const center = {
+export const center: SxProps = {
   position: 'relative',
   display: 'flex',
   padding: 2,
@@ -16,4 +16,4 @@ export const center = {
   height: '100%',
   justifyContent: 'space-between',
   columnGap: 2,
-} as SxProps;
+};
