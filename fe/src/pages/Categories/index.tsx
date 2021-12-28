@@ -3,24 +3,15 @@ import MainLayout from 'layouts/MainLayout';
 import WithMenuLayout from 'layouts/WithMenuLayout';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import * as styles from './styles';
-import {
-  Box,
-  Button,
-  SpeedDial,
-  SpeedDialAction,
-  SpeedDialIcon,
-} from '@mui/material';
+import { Box, Button, IconButton, SpeedDialIcon } from '@mui/material';
 import BreadCrumbs from 'components/BreadCrumbs';
 import itemsApi from 'store/api/items';
 import routes from 'routes';
 import ItemCards from 'pages/Categories/units/ItemCards';
 import EmptyState from 'components/EmptyState';
 import categoriesApi from 'store/api/categories';
-import {
-  Inventory2 as ItemAddIcon,
-  PlaylistAdd as CategoryAddIcon,
-} from '@mui/icons-material';
 import AddItemPopup from 'components/Popups/AddItemPopup';
+import ActionsButtons from 'pages/Categories/units/ActionsButtons';
 
 function Categories() {
   const navigate = useNavigate();
@@ -64,14 +55,14 @@ function Categories() {
             <>
               <Box sx={styles.headerContainer}>
                 <BreadCrumbs data={category?.tree} />
-                {/*<IconButton*/}
-                {/*  sx={{ p: 0 }}*/}
-                {/*  aria-label="add item"*/}
-                {/*  title="Добавить товар в эту категорию"*/}
-                {/*  onClick={addItemHandler}*/}
-                {/*>*/}
-                {/*  <AddIcon />*/}
-                {/*</IconButton>*/}
+                <IconButton
+                  sx={{ p: 0 }}
+                  aria-label="add item"
+                  title="Добавить товар в эту категорию"
+                  onClick={addItemHandler}
+                >
+                  <SpeedDialIcon />
+                </IconButton>
               </Box>
 
               {fetchedItems?.length ? (
@@ -92,21 +83,11 @@ function Categories() {
           )}
         </Box>
       </WithMenuLayout>
-      <SpeedDial
-        ariaLabel="SpeedDial basic example"
-        sx={{ position: 'fixed', bottom: 32, right: 32 }}
-        icon={<SpeedDialIcon />}
-      >
-        <SpeedDialAction
-          title={'Добавить товар в эту категорию'}
-          icon={<ItemAddIcon />}
-          onClick={addItemHandler}
-        />
-        <SpeedDialAction
-          title={'Добавить подкатегорию (только для администратора)'}
-          icon={<CategoryAddIcon />}
-        />
-      </SpeedDial>
+      <ActionsButtons
+        handlers={{
+          addItemHandler,
+        }}
+      />
       <AddItemPopup
         open={addItemPopupOpen}
         setOpen={setAddItemPopupOpen}
