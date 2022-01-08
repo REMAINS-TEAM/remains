@@ -128,7 +128,7 @@ export class UsersService {
     throw new BadRequestException('User not found');
   }
 
-  async logout({ token }: LogoutUserDto) {
+  async logout(token: string) {
     try {
       await this.prisma.token.delete({ where: { token } });
     } catch (err) {

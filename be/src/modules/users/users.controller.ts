@@ -59,7 +59,11 @@ export class UsersController {
   }
 
   @Post('logout')
-  async logout(@Body() logoutUserDto: LogoutUserDto): Promise<string> {
-    return this.usersService.logout(logoutUserDto);
+  async logout(
+    @Headers() headers: { authorization: string | undefined },
+  ): Promise<string> {
+    const authHeader = headers.authorization || '';
+    const token = authHeader.split(' ')[1];
+    return this.usersService.logout(token);
   }
 }
