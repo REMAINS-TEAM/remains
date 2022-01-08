@@ -15,6 +15,7 @@ import {
   hashPassword,
 } from 'modules/users/users.utils';
 import { LoginUserDto } from 'modules/users/dto/login-user.dto';
+import { LogoutUserDto } from 'modules/users/dto/logout-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -83,6 +84,12 @@ export class UsersService {
           const compared = await checkPassword(password, result.passwordHash);
           if (compared) {
             const token = generateToken();
+            await this.prisma.token.create({
+              data: {
+                userId: user.id,
+                token,
+              },
+            });
             return { token };
           }
         }
@@ -92,6 +99,16 @@ export class UsersService {
     }
 
     throw new BadRequestException('User not found');
+  }
+
+  async logout({ token }: LogoutUserDto) {
+    try {
+      await this.prisma.token.delete({ where: { token } });
+    } catch (err) {
+      throw new NotFoundException('No such token');
+    }
+
+    return 'OK';
   }
 
   async update(id: number, data: UpdateUserDto) {
