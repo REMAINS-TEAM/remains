@@ -18,7 +18,7 @@ export async function checkPassword(
 ): Promise<boolean> {
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, hash, function (err, result) {
-      if (err) resolve(false);
+      if (err || !result) resolve(false);
       resolve(true);
     });
   });
