@@ -1,9 +1,20 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { User } from "@prisma/client";
-import { PrismaException } from "../../exceptions/prismaException";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
+import {
+  BadRequestException,
+  HttpException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { User } from '@prisma/client';
+import { PrismaException } from '../../exceptions/prismaException';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { RegisterUserDto } from 'modules/users/dto/register-user.dto';
+import {
+  checkPassword,
+  generateToken,
+  hashPassword,
+} from 'modules/users/users.utils';
+import { LoginUserDto } from 'modules/users/dto/login-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -34,15 +45,53 @@ export class UsersService {
     return result;
   }
 
-  async create(data: CreateUserDto) {
-    let result;
+  async register({ password, email, ...data }: RegisterUserDto) {
     try {
-      result = await this.prisma.user.create({ data });
+      const passwordHash = await hashPassword(password);
+      if (passwordHash) {
+        await this.prisma.user.create({
+          data: { ...data, email: email.toLowerCase(), passwordHash },
+        });
+        return 'REGISTERED';
+      }
     } catch (err) {
       throw new PrismaException(err as Error);
     }
 
-    return result;
+    throw new HttpException('Something went wrong when register new user', 500);
+  }
+
+  async login({ login, password }: LoginUserDto) {
+    let user;
+    try {
+      const users = await this.prisma.user.findMany({
+        where: {
+          OR: [{ email: login.toLowerCase() }, { phone: login }],
+        },
+      });
+      user = users[0];
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    if (user) {
+      try {
+        const result = await this.prisma.user.findUnique({
+          where: { id: user.id },
+        });
+        if (result?.passwordHash) {
+          const compared = await checkPassword(password, result.passwordHash);
+          if (compared) {
+            const token = generateToken();
+            return { token };
+          }
+        }
+      } catch (err) {
+        throw new PrismaException(err as Error);
+      }
+    }
+
+    throw new BadRequestException('User not found');
   }
 
   async update(id: number, data: UpdateUserDto) {
