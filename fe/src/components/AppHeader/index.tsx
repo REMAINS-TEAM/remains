@@ -17,6 +17,7 @@ import AuthPopup from 'components/Popups/AuthPopup';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import userApi from 'store/api/user';
+import ProfileMenu from 'components/AppHeader/units/ProfileMenu';
 
 function AppHeader() {
   const { isFetching } = userApi.useMeQuery(undefined, {
@@ -25,8 +26,16 @@ function AppHeader() {
   const user = useSelector((state: RootState) => state.user);
   const [authPopupOpen, setAuthPopupOpen] = useState(false);
 
+  const [profileButtonRef, setProfileButtonRef] = useState<HTMLElement | null>(
+    null,
+  );
+
   const loginClickHandler = () => {
     setAuthPopupOpen(true);
+  };
+
+  const profileClickHandler = (event: React.MouseEvent<HTMLElement>) => {
+    setProfileButtonRef(event.currentTarget);
   };
 
   return (
@@ -51,15 +60,20 @@ function AppHeader() {
         ) : (
           <Button
             color="inherit"
-            onClick={loginClickHandler}
+            onClick={user ? profileClickHandler : loginClickHandler}
             sx={{ columnGap: 1 }}
           >
-            {user.name || 'Login'}
+            {/*TODO выпадающий список + logout*/}
+            {user?.name || 'Login'}
             <UserIcon />
           </Button>
         )}
       </Toolbar>
       <AuthPopup open={authPopupOpen} setOpen={setAuthPopupOpen} />
+      <ProfileMenu
+        anchorEl={profileButtonRef}
+        setAnchorEl={setProfileButtonRef}
+      />
     </AppBar>
   );
 }

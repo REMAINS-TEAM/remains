@@ -56,6 +56,19 @@ export const usersApi = api.injectEndpoints({
         return { data: userData };
       },
     }),
+    logout: build.mutation<null, void>({
+      async queryFn(_args, _queryApi, _extraOptions, fetchWithBQ) {
+        const logoutResponse = await fetchWithBQ({
+          url: 'users/logout',
+          method: 'POST',
+        });
+
+        if (logoutResponse.error) throw logoutResponse.error;
+        _queryApi.dispatch(setCurrent(null));
+        localStorage.removeItem(LS_KEY_TOKEN);
+        return { data: null };
+      },
+    }),
   }),
 });
 

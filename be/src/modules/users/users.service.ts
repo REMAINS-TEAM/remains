@@ -135,7 +135,7 @@ export class UsersService {
       throw new NotFoundException('No such token');
     }
 
-    return 'OK';
+    return { status: 'OK' };
   }
 
   async update(id: number, data: UpdateUserDto) {

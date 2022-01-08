@@ -61,7 +61,7 @@ export class UsersController {
   @Post('logout')
   async logout(
     @Headers() headers: { authorization: string | undefined },
-  ): Promise<string> {
+  ): Promise<{ status: string }> {
     const authHeader = headers.authorization || '';
     const token = authHeader.split(' ')[1];
     return this.usersService.logout(token);

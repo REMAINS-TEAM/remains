@@ -11,6 +11,10 @@ import usersApi from 'store/api/user';
 function AuthPopup({ open, setOpen }: AuthPopupProps) {
   const [loginRequest, result] = usersApi.useLoginMutation();
 
+  // TODO: отправлять даныне из формы
+  // TODO: показывать оставшееся время до оплаты
+  // TODO: регистрация
+
   const loginClickHandler = () => {
     loginRequest({
       login: 'admin@remains.ru',
