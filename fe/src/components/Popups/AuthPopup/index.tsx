@@ -13,7 +13,7 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
 
   const loginClickHandler = () => {
     loginRequest({
-      login: '2',
+      login: 'admin@remains.ru',
       password: '123',
     });
   };

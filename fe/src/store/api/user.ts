@@ -1,6 +1,7 @@
 import api from './';
 import { LS_KEY_TOKEN } from 'global/constants';
 import { User, setCurrent } from 'store/slices/user';
+import { getQueryString } from 'utils';
 
 export const usersApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -40,6 +41,19 @@ export const usersApi = api.injectEndpoints({
         }
 
         return { data };
+      },
+    }),
+    me: build.query<User, void>({
+      async queryFn(_args, _queryApi, _extraOptions, fetchWithBQ) {
+        const meResponse = await fetchWithBQ({
+          url: 'users/me',
+          method: 'GET',
+        });
+
+        if (meResponse.error) throw meResponse.error;
+        const userData = meResponse.data as User;
+        _queryApi.dispatch(setCurrent(userData));
+        return { data: userData };
       },
     }),
   }),
