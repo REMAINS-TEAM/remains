@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { User } from '@prisma/client';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -10,6 +18,16 @@ import { LogoutUserDto } from 'modules/users/dto/logout-user.dto';
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
+  @Get('me')
+  async getMe(
+    @Headers() headers: { authorization: string | undefined },
+  ): Promise<Omit<User, 'passwordHash'>> {
+    const authHeader = headers.authorization || '';
+    const token = authHeader.split(' ')[1];
+
+    return this.usersService.findOneByToken(token);
+  }
 
   @Get()
   @Roles('admin')

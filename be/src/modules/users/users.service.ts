@@ -42,6 +42,37 @@ export class UsersService {
     return result;
   }
 
+  async findOneByToken(
+    token: string | undefined,
+  ): Promise<Omit<User, 'passwordHash'>> {
+    if (!token) {
+      throw new BadRequestException(`Token is missing`);
+    }
+    let result;
+    try {
+      result = await this.prisma.user.findFirst({
+        where: {
+          tokens: {
+            some: { token },
+          },
+        },
+        include: {
+          company: true,
+        },
+      });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    if (!result) {
+      throw new NotFoundException(`User with such token does not exist`);
+    }
+
+    const { passwordHash, ...userWithoutPwd } = result;
+
+    return userWithoutPwd;
+  }
+
   async register({ password, email, ...data }: RegisterUserDto) {
     try {
       const passwordHash = await hashPassword(password);
