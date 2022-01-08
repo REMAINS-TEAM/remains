@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import categoriesReducer from './slices/categories';
 import itemsReducer from './slices/items';
+import userReducer from './slices/user';
 
 import api from './api';
 
@@ -8,6 +9,7 @@ export const store = configureStore({
   reducer: {
     categories: categoriesReducer,
     items: itemsReducer,
+    user: userReducer,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) => [

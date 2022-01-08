@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,8 +11,17 @@ import Search from 'components/Search';
 
 import * as styles from './styles';
 import { APP_HEADER_HEIGHT } from 'global/constants';
+import AddItemPopup from 'components/Popups/AddItemPopup';
+import MainLayout from 'layouts/MainLayout';
+import AuthPopup from 'components/Popups/AuthPopup';
 
 function AppHeader() {
+  const [authPopupOpen, setAuthPopupOpen] = useState(false);
+
+  const loginClickHandler = () => {
+    setAuthPopupOpen(true);
+  };
+
   return (
     <AppBar position="fixed" sx={{ height: APP_HEADER_HEIGHT }}>
       <Toolbar sx={styles.toolbar}>
@@ -30,8 +39,11 @@ function AppHeader() {
           </Typography>
           <Search />
         </Box>
-        <Button color="inherit">Login</Button>
+        <Button color="inherit" onClick={loginClickHandler}>
+          Login
+        </Button>
       </Toolbar>
+      <AuthPopup open={authPopupOpen} setOpen={setAuthPopupOpen} />
     </AppBar>
   );
 }
