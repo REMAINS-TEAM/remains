@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   DefaultValuePipe,
   Get,
@@ -9,6 +10,7 @@ import {
 import { Item } from '@prisma/client';
 import { ItemsService } from './items.service';
 import { Access } from 'decorators/access.decorator';
+import { MAX_ITEMS_FOR_NOT_REGISTERED_USER } from 'constants/main';
 
 @Controller('items')
 export class ItemsController {
@@ -21,10 +23,18 @@ export class ItemsController {
     @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
     @Query('categoryId') categoryId?: number,
   ): Promise<Item[]> {
-    console.log('access', access);
+    let availableLimit = limit;
+    if (!access) {
+      if (offset > MAX_ITEMS_FOR_NOT_REGISTERED_USER) {
+        throw new BadRequestException('Access is not paid for');
+      }
+      if (limit > MAX_ITEMS_FOR_NOT_REGISTERED_USER) {
+        availableLimit = MAX_ITEMS_FOR_NOT_REGISTERED_USER;
+      }
+    }
     return this.itemsService.findAll({
       categoryId: categoryId || undefined,
-      limit,
+      limit: availableLimit,
       offset,
     });
   }
