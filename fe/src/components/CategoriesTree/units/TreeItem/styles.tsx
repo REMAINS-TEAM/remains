@@ -5,8 +5,8 @@ export const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
   color: theme.palette.text.secondary,
   [`& .${treeItemClasses.content}`]: {
     color: theme.palette.text.secondary,
-    borderTopRightRadius: theme.spacing(1),
-    borderBottomRightRadius: theme.spacing(1),
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
     paddingRight: theme.spacing(1),
     fontWeight: theme.typography.fontWeightMedium,
     '&.Mui-expanded': {
@@ -27,7 +27,7 @@ export const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
   [`& .${treeItemClasses.group}`]: {
     marginLeft: 10,
     [`& .${treeItemClasses.content}`]: {
-      paddingLeft: theme.spacing(2),
+      paddingLeft: theme.spacing(1),
     },
   },
 }));
