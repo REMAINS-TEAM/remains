@@ -7,62 +7,92 @@ import {
   VpnKey as PasswordIcon,
 } from '@mui/icons-material';
 import usersApi from 'store/api/user';
+import { Controller, useForm } from 'react-hook-form';
 
 function AuthPopup({ open, setOpen }: AuthPopupProps) {
   const [loginRequest, result] = usersApi.useLoginMutation();
 
-  // TODO: отправлять даныне из формы
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      login: '',
+      password: '',
+    },
+  });
+
   // TODO: показывать оставшееся время до оплаты
   // TODO: регистрация
+  // TODO: валидация
+  // TODO: обработка если неправильный пароль
+  // TODO: если верный - показать уведомление
 
-  const loginClickHandler = () => {
+  const onSubmit = ({
+    login,
+    password,
+  }: {
+    login: string;
+    password: string;
+  }) => {
     loginRequest({
-      login: 'admin@remains.ru',
-      password: '123',
+      login,
+      password,
     });
   };
-
-  console.log('res', result.data || 'fail');
 
   return (
     <Popup
       title={`Авторизация`}
       okButtonText={'Войти'}
-      onOkClick={loginClickHandler}
+      onOkClick={handleSubmit(onSubmit)}
       {...{ open, setOpen }}
     >
-      <TextField
-        autoFocus
-        margin="dense"
-        id="login"
-        label="Телефон/e-mail"
-        type="text"
-        fullWidth
-        variant="outlined"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <UserIcon />
-            </InputAdornment>
-          ),
-        }}
-      />
-      <TextField
-        autoFocus
-        margin="dense"
-        id="password"
-        label="Пароль"
-        type="password"
-        fullWidth
-        variant="outlined"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <PasswordIcon />
-            </InputAdornment>
-          ),
-        }}
-      />
+      <form>
+        <Controller
+          name="login"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              autoFocus
+              margin="dense"
+              id="login"
+              label="Телефон/e-mail"
+              type="text"
+              fullWidth
+              variant="outlined"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <UserIcon />
+                  </InputAdornment>
+                ),
+              }}
+              {...field}
+            />
+          )}
+        />
+        <Controller
+          name="password"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              autoFocus
+              margin="dense"
+              id="password"
+              label="Пароль"
+              type="password"
+              fullWidth
+              variant="outlined"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <PasswordIcon />
+                  </InputAdornment>
+                ),
+              }}
+              {...field}
+            />
+          )}
+        />
+      </form>
     </Popup>
   );
 }
