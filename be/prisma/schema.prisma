@@ -11,17 +11,18 @@ datasource db {
 }
 
 model User {
-  id              Int         @id @default(autoincrement())
-  email           String      @unique
-  name            String
-  phone           String
-  passwordHash    String?
-  company         Company     @relation(fields: [companyId], references: [id])
-  companyId       Int
-  items           Item[]
-  tokens          Token[]
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  id                  Int         @id @default(autoincrement())
+  email               String      @unique
+  name                String
+  phone               String      @unique
+  passwordHash        String?
+  paymentExpiredDate  DateTime    @default(now())
+  company             Company     @relation(fields: [companyId], references: [id])
+  companyId           Int
+  items               Item[]
+  tokens              Token[]
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
 }
 
 model Token {

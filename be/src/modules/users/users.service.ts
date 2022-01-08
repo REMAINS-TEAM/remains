@@ -6,16 +6,12 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User } from '@prisma/client';
-import { PrismaException } from '../../exceptions/prismaException';
+import { PrismaException } from 'exceptions/prismaException';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { RegisterUserDto } from 'modules/users/dto/register-user.dto';
-import {
-  checkPassword,
-  generateToken,
-  hashPassword,
-} from 'modules/users/users.utils';
-import { LoginUserDto } from 'modules/users/dto/login-user.dto';
-import { LogoutUserDto } from 'modules/users/dto/logout-user.dto';
+import { RegisterUserDto } from './dto/register-user.dto';
+import { checkPassword, generateToken, hashPassword } from './users.utils';
+import { LoginUserDto } from './dto/login-user.dto';
+import { LogoutUserDto } from './dto/logout-user.dto';
 
 @Injectable()
 export class UsersService {
