@@ -1,10 +1,13 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   DefaultValuePipe,
   Get,
+  Headers,
   Param,
   ParseIntPipe,
+  Post,
   Query,
 } from '@nestjs/common';
 import { Item } from '@prisma/client';
@@ -42,5 +45,22 @@ export class ItemsController {
   @Get(':id')
   async findOne(@Param() params: { id: string }): Promise<Item> {
     return this.itemsService.findOne(+params.id);
+  }
+
+  @Post()
+  async create(
+    @Body()
+    createItemDto: {
+      title: string;
+      description: string;
+      price: string;
+      categoryId: number;
+    },
+    @Headers() headers: { authorization: string | undefined },
+  ): Promise<Item> {
+    const authHeader = headers.authorization || '';
+    const token = authHeader.split(' ')[1];
+
+    return this.itemsService.create(token, createItemDto);
   }
 }

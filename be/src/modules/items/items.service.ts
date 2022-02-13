@@ -1,6 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma, Item } from '@prisma/client';
+import { Item, User, Token } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
 
 @Injectable()
@@ -48,5 +53,48 @@ export class ItemsService {
     }
 
     return result;
+  }
+
+  async create(
+    token: string | undefined,
+    data: {
+      title: string;
+      description: string;
+      price: string;
+      categoryId: number;
+    },
+  ) {
+    if (!token) {
+      throw new ForbiddenException(`You are not authorized to create item`);
+    }
+
+    let foundToken: (Token & { user: User | null }) | null;
+    try {
+      foundToken = await this.prisma.token.findUnique({
+        where: { token },
+        include: { user: true },
+      });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    if (!foundToken?.user) {
+      throw new UnauthorizedException(`User does not exist`);
+    }
+
+    if (new Date() > foundToken.user.paymentExpiredDate) {
+      throw new ForbiddenException(`Please pay service for this action`);
+    }
+
+    return this.prisma.item.create({
+      data: {
+        title: data.title,
+        description: data.description,
+        price: +data.price,
+        categoryId: data.categoryId,
+        images: [],
+        userId: foundToken.user.id,
+      },
+    });
   }
 }
