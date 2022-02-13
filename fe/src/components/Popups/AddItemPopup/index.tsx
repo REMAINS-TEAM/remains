@@ -4,52 +4,135 @@ import { AddItemPopupProps } from 'components/Popups/AddItemPopup/types';
 import { Box, InputAdornment, TextField, Typography } from '@mui/material';
 import UploadedImage from './units/UploadedImage';
 import * as styles from './styles';
-import { padding } from '@mui/system';
+import { Controller, useForm } from 'react-hook-form';
+import useLimitTextField from 'hooks/useLimitTextField';
+import itemsApi from 'store/api/items';
+
+const MAX_LENGTH_TITLE = 80;
+const MAX_LENGTH_DESCRIPTION = 200;
+
+const fields = {
+  TITLE: 'title',
+  DESCRIPTION: 'description',
+  PRICE: 'price',
+};
 
 function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
+  const [createItemRequest, result] = itemsApi.useCreateItemMutation();
+
+  const { control, handleSubmit, watch, setValue } = useForm({
+    defaultValues: Object.values(fields).reduce(
+      (acc, value) => ({
+        ...acc,
+        [value]: '',
+      }),
+      {} as any,
+    ),
+  });
+
+  // TODO: get categoryId, send form-data
+  const onSubmit = (fieldsValues: {
+    title: string;
+    description: string;
+    price: number;
+  }) => {
+    createItemRequest({
+      ...fieldsValues,
+      categoryId: 6,
+      images: [] as string[],
+    });
+  };
+
+  // TODO: refactor: remove name
+  const titleLength = useLimitTextField({
+    name: fields.TITLE,
+    value: watch(fields.TITLE),
+    setValue,
+    maxLength: MAX_LENGTH_TITLE,
+  });
+
+  const descriptionLength = useLimitTextField({
+    name: fields.DESCRIPTION,
+    value: watch(fields.DESCRIPTION),
+    setValue,
+    maxLength: MAX_LENGTH_DESCRIPTION,
+  });
+
   if (!category) return null;
 
   return (
     <Popup
       title={`Разместить товар в категории "${category.title}"`}
       okButtonText={'Разместить'}
+      onOkClick={handleSubmit(onSubmit)}
       {...{ open, setOpen }}
     >
-      <TextField
-        autoFocus
-        margin="dense"
-        id="title"
-        label="Заголовок"
-        type="text"
-        fullWidth
-        variant="outlined"
-        InputProps={{
-          endAdornment: <InputAdornment position="end">80</InputAdornment>,
-        }}
+      <Controller
+        name="title"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            autoFocus
+            margin="dense"
+            id="title"
+            label="Заголовок"
+            type="text"
+            fullWidth
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {MAX_LENGTH_TITLE - titleLength}
+                </InputAdornment>
+              ),
+            }}
+            {...field}
+          />
+        )}
       />
-      <TextField
-        margin="dense"
-        id="description"
-        label="Описание"
-        type="text"
-        multiline
-        fullWidth
-        variant="outlined"
-        rows={3}
-        InputProps={{
-          endAdornment: <InputAdornment position="end">200</InputAdornment>,
-        }}
+      <Controller
+        name="description"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            margin="dense"
+            id="description"
+            label="Описание"
+            type="text"
+            multiline
+            fullWidth
+            variant="outlined"
+            rows={3}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {MAX_LENGTH_DESCRIPTION - descriptionLength}
+                </InputAdornment>
+              ),
+            }}
+            {...field}
+          />
+        )}
       />
-      <TextField
-        margin="dense"
-        id="price"
-        label="Цена"
-        type="number"
-        variant="outlined"
-        InputProps={{
-          endAdornment: <InputAdornment position="end">₽</InputAdornment>,
-        }}
+
+      <Controller
+        name="price"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            margin="dense"
+            id="price"
+            label="Цена"
+            type="number"
+            variant="outlined"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">₽</InputAdornment>,
+            }}
+            {...field}
+          />
+        )}
       />
+
       <Typography variant="subtitle1" color="secondary" sx={{ p: 1.5 }}>
         Фото:
       </Typography>

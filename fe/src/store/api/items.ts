@@ -10,6 +10,22 @@ export const itemsApi = api.injectEndpoints({
     >({
       query: (params) => `items` + getQueryString(params),
     }),
+    createItem: build.mutation<
+      Item,
+      {
+        title: string;
+        description: string;
+        price: number;
+        categoryId: number;
+        images: string[];
+      }
+    >({
+      query: (body) => ({
+        url: `items`,
+        method: 'post',
+        body,
+      }),
+    }),
   }),
 });
 
