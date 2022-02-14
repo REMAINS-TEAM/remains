@@ -43,18 +43,15 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
     });
   };
 
-  // TODO: refactor: remove name
   const titleLength = useLimitTextField({
-    name: fields.TITLE,
     value: watch(fields.TITLE),
-    setValue,
+    setValue: (value) => setValue(fields.TITLE, value),
     maxLength: MAX_LENGTH_TITLE,
   });
 
   const descriptionLength = useLimitTextField({
-    name: fields.DESCRIPTION,
     value: watch(fields.DESCRIPTION),
-    setValue,
+    setValue: (value) => setValue(fields.DESCRIPTION, value),
     maxLength: MAX_LENGTH_DESCRIPTION,
   });
 
@@ -81,7 +78,14 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
             variant="outlined"
             InputProps={{
               endAdornment: (
-                <InputAdornment position="end">
+                <InputAdornment
+                  position="end"
+                  sx={
+                    MAX_LENGTH_TITLE - titleLength <= 0
+                      ? { color: 'red' }
+                      : null
+                  }
+                >
                   {MAX_LENGTH_TITLE - titleLength}
                 </InputAdornment>
               ),
@@ -105,7 +109,14 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
             rows={3}
             InputProps={{
               endAdornment: (
-                <InputAdornment position="end">
+                <InputAdornment
+                  position="end"
+                  sx={
+                    MAX_LENGTH_DESCRIPTION - descriptionLength <= 0
+                      ? { color: 'red' }
+                      : null
+                  }
+                >
                   {MAX_LENGTH_DESCRIPTION - descriptionLength}
                 </InputAdornment>
               ),
