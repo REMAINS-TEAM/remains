@@ -15,7 +15,7 @@ export const itemsApi = api.injectEndpoints({
       {
         title: string;
         description: string;
-        price: number;
+        price: string;
         categoryId: number;
         images: string[];
       }

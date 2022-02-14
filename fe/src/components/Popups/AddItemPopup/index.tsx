@@ -8,14 +8,16 @@ import { Controller, useForm } from 'react-hook-form';
 import useLimitTextField from 'hooks/useLimitTextField';
 import itemsApi from 'store/api/items';
 
-const MAX_LENGTH_TITLE = 80;
-const MAX_LENGTH_DESCRIPTION = 200;
-
 const fields = {
   TITLE: 'title',
   DESCRIPTION: 'description',
   PRICE: 'price',
 };
+
+type FieldsType = typeof fields[keyof typeof fields];
+
+const MAX_LENGTH_TITLE = 80;
+const MAX_LENGTH_DESCRIPTION = 200;
 
 function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
   const [createItemRequest, result] = itemsApi.useCreateItemMutation();
@@ -26,22 +28,9 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
         ...acc,
         [value]: '',
       }),
-      {} as any,
+      {} as Record<FieldsType, string>,
     ),
   });
-
-  // TODO: get categoryId, send form-data
-  const onSubmit = (fieldsValues: {
-    title: string;
-    description: string;
-    price: number;
-  }) => {
-    createItemRequest({
-      ...fieldsValues,
-      categoryId: 6,
-      images: [] as string[],
-    });
-  };
 
   const titleLength = useLimitTextField({
     value: watch(fields.TITLE),
@@ -54,6 +43,19 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
     setValue: (value) => setValue(fields.DESCRIPTION, value),
     maxLength: MAX_LENGTH_DESCRIPTION,
   });
+
+  // TODO: get categoryId, send form-data
+  const onSubmit = (fieldsValues: Record<FieldsType, string>) => {
+    const { title, description, price } = fieldsValues;
+
+    createItemRequest({
+      title,
+      description,
+      price,
+      categoryId: 6,
+      images: [] as string[],
+    });
+  };
 
   if (!category) return null;
 
