@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
   Headers,
   Param,
@@ -62,5 +63,16 @@ export class ItemsController {
     const token = authHeader.split(' ')[1];
 
     return this.itemsService.create(token, createItemDto);
+  }
+
+  @Delete(':id')
+  async delete(
+    @Param() params: { id: string },
+    @Headers() headers: { authorization: string | undefined },
+  ): Promise<Item> {
+    const authHeader = headers.authorization || '';
+    const token = authHeader.split(' ')[1];
+
+    return this.itemsService.delete(token, +params.id);
   }
 }

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -95,6 +96,49 @@ export class ItemsService {
         images: [],
         userId: foundToken.user.id,
       },
+    });
+  }
+
+  async delete(token: string | undefined, id: number) {
+    if (!token) {
+      throw new ForbiddenException(`You are not authorized to delete item`);
+    }
+
+    let foundToken: (Token & { user: User | null }) | null;
+    try {
+      foundToken = await this.prisma.token.findUnique({
+        where: { token },
+        include: { user: true },
+      });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    if (!foundToken?.user) {
+      throw new UnauthorizedException(`User does not exist`);
+    }
+
+    let item: Item | null;
+    try {
+      item = await this.prisma.item.findUnique({
+        where: { id },
+      });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    if (!item) {
+      throw new BadRequestException(`Item with id ${id} not found`);
+    }
+
+    if (item.userId !== foundToken?.userId) {
+      throw new ForbiddenException(
+        `Cannot delete item with id ${id}. It is not your item`,
+      );
+    }
+
+    return this.prisma.item.delete({
+      where: { id },
     });
   }
 }
