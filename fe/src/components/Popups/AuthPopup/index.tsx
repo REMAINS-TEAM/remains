@@ -8,13 +8,16 @@ import {
 } from '@mui/icons-material';
 import usersApi from 'store/api/user';
 import { Controller, useForm } from 'react-hook-form';
-import { QueryStatus } from '@reduxjs/toolkit/query';
-import useNotification, { notificationType } from 'hooks/useNotification';
+import useResponseNotifications from 'hooks/useResponseNotifications';
 
 function AuthPopup({ open, setOpen }: AuthPopupProps) {
-  const notification = useNotification();
-
   const [loginRequest, result] = usersApi.useLoginMutation();
+
+  useResponseNotifications({
+    result,
+    onSuccessText: 'Вы успешно вошли в свой аккаунт',
+    onErrorText: 'Неверный логин и/или пароль',
+  });
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
@@ -38,18 +41,6 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
       password,
     });
   };
-
-  useEffect(() => {
-    if (result.status === QueryStatus.fulfilled) {
-      notification.show(
-        notificationType.SUCCESS,
-        'Вы успешно вошли в свой аккаунт',
-      );
-      setOpen(false);
-    } else if (result.status === QueryStatus.rejected) {
-      notification.show(notificationType.ERROR, 'Неверный логин и/или пароль');
-    }
-  }, [result.status]);
 
   return (
     <Popup
