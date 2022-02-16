@@ -13,11 +13,12 @@ export default function Popup({
   okButtonText = 'OK',
   cancelButtonText = 'Отмена',
   onOkClick,
+  closeWhenSubmit = true,
   hideActionButtons = false,
   children,
 }: PopupProps) {
   const handleOkClick = () => {
-    setOpen(false);
+    closeWhenSubmit && setOpen(false);
     onOkClick && onOkClick();
   };
 

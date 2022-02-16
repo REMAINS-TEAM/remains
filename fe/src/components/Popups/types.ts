@@ -7,6 +7,7 @@ export interface PopupProps {
   okButtonText?: string;
   cancelButtonText?: string;
   onOkClick?: () => void;
+  closeWhenSubmit?: boolean;
   hideActionButtons?: boolean;
   children: ReactNode;
 }

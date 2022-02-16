@@ -25,7 +25,6 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
 
   // TODO: регистрация
   // TODO: валидация
-  // TODO: обработка если неправильный пароль
 
   const onSubmit = ({
     login,
@@ -46,6 +45,7 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
         notificationType.SUCCESS,
         'Вы успешно вошли в свой аккаунт',
       );
+      setOpen(false);
     } else if (result.status === QueryStatus.rejected) {
       notification.show(notificationType.ERROR, 'Неверный логин и/или пароль');
     }
@@ -55,6 +55,7 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
     <Popup
       title={`Авторизация`}
       okButtonText={'Войти'}
+      closeWhenSubmit={false}
       onOkClick={handleSubmit(onSubmit)}
       {...{ open, setOpen }}
     >
