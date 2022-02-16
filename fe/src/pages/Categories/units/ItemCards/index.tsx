@@ -18,15 +18,6 @@ function ItemCards({
       {items.map((item) => (
         <ItemCard key={item.id} item={item} />
       ))}
-      {items.map((item) => (
-        <ItemCard key={item.id} item={item} />
-      ))}
-      {items.map((item) => (
-        <ItemCard key={item.id} item={item} />
-      ))}
-      {items.map((item) => (
-        <ItemCard key={item.id} item={item} />
-      ))}
     </Box>
   );
 }

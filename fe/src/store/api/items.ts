@@ -1,6 +1,7 @@
 import api from './';
 import { Item } from '../slices/items';
 import { getQueryString } from 'utils';
+import { deleteById } from 'store/slices/items';
 
 export const itemsApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -25,6 +26,20 @@ export const itemsApi = api.injectEndpoints({
         method: 'post',
         body,
       }),
+    }),
+    deleteItem: build.mutation<Item, number>({
+      async queryFn(id, _queryApi, _extraOptions, fetchWithBQ) {
+        const deleteResponse = await fetchWithBQ({
+          url: `items/${id}`,
+          method: 'DELETE',
+        });
+        if (deleteResponse.error) throw deleteResponse.error;
+        const data = deleteResponse.data as Item;
+
+        _queryApi.dispatch(deleteById(id));
+
+        return { data };
+      },
     }),
   }),
 });

@@ -1,5 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import categoriesApi from '../api/categories';
+import { Notification } from 'store/slices/notification';
+import itemsApi from 'store/api/items';
 
 export interface Item {
   id: number;
@@ -26,24 +28,26 @@ const initialState: {
 export const itemsSlice = createSlice({
   name: 'items',
   initialState,
-  reducers: {},
-  // extraReducers: (builder) => {
-  //   builder.addMatcher(
-  //     categoriesApi.endpoints.getCategoryById.matchFulfilled,
-  //     (state, { payload }) => {
-  //       state.current = payload;
-  //     },
-  //   );
-  //   builder.addMatcher(
-  //     categoriesApi.endpoints.getAllCategories.matchFulfilled,
-  //     (state, { payload }) => {
-  //       state.list = payload;
-  //     },
-  //   );
-  // },
+  reducers: {
+    deleteById: (state, action: PayloadAction<number>) => {
+      state = {
+        ...state,
+        list: state.list.filter((item) => item.id !== action.payload),
+      };
+      return state;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      itemsApi.endpoints.getCategoryItems.matchFulfilled,
+      (state, { payload }) => {
+        state.list = payload;
+      },
+    );
+  },
 });
 
 // Action creators are generated for each case reducer function
-export const {} = itemsSlice.actions;
+export const { deleteById } = itemsSlice.actions;
 
 export default itemsSlice.reducer;

@@ -31,5 +31,7 @@ export default function ({
         onError && onError(result.error);
         break;
     }
+
+    console.log('res', result?.status);
   }, [result.status]);
 }

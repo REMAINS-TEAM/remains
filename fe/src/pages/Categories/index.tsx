@@ -13,15 +13,18 @@ import categoriesApi from 'store/api/categories';
 import AddItemPopup from 'components/Popups/AddItemPopup';
 import ActionsButtons from 'pages/Categories/units/ActionsButtons';
 import NotFoundPage from 'pages/NotFoundPage';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 
 function Categories() {
   const navigate = useNavigate();
   const { categoryId } = useParams();
 
+  const categoryItems = useSelector((state: RootState) => state.items.list);
+
   const [addItemPopupOpen, setAddItemPopupOpen] = useState(false);
 
   const {
-    data: fetchedItems,
     isFetching,
     error: getCategoryItemsError,
   } = itemsApi.useGetCategoryItemsQuery({
@@ -79,8 +82,8 @@ function Categories() {
                 </IconButton>
               </Box>
 
-              {fetchedItems?.length ? (
-                <ItemCards items={fetchedItems} isLoading={isFetching} />
+              {categoryItems?.length ? (
+                <ItemCards items={categoryItems} isLoading={isFetching} />
               ) : (
                 <EmptyState
                   text={'Здесь пока нет товаров'}
