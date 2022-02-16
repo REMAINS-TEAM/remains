@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Box } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 import Loader from '@mui/material/CircularProgress';
 import { PersonRounded as UserIcon } from '@mui/icons-material';
 import Search from 'components/Search';
@@ -18,6 +18,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import userApi from 'store/api/user';
 import ProfileMenu from 'components/AppHeader/units/ProfileMenu';
+import CircularProgressWithLabel from 'components/CircularProgressWithLabel';
+import { differenceInDays, format } from 'date-fns';
 
 function AppHeader() {
   const { isFetching } = userApi.useMeQuery(undefined, {
@@ -29,6 +31,12 @@ function AppHeader() {
   const [profileButtonRef, setProfileButtonRef] = useState<HTMLElement | null>(
     null,
   );
+
+  const daysLeft =
+    user &&
+    (new Date() > user.paymentExpiredDate
+      ? 0
+      : differenceInDays(new Date(user.paymentExpiredDate), new Date()));
 
   const loginClickHandler = () => {
     setAuthPopupOpen(true);
@@ -55,19 +63,39 @@ function AppHeader() {
           </Typography>
           <Search />
         </Box>
-        {isFetching ? (
-          <Loader color={'secondary'} size={20} />
-        ) : (
-          <Button
-            color="inherit"
-            onClick={user ? profileClickHandler : loginClickHandler}
-            sx={{ columnGap: 1 }}
-          >
-            {/*TODO выпадающий список + logout*/}
-            {user?.name || 'Login'}
-            <UserIcon />
-          </Button>
-        )}
+        <Box sx={styles.rightSide}>
+          {isFetching ? (
+            <Loader color={'secondary'} size={20} />
+          ) : (
+            <>
+              {user && daysLeft !== null && (
+                <Tooltip
+                  title={
+                    daysLeft < 0
+                      ? `Оплата истекла ${format(
+                          new Date(user.paymentExpiredDate),
+                          'dd.MM.YYYY hh:mm',
+                        )}`
+                      : 'Осталось до оплаты'
+                  }
+                >
+                  <CircularProgressWithLabel
+                    value={daysLeft > 30 ? 100 : (daysLeft * 100) / 30}
+                    label={`${daysLeft < 0 ? 0 : daysLeft}д`}
+                  />
+                </Tooltip>
+              )}
+              <Button
+                color="inherit"
+                onClick={user ? profileClickHandler : loginClickHandler}
+                sx={{ columnGap: 1 }}
+              >
+                {user?.name || 'Login'}
+                <UserIcon />
+              </Button>
+            </>
+          )}
+        </Box>
       </Toolbar>
       <AuthPopup open={authPopupOpen} setOpen={setAuthPopupOpen} />
       <ProfileMenu

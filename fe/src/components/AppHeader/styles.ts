@@ -13,4 +13,6 @@ export const leftSide: SxProps = {
 
 export const rightSide: SxProps = {
   display: 'flex',
+  columnGap: 2,
+  alignItems: 'center',
 };
