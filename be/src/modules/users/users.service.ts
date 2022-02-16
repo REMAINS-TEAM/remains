@@ -3,6 +3,7 @@ import {
   HttpException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User } from '@prisma/client';
@@ -125,7 +126,7 @@ export class UsersService {
       }
     }
 
-    throw new BadRequestException('User not found');
+    throw new UnauthorizedException('User or password is invalid');
   }
 
   async logout(token: string) {
