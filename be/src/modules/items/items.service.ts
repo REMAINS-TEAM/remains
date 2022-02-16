@@ -118,6 +118,10 @@ export class ItemsService {
       throw new UnauthorizedException(`User does not exist`);
     }
 
+    if (new Date() > foundToken.user.paymentExpiredDate) {
+      throw new ForbiddenException(`Please pay service for this action`);
+    }
+
     let item: Item | null;
     try {
       item = await this.prisma.item.findUnique({
