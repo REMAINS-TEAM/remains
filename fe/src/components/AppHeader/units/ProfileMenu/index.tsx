@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Avatar, Divider, ListItemIcon, Menu, MenuItem } from '@mui/material';
 import { Logout } from '@mui/icons-material';
 import usersApi from 'store/api/user';
+import { QueryStatus } from '@reduxjs/toolkit/query';
+import useNotification, { notificationType } from 'hooks/useNotification';
 
 function ProfileMenu({
   anchorEl,
@@ -11,6 +13,8 @@ function ProfileMenu({
   anchorEl: HTMLElement | null;
   setAnchorEl: (anchorEl: HTMLElement | null) => void;
 }) {
+  const notification = useNotification();
+
   const [logoutRequest, result] = usersApi.useLogoutMutation();
 
   const open = Boolean(anchorEl);
@@ -22,6 +26,17 @@ function ProfileMenu({
   const handleClickLogout = () => {
     logoutRequest();
   };
+
+  useEffect(() => {
+    if (result.status === QueryStatus.fulfilled) {
+      notification.show(
+        notificationType.SUCCESS,
+        'Вы успешно вышли из аккаунта',
+      );
+    } else if (result.status === QueryStatus.rejected) {
+      notification.show(notificationType.ERROR, 'Что-то пошло не так');
+    }
+  }, [result.status]);
 
   return (
     <Menu
