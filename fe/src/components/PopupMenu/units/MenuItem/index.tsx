@@ -1,5 +1,6 @@
 import { ListItemIcon, MenuItem as MUIMenuItem } from '@mui/material';
-import React from 'react';
+import React, { Component, ReactNode } from 'react';
+import { SvgIconComponent } from '@mui/icons-material';
 
 export default function MenuItem({
   Icon,
@@ -8,14 +9,14 @@ export default function MenuItem({
   color,
 }: {
   onClick: () => void;
-  Icon: any;
+  Icon: SvgIconComponent;
   label: string;
   color?: string;
 }) {
   return (
     <MUIMenuItem onClick={onClick} color={color}>
       <ListItemIcon>
-        <Icon fontSize="small" color={color} />
+        <Icon fontSize="small" />
       </ListItemIcon>
       {label}
     </MUIMenuItem>
