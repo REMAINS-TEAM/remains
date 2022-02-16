@@ -71,18 +71,20 @@ function AppHeader() {
               {user && daysLeft !== null && (
                 <Tooltip
                   title={
-                    daysLeft < 0
-                      ? `Оплата истекла ${format(
+                    daysLeft <= 0
+                      ? `Последний платеж: ${format(
                           new Date(user.paymentExpiredDate),
-                          'dd.MM.YYYY hh:mm',
+                          'dd.MM.yyyy hh:mm',
                         )}`
-                      : 'Осталось до оплаты'
+                      : `Функционал сервиса будет ограничен через ${daysLeft}дн.`
                   }
                 >
-                  <CircularProgressWithLabel
-                    value={daysLeft > 30 ? 100 : (daysLeft * 100) / 30}
-                    label={`${daysLeft < 0 ? 0 : daysLeft}д`}
-                  />
+                  <div>
+                    <CircularProgressWithLabel
+                      value={daysLeft > 30 ? 100 : (daysLeft * 100) / 30}
+                      label={`${daysLeft < 0 ? 0 : daysLeft}д`}
+                    />
+                  </div>
                 </Tooltip>
               )}
               <Button

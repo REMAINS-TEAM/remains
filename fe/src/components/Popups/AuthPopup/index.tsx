@@ -15,6 +15,7 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
 
   useResponseNotifications({
     result,
+    onSuccess: () => setOpen(false),
     onSuccessText: 'Вы успешно вошли в свой аккаунт',
     onErrorText: 'Неверный логин и/или пароль',
   });
