@@ -5,34 +5,29 @@ import { Item } from 'store/slices/items';
 import ItemImage from 'components/ItemCard/units/ItemImage';
 import { Box, Button, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
-import { MoreHoriz as DotsIcon } from '@mui/icons-material';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+  MoreHoriz as DotsIcon,
+} from '@mui/icons-material';
+import { useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import PopupMenu from 'components/PopupMenu';
 import MenuItem from 'components/PopupMenu/units/MenuItem';
-import itemsApi from 'store/api/items';
-import useResponseNotifications from 'hooks/useResponseNotifications';
 
-function ItemCard({ item }: { item: Item }) {
-  const [deleteItemRequest, deleteResult] = itemsApi.useDeleteItemMutation();
-
-  useResponseNotifications({
-    result: deleteResult,
-    onSuccessText: 'Товар удален"',
-    onErrorText: 'Ошибка при удалении товара',
-  });
-
+function ItemCard({
+  item,
+  onDeleteClick,
+}: {
+  item: Item;
+  onDeleteClick: (id: number) => void;
+}) {
   const user = useSelector((state: RootState) => state.user);
 
   const [dotsButtonRef, setDotsButtonRef] = useState<HTMLElement | null>(null);
 
   const dotsClickHandler = (event: React.MouseEvent<HTMLElement>) => {
     setDotsButtonRef(event.currentTarget);
-  };
-
-  const deleteHandler = () => {
-    deleteItemRequest(item.id);
   };
 
   return (
@@ -77,6 +72,7 @@ function ItemCard({ item }: { item: Item }) {
           </Typography>
         </Box>
       </Box>
+      {/* TODO: Добавить попап с подтверждением*/}
       <PopupMenu
         id={'ItemMenu'}
         anchorEl={dotsButtonRef}
@@ -88,7 +84,7 @@ function ItemCard({ item }: { item: Item }) {
           label={'Редактировать'}
         />
         <MenuItem
-          onClick={deleteHandler}
+          onClick={() => onDeleteClick(item.id)}
           Icon={DeleteIcon}
           label={'Удалить'}
           color={'error'}
