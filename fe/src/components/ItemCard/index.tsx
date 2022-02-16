@@ -3,7 +3,7 @@ import * as styles from './styles';
 import Container from 'components/Container';
 import { Item } from 'store/slices/items';
 import ItemImage from 'components/ItemCard/units/ItemImage';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Tooltip, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import {
   Delete as DeleteIcon,
@@ -47,13 +47,17 @@ function ItemCard({
       <Box sx={styles.rightSide}>
         <Box sx={styles.rightTop}>
           {item.userId === user?.id && (
-            <IconButton
-              color="secondary"
-              sx={styles.dotsButton}
-              onClick={dotsClickHandler}
+            <Tooltip
+              title={'Этот товар добавили Вы. Нажмите для редактирования.'}
             >
-              <DotsIcon />
-            </IconButton>
+              <IconButton
+                color="secondary"
+                sx={styles.dotsButton}
+                onClick={dotsClickHandler}
+              >
+                <DotsIcon />
+              </IconButton>
+            </Tooltip>
           )}
 
           <Typography
