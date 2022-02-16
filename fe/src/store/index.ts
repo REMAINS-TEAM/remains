@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import categoriesReducer from './slices/categories';
 import itemsReducer from './slices/items';
 import userReducer from './slices/user';
+import notificationReducer from './slices/notification';
 
 import api from './api';
 
@@ -10,6 +11,7 @@ export const store = configureStore({
     categories: categoriesReducer,
     items: itemsReducer,
     user: userReducer,
+    notification: notificationReducer,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) => [

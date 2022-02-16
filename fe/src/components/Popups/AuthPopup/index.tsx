@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Popup from 'components/Popups/index';
 import { InputAdornment, TextField } from '@mui/material';
 import { AuthPopupProps } from '../../Popups/AuthPopup/types';
@@ -8,8 +8,12 @@ import {
 } from '@mui/icons-material';
 import usersApi from 'store/api/user';
 import { Controller, useForm } from 'react-hook-form';
+import { QueryStatus } from '@reduxjs/toolkit/query';
+import useNotification, { notificationType } from 'hooks/useNotification';
 
 function AuthPopup({ open, setOpen }: AuthPopupProps) {
+  const notification = useNotification();
+
   const [loginRequest, result] = usersApi.useLoginMutation();
 
   const { control, handleSubmit } = useForm({
@@ -19,11 +23,9 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
     },
   });
 
-  // TODO: показывать оставшееся время до оплаты
   // TODO: регистрация
   // TODO: валидация
   // TODO: обработка если неправильный пароль
-  // TODO: если верный - показать уведомление
 
   const onSubmit = ({
     login,
@@ -37,6 +39,17 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
       password,
     });
   };
+
+  useEffect(() => {
+    if (result.status === QueryStatus.fulfilled) {
+      notification.show(
+        notificationType.SUCCESS,
+        'Вы успешно вошли в свой аккаунт',
+      );
+    } else if (result.status === QueryStatus.rejected) {
+      notification.show(notificationType.ERROR, 'Неверный логин и/или пароль');
+    }
+  }, [result.status]);
 
   return (
     <Popup

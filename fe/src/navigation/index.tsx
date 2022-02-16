@@ -7,6 +7,7 @@ import NotFoundPage from 'pages/NotFoundPage';
 import Categories from 'pages/Categories';
 import { Box } from '@mui/material';
 import { APP_HEADER_HEIGHT } from 'global/constants';
+import MainNotification from 'components/MainNotification';
 
 export const history = createBrowserHistory();
 
@@ -21,6 +22,7 @@ export default function MainNavigation() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Box>
+      <MainNotification />
     </BrowserRouter>
   );
 }
