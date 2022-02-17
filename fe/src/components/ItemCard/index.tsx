@@ -78,7 +78,7 @@ function ItemCard({
       </Box>
       {/* TODO: Добавить попап с подтверждением*/}
       <PopupMenu
-        id={'ItemMenu'}
+        id={`ItemMenu${item.id}`}
         anchorEl={dotsButtonRef}
         setAnchorEl={setDotsButtonRef}
       >
@@ -92,6 +92,7 @@ function ItemCard({
           Icon={DeleteIcon}
           label={'Удалить'}
           color={'error'}
+          confirm
         />
       </PopupMenu>
     </Container>

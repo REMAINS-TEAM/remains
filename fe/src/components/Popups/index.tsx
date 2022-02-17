@@ -27,19 +27,17 @@ export default function Popup({
   };
 
   return (
-    <div>
-      <Dialog open={open} onClose={handleCancelClick} scroll={'paper'}>
-        {title && <DialogTitle id="scroll-dialog-title">{title}</DialogTitle>}
-        <DialogContent dividers={true}>{children}</DialogContent>
-        {!hideActionButtons && (
-          <DialogActions sx={{ p: 3 }}>
-            <Button onClick={handleCancelClick}>{cancelButtonText}</Button>
-            <Button variant={'contained'} onClick={handleOkClick}>
-              {okButtonText}
-            </Button>
-          </DialogActions>
-        )}
-      </Dialog>
-    </div>
+    <Dialog open={open} onClose={handleCancelClick} scroll={'paper'}>
+      {title && <DialogTitle id="scroll-dialog-title">{title}</DialogTitle>}
+      <DialogContent dividers={true}>{children}</DialogContent>
+      {!hideActionButtons && (
+        <DialogActions sx={{ p: 3 }}>
+          <Button onClick={handleCancelClick}>{cancelButtonText}</Button>
+          <Button variant={'contained'} onClick={handleOkClick}>
+            {okButtonText}
+          </Button>
+        </DialogActions>
+      )}
+    </Dialog>
   );
 }
