@@ -3,7 +3,7 @@ import * as styles from './styles';
 import Container from 'components/Container';
 import { Item } from 'store/slices/items';
 import ItemImage from 'components/ItemCard/units/ItemImage';
-import { Box, Button, Tooltip, Typography } from '@mui/material';
+import { Box, Button, Tooltip, Typography, useTheme } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import {
   Delete as DeleteIcon,
@@ -22,6 +22,7 @@ function ItemCard({
   item: Item;
   onDeleteClick: (id: number) => void;
 }) {
+  const theme = useTheme();
   const user = useSelector((state: RootState) => state.user);
 
   const [dotsButtonRef, setDotsButtonRef] = useState<HTMLElement | null>(null);
@@ -90,7 +91,7 @@ function ItemCard({
           onClick={() => onDeleteClick(item.id)}
           Icon={DeleteIcon}
           label={'Удалить'}
-          color={'error'}
+          color={theme.palette.error.main}
           confirm
         />
       </PopupMenu>

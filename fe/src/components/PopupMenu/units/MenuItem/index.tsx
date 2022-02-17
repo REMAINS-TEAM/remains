@@ -22,8 +22,11 @@ export default function MenuItem({
 
   return (
     <>
-      <MUIMenuItem onClick={confirm ? showConfirmPopup : onClick} color={color}>
-        <ListItemIcon>
+      <MUIMenuItem
+        onClick={confirm ? showConfirmPopup : onClick}
+        sx={{ color }}
+      >
+        <ListItemIcon sx={{ color }}>
           <Icon fontSize="small" />
         </ListItemIcon>
         {label}
