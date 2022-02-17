@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Popup from 'components/Popups/index';
 import { ConfirmPopupProps } from 'components/Popups/ConfirmPopup/types';
+import { Box, Typography } from '@mui/material';
+import { ReportGmailerrorred as Icon } from '@mui/icons-material';
 
 function ConfirmPopup({ onOkClick, open, setOpen }: ConfirmPopupProps) {
   return (
@@ -10,7 +12,10 @@ function ConfirmPopup({ onOkClick, open, setOpen }: ConfirmPopupProps) {
       onOkClick={onOkClick}
       {...{ open, setOpen }}
     >
-      <div />
+      <Box sx={{ display: 'flex', columnGap: 2 }}>
+        <Icon color={'error'} />
+        <Typography>Отменить действие будет невозможно!</Typography>
+      </Box>
     </Popup>
   );
 }

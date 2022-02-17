@@ -76,7 +76,6 @@ function ItemCard({
           </Typography>
         </Box>
       </Box>
-      {/* TODO: Добавить попап с подтверждением*/}
       <PopupMenu
         id={`ItemMenu${item.id}`}
         anchorEl={dotsButtonRef}

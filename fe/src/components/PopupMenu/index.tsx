@@ -1,5 +1,5 @@
 import { Menu } from '@mui/material';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import * as styles from './styles';
 
 export default function PopupMenu({
@@ -19,6 +19,12 @@ export default function PopupMenu({
     setAnchorEl(null);
   };
 
+  const keepMounted = useMemo(
+    () =>
+      Array.isArray(children) && children.some((child) => child.props.confirm),
+    [children],
+  );
+
   return (
     <Menu
       anchorEl={anchorEl}
@@ -32,7 +38,7 @@ export default function PopupMenu({
       }}
       transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      keepMounted
+      keepMounted={keepMounted}
     >
       {children}
     </Menu>
