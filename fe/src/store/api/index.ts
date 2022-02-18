@@ -13,5 +13,6 @@ export default createApi({
       return headers;
     },
   }),
+  tagTypes: ['Item', 'Category'],
   endpoints: () => ({}),
 });

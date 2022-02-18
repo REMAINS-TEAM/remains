@@ -48,9 +48,7 @@ function ItemCard({
       <Box sx={styles.rightSide}>
         <Box sx={styles.rightTop}>
           {item.userId === user?.id && (
-            <Tooltip
-              title={'Этот товар добавили Вы. Нажмите для редактирования.'}
-            >
+            <Tooltip title={'Этот товар добавили Вы. Нажмите, чтобы ред.'}>
               <IconButton
                 color="secondary"
                 sx={styles.dotsButton}

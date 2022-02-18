@@ -10,6 +10,10 @@ export const itemsApi = api.injectEndpoints({
       Record<string, string | number | undefined> | void
     >({
       query: (params) => `items` + getQueryString(params),
+      providesTags: (result, error, arg) =>
+        result
+          ? [...result.map(({ id }) => ({ type: 'Item' as const, id })), 'Item']
+          : ['Item'],
     }),
     createItem: build.mutation<
       Item,
@@ -26,6 +30,7 @@ export const itemsApi = api.injectEndpoints({
         method: 'post',
         body,
       }),
+      invalidatesTags: ['Item'],
     }),
     deleteItem: build.mutation<Item, number>({
       async queryFn(id, _queryApi, _extraOptions, fetchWithBQ) {
@@ -40,6 +45,7 @@ export const itemsApi = api.injectEndpoints({
 
         return { data };
       },
+      invalidatesTags: ['Item'],
     }),
   }),
 });

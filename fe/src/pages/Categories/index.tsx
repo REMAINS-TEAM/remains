@@ -13,18 +13,15 @@ import categoriesApi from 'store/api/categories';
 import AddItemPopup from 'components/Popups/AddItemPopup';
 import ActionsButtons from 'pages/Categories/units/ActionsButtons';
 import NotFoundPage from 'pages/NotFoundPage';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
 
 function Categories() {
   const navigate = useNavigate();
   const { categoryId } = useParams();
 
-  const categoryItems = useSelector((state: RootState) => state.items.list);
-
   const [addItemPopupOpen, setAddItemPopupOpen] = useState(false);
 
   const {
+    data: categoryItems,
     isFetching,
     error: getCategoryItemsError,
   } = itemsApi.useGetCategoryItemsQuery({
