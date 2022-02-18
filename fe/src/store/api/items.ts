@@ -1,4 +1,4 @@
-import api from './';
+import api, { apiTypes } from './';
 import { Item } from '../slices/items';
 import { getQueryString } from 'utils';
 import { deleteById } from 'store/slices/items';
@@ -12,8 +12,11 @@ export const itemsApi = api.injectEndpoints({
       query: (params) => `items` + getQueryString(params),
       providesTags: (result, error, arg) =>
         result
-          ? [...result.map(({ id }) => ({ type: 'Item' as const, id })), 'Item']
-          : ['Item'],
+          ? [
+              ...result.map(({ id }) => ({ type: apiTypes.ITEMS, id })),
+              apiTypes.ITEMS,
+            ]
+          : [apiTypes.ITEMS],
     }),
     createItem: build.mutation<
       Item,
@@ -26,16 +29,16 @@ export const itemsApi = api.injectEndpoints({
       }
     >({
       query: (body) => ({
-        url: `items`,
+        url: apiTypes.ITEMS,
         method: 'post',
         body,
       }),
-      invalidatesTags: ['Item'],
+      invalidatesTags: [apiTypes.ITEMS],
     }),
     deleteItem: build.mutation<Item, number>({
       async queryFn(id, _queryApi, _extraOptions, fetchWithBQ) {
         const deleteResponse = await fetchWithBQ({
-          url: `items/${id}`,
+          url: `${apiTypes.ITEMS}/${id}`,
           method: 'DELETE',
         });
         if (deleteResponse.error) throw deleteResponse.error;
@@ -45,7 +48,7 @@ export const itemsApi = api.injectEndpoints({
 
         return { data };
       },
-      invalidatesTags: ['Item'],
+      invalidatesTags: [apiTypes.ITEMS],
     }),
   }),
 });

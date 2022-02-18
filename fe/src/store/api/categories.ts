@@ -1,4 +1,4 @@
-import api from './';
+import api, { apiTypes } from './';
 import { Category } from '../slices/categories';
 import { getQueryString } from 'utils';
 
@@ -8,13 +8,13 @@ export const categoriesApi = api.injectEndpoints({
       Category[],
       Record<string, string | number | undefined> | void
     >({
-      query: (params) => `categories` + getQueryString(params),
+      query: (params) => apiTypes.CATEGORIES + getQueryString(params),
     }),
     getCategoryById: build.query<
       { category: Category; tree: Category[] },
       number | string
     >({
-      query: (id) => `categories/${id}`,
+      query: (id) => `${apiTypes.CATEGORIES}/${id}`,
       // transformResponse: (response: Category, meta, arg) => ({
       //   ...response,
       //   test: 1,

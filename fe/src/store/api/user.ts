@@ -1,7 +1,6 @@
-import api from './';
+import api, { apiTypes } from './';
 import { LS_KEY_TOKEN } from 'global/constants';
-import { User, setCurrent } from 'store/slices/user';
-import { getQueryString } from 'utils';
+import { setCurrent, User } from 'store/slices/user';
 
 export const usersApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -19,7 +18,7 @@ export const usersApi = api.injectEndpoints({
         fetchWithBQ,
       ) {
         const loginResponse = await fetchWithBQ({
-          url: 'users/login',
+          url: `${apiTypes.USERS}/login`,
           method: 'POST',
           body: { login, password },
         });
@@ -30,7 +29,7 @@ export const usersApi = api.injectEndpoints({
         if (data.token) {
           localStorage.setItem(LS_KEY_TOKEN, data.token);
           const meResponse = await fetchWithBQ({
-            url: 'users/me',
+            url: `${apiTypes.USERS}/me`,
             method: 'GET',
             headers: { authorization: `Bearer ${data.token}` },
           });
@@ -46,7 +45,7 @@ export const usersApi = api.injectEndpoints({
     me: build.query<User, void>({
       async queryFn(_args, _queryApi, _extraOptions, fetchWithBQ) {
         const meResponse = await fetchWithBQ({
-          url: 'users/me',
+          url: `${apiTypes.USERS}/me`,
           method: 'GET',
         });
 
@@ -59,7 +58,7 @@ export const usersApi = api.injectEndpoints({
     logout: build.mutation<null, void>({
       async queryFn(_args, _queryApi, _extraOptions, fetchWithBQ) {
         const logoutResponse = await fetchWithBQ({
-          url: 'users/logout',
+          url: `${apiTypes.USERS}/logout`,
           method: 'POST',
         });
 
