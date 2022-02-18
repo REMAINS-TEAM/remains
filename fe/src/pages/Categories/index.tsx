@@ -13,10 +13,14 @@ import categoriesApi from 'store/api/categories';
 import AddItemPopup from 'components/Popups/AddItemPopup';
 import ActionsButtons from 'pages/Categories/units/ActionsButtons';
 import NotFoundPage from 'pages/NotFoundPage';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 
 function Categories() {
   const navigate = useNavigate();
   const { categoryId } = useParams();
+
+  const user = useSelector((state: RootState) => state.user);
 
   const [addItemPopupOpen, setAddItemPopupOpen] = useState(false);
 
@@ -70,13 +74,15 @@ function Categories() {
             <>
               <Box sx={styles.headerContainer}>
                 <BreadCrumbs data={category?.tree} />
-                <IconButton
-                  sx={{ p: 0 }}
-                  title="Добавить товар в эту категорию"
-                  onClick={addItemHandler}
-                >
-                  <SpeedDialIcon />
-                </IconButton>
+                {user && (
+                  <IconButton
+                    sx={{ p: 0 }}
+                    title="Добавить товар в эту категорию"
+                    onClick={addItemHandler}
+                  >
+                    <SpeedDialIcon />
+                  </IconButton>
+                )}
               </Box>
 
               {categoryItems?.length ? (
@@ -97,11 +103,13 @@ function Categories() {
           )}
         </Box>
       </WithMenuLayout>
-      <ActionsButtons
-        handlers={{
-          addItemHandler,
-        }}
-      />
+      {user && (
+        <ActionsButtons
+          handlers={{
+            addItemHandler,
+          }}
+        />
+      )}
       <AddItemPopup
         open={addItemPopupOpen}
         setOpen={setAddItemPopupOpen}

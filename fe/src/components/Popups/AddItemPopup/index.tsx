@@ -7,6 +7,7 @@ import * as styles from './styles';
 import { Controller, useForm } from 'react-hook-form';
 import useLimitTextField from 'hooks/useLimitTextField';
 import itemsApi from 'store/api/items';
+import useResponseNotifications from 'hooks/useResponseNotifications';
 
 const fields = {
   TITLE: 'title',
@@ -21,6 +22,12 @@ const MAX_LENGTH_DESCRIPTION = 200;
 
 function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
   const [createItemRequest, result] = itemsApi.useCreateItemMutation();
+
+  useResponseNotifications({
+    result,
+    onSuccessText: 'Товар добавлен в выбранную категорию',
+    onErrorText: 'Ошибка при добавлении товара',
+  });
 
   const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: Object.values(fields).reduce(
