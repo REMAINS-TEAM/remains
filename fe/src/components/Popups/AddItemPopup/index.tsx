@@ -51,6 +51,8 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
     maxLength: MAX_LENGTH_DESCRIPTION,
   });
 
+  if (!category) return null;
+
   // TODO: get categoryId, send form-data
   const onSubmit = (fieldsValues: Record<FieldsType, string>) => {
     const { title, description, price } = fieldsValues;
@@ -59,12 +61,10 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
       title,
       description,
       price,
-      categoryId: 6,
+      categoryId: category.id,
       images: [] as string[],
     });
   };
-
-  if (!category) return null;
 
   return (
     <Popup

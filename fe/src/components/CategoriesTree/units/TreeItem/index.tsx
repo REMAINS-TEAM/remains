@@ -1,13 +1,13 @@
-import { TreeItemProps } from "@mui/lab/TreeItem";
-import { SvgIconProps } from "@mui/material/SvgIcon";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { StyledTreeItemRoot } from "./styles";
+import { TreeItemProps } from '@mui/lab/TreeItem';
+import { SvgIconProps } from '@mui/material/SvgIcon';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { StyledTreeItemRoot } from './styles';
 
-declare module "react" {
+declare module 'react' {
   interface CSSProperties {
-    "--tree-view-color"?: string;
-    "--tree-view-bg-color"?: string;
+    '--tree-view-color'?: string;
+    '--tree-view-bg-color'?: string;
   }
 }
 
@@ -32,11 +32,18 @@ export default function StyledTreeItem(props: StyledTreeItemProps) {
   return (
     <StyledTreeItemRoot
       label={
-        <Box sx={{ display: "flex", alignItems: "center", p: 0.5, pr: 3 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            p: 0.5,
+            pr: 3,
+          }}
+        >
           <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} />
           <Typography
             variant="body2"
-            sx={{ fontWeight: "inherit", flexGrow: 1 }}
+            sx={{ fontWeight: 'inherit', flexGrow: 1 }}
           >
             {labelText}
           </Typography>
@@ -46,8 +53,8 @@ export default function StyledTreeItem(props: StyledTreeItemProps) {
         </Box>
       }
       style={{
-        "--tree-view-color": color,
-        "--tree-view-bg-color": bgColor,
+        '--tree-view-color': color,
+        '--tree-view-bg-color': bgColor,
       }}
       {...other}
     />

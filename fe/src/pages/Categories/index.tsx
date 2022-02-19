@@ -90,13 +90,15 @@ function Categories() {
               ) : (
                 <EmptyState
                   text={'Здесь пока нет товаров'}
-                  description={
-                    'Выберите подкатегорию или добавьте сюда что-нибудь'
-                  }
+                  description={`Выберите подкатегорию${
+                    user ? ' или добавьте сюда что-нибудь' : ''
+                  }`}
                 >
-                  <Button variant={'contained'} onClick={addItemHandler}>
-                    Добавить
-                  </Button>
+                  {user && (
+                    <Button variant={'contained'} onClick={addItemHandler}>
+                      Добавить
+                    </Button>
+                  )}
                 </EmptyState>
               )}
             </>
