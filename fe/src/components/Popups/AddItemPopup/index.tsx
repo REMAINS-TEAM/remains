@@ -8,6 +8,7 @@ import { Controller, useForm } from 'react-hook-form';
 import useLimitTextField from 'hooks/useLimitTextField';
 import itemsApi from 'store/api/items';
 import useResponseNotifications from 'hooks/useResponseNotifications';
+import useNotification, { notificationType } from 'hooks/useNotification';
 
 const fields = {
   TITLE: 'title',
@@ -24,6 +25,8 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
   const [createItemRequest, result] = itemsApi.useCreateItemMutation();
 
   const [imageFiles, setImageFiles] = useState<File[]>([]);
+
+  const notification = useNotification();
 
   useResponseNotifications({
     result,
@@ -68,6 +71,13 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
   };
 
   const addFileHandler = async (file: File) => {
+    const existedTheSame = !!imageFiles.find(
+      (f) => f.name === file.name && f.size === file.size,
+    );
+    if (existedTheSame) {
+      notification.show(notificationType.ERROR, 'Такое изображение уже есть');
+      return;
+    }
     setImageFiles((prev) => [...prev, file]);
   };
 
