@@ -23,8 +23,6 @@ export const itemsApi = api.injectEndpoints({
         url: apiTypes.ITEMS,
         method: 'post',
         body,
-        headers: { 'content-type': undefined },
-        // headers: { 'content-type': 'multipart/form-data' },
       }),
       invalidatesTags: [apiTypes.ITEMS],
     }),

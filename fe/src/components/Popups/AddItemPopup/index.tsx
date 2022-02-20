@@ -63,7 +63,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
     Object.entries(fieldsValues).forEach(([key, value]) =>
       formData.append(key, value),
     );
-    imagesFile.forEach((file) => formData.append('images', file));
+    imagesFile.forEach((file) => formData.append('images', file, file.name));
 
     createItemRequest(formData);
   };
