@@ -18,20 +18,13 @@ export const itemsApi = api.injectEndpoints({
             ]
           : [apiTypes.ITEMS],
     }),
-    createItem: build.mutation<
-      Item,
-      {
-        title: string;
-        description: string;
-        price: string;
-        categoryId: number;
-        images: string[];
-      }
-    >({
+    createItem: build.mutation<Item, FormData>({
       query: (body) => ({
         url: apiTypes.ITEMS,
         method: 'post',
         body,
+        headers: { 'content-type': undefined },
+        // headers: { 'content-type': 'multipart/form-data' },
       }),
       invalidatesTags: [apiTypes.ITEMS],
     }),

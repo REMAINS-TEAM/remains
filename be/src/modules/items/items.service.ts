@@ -12,7 +12,7 @@ import { PrismaException } from 'exceptions/prismaException';
 import * as fs from 'fs';
 import path, { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { ITEM_FILES_PATH } from 'constants/main';
+import { ITEM_FILES_PATH, MIME_IMAGES_TYPE_MAP } from 'constants/main';
 
 @Injectable()
 export class ItemsService {
@@ -118,11 +118,6 @@ export class ItemsService {
     }
 
     // save files
-    const MIME_TYPE_MAP = {
-      'image/png': 'png',
-      'image/jpeg': 'jpg',
-      'image/jpg': 'jpg',
-    } as Record<string, string>;
     let savedFileNames: string[] = [];
     try {
       await fs.promises.mkdir(
@@ -130,7 +125,7 @@ export class ItemsService {
         { recursive: true },
       );
       for (const image of images) {
-        const isValid = !!MIME_TYPE_MAP[image.mimetype];
+        const isValid = !!MIME_IMAGES_TYPE_MAP[image.mimetype];
         if (isValid) {
           const name = uuidv4();
           const ext = path.extname(image.originalname);

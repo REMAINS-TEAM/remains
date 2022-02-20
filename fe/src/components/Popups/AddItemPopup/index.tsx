@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Popup from 'components/Popups/index';
 import { AddItemPopupProps } from 'components/Popups/AddItemPopup/types';
 import { Box, InputAdornment, TextField, Typography } from '@mui/material';
@@ -8,6 +8,7 @@ import { Controller, useForm } from 'react-hook-form';
 import useLimitTextField from 'hooks/useLimitTextField';
 import itemsApi from 'store/api/items';
 import useResponseNotifications from 'hooks/useResponseNotifications';
+import { fileToDataUri } from 'utils';
 
 const fields = {
   TITLE: 'title',
@@ -22,6 +23,9 @@ const MAX_LENGTH_DESCRIPTION = 200;
 
 function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
   const [createItemRequest, result] = itemsApi.useCreateItemMutation();
+
+  const [imagesUri, setImagesUri] = useState<string[]>([]);
+  const [imagesFile, setImagesFile] = useState<File[]>([]);
 
   useResponseNotifications({
     result,
@@ -53,17 +57,21 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
 
   if (!category) return null;
 
-  // TODO: get categoryId, send form-data
   const onSubmit = (fieldsValues: Record<FieldsType, string>) => {
-    const { title, description, price } = fieldsValues;
+    const formData = new FormData();
+    formData.append('categoryId', String(category.id));
+    Object.entries(fieldsValues).forEach(([key, value]) =>
+      formData.append(key, value),
+    );
+    imagesFile.forEach((file) => formData.append('images', file));
 
-    createItemRequest({
-      title,
-      description,
-      price,
-      categoryId: category.id,
-      images: [] as string[],
-    });
+    createItemRequest(formData);
+  };
+
+  const addFileHandler = async (file: File) => {
+    const dataUri = await fileToDataUri(file);
+    setImagesUri((prev) => [...prev, dataUri]);
+    setImagesFile((prev) => [...prev, file]);
   };
 
   return (
@@ -157,12 +165,10 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
         Фото:
       </Typography>
       <Box sx={styles.imagesContainer}>
-        <UploadedImage
-          src={
-            'https://www.worldofquartz.ru/upload/iblock/ee4/ee458489521e9bc9a3aec4692fd365ec.jpg'
-          }
-        />
-        <UploadedImage />
+        {imagesUri.map((imageUri, i) => (
+          <UploadedImage key={imageUri} src={imageUri} />
+        ))}
+        <UploadedImage onAdd={addFileHandler} />
       </Box>
     </Popup>
   );

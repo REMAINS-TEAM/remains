@@ -7,12 +7,34 @@ import {
 import { Box } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 
-function UploadedImage({ src }: { src?: string }) {
+function UploadedImage({
+  src,
+  onAdd,
+}: {
+  src?: string;
+  onAdd?: (file: File) => void;
+}) {
   const [hover, setHover] = useState(false);
+
+  const selectImageHandler = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+
+    input.onchange = async (e) => {
+      const target = e.target as HTMLInputElement;
+      const file: File = (target.files as FileList)[0];
+      if (file && onAdd) {
+        onAdd(file);
+      }
+    };
+
+    input.click();
+  };
+
   if (!src)
     return (
       <Box sx={styles.imageContainer}>
-        <IconButton color="secondary">
+        <IconButton color="secondary" onClick={selectImageHandler}>
           <AddImageIcon />
         </IconButton>
       </Box>
