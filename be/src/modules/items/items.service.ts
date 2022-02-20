@@ -10,7 +10,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Item, Token, User } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
 import * as fs from 'fs';
-import { join } from 'path';
+import path, { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { ITEM_FILES_PATH } from 'constants/main';
 
@@ -118,6 +118,11 @@ export class ItemsService {
     }
 
     // save files
+    const MIME_TYPE_MAP = {
+      'image/png': 'png',
+      'image/jpeg': 'jpg',
+      'image/jpg': 'jpg',
+    } as Record<string, string>;
     let savedFileNames: string[] = [];
     try {
       await fs.promises.mkdir(
@@ -125,18 +130,20 @@ export class ItemsService {
         { recursive: true },
       );
       for (const image of images) {
-        const separatedName = image.originalname.split('.');
-        const name = uuidv4();
-        const ext = separatedName[separatedName.length - 1];
-        const imageName = `${name}${ext ? '.' + ext : ''}`;
+        const isValid = !!MIME_TYPE_MAP[image.mimetype];
+        if (isValid) {
+          const name = uuidv4();
+          const ext = path.extname(image.originalname);
+          const imageName = `${name}${ext || ''}`;
 
-        const fileName = join(
-          ...ITEM_FILES_PATH.split('/'),
-          String(newItem.id),
-          imageName,
-        );
-        await fs.promises.writeFile(fileName, image.buffer);
-        savedFileNames.push(imageName);
+          const fileName = join(
+            ...ITEM_FILES_PATH.split('/'),
+            String(newItem.id),
+            imageName,
+          );
+          await fs.promises.writeFile(fileName, image.buffer);
+          savedFileNames.push(imageName);
+        }
       }
     } catch (err) {
       throw new HttpException('Something went wrong when save file', 500);
