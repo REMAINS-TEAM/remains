@@ -10,14 +10,16 @@ import {
   ParseIntPipe,
   Post,
   Query,
-  UploadedFile,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { Item } from '@prisma/client';
 import { ItemsService } from './items.service';
 import { Access } from 'decorators/access.decorator';
-import { MAX_ITEMS_FOR_NOT_REGISTERED_USER } from 'constants/main';
+import {
+  MAX_FILE_SIZE,
+  MAX_ITEMS_FOR_NOT_REGISTERED_USER,
+} from 'constants/main';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('items')
@@ -53,7 +55,9 @@ export class ItemsController {
   }
 
   @Post()
-  @UseInterceptors(FilesInterceptor('images', 10))
+  @UseInterceptors(
+    FilesInterceptor('images', 10, { limits: { fileSize: MAX_FILE_SIZE } }),
+  )
   async create(
     @UploadedFiles() images: Express.Multer.File[],
     @Body()
