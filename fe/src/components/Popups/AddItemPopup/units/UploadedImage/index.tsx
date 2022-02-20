@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as styles from 'components/ItemCard/units/ItemImage/styles';
 import {
   AddPhotoAlternate as AddImageIcon,
@@ -6,15 +6,27 @@ import {
 } from '@mui/icons-material';
 import { Box } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
+import { fileToDataUri } from 'utils';
 
 function UploadedImage({
-  src,
+  file,
   onAdd,
+  onDelete,
 }: {
-  src?: string;
+  file?: File;
   onAdd?: (file: File) => void;
+  onDelete?: (file: File) => void;
 }) {
   const [hover, setHover] = useState(false);
+  const [dataUri, setDataUri] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      if (!file) return;
+      const data = await fileToDataUri(file);
+      setDataUri(data);
+    })();
+  }, [file]);
 
   const selectImageHandler = () => {
     const input = document.createElement('input');
@@ -31,7 +43,7 @@ function UploadedImage({
     input.click();
   };
 
-  if (!src)
+  if (!file)
     return (
       <Box sx={styles.imageContainer}>
         <IconButton color="secondary" onClick={selectImageHandler}>
@@ -49,10 +61,10 @@ function UploadedImage({
       onMouseEnter={mouseEnterHandler}
       onMouseLeave={mouseLeaveHandler}
     >
-      <img src={src} alt={'Изображение товара'} style={styles.image} />
+      <img src={dataUri} alt={'Изображение товара'} style={styles.image} />
 
       {hover && (
-        <Box sx={styles.overlay} onClick={() => console.log('click')}>
+        <Box sx={styles.overlay} onClick={() => onDelete && onDelete(file)}>
           <IconButton color="error">
             <DeleteIcon />
           </IconButton>

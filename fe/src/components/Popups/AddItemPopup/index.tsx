@@ -8,7 +8,6 @@ import { Controller, useForm } from 'react-hook-form';
 import useLimitTextField from 'hooks/useLimitTextField';
 import itemsApi from 'store/api/items';
 import useResponseNotifications from 'hooks/useResponseNotifications';
-import { fileToDataUri } from 'utils';
 
 const fields = {
   TITLE: 'title',
@@ -24,8 +23,7 @@ const MAX_LENGTH_DESCRIPTION = 200;
 function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
   const [createItemRequest, result] = itemsApi.useCreateItemMutation();
 
-  const [imagesUri, setImagesUri] = useState<string[]>([]);
-  const [imagesFile, setImagesFile] = useState<File[]>([]);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
 
   useResponseNotifications({
     result,
@@ -59,19 +57,24 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
 
   const onSubmit = (fieldsValues: Record<FieldsType, string>) => {
     const formData = new FormData();
+
     formData.append('categoryId', String(category.id));
     Object.entries(fieldsValues).forEach(([key, value]) =>
       formData.append(key, value),
     );
-    imagesFile.forEach((file) => formData.append('images', file, file.name));
+    imageFiles.forEach((file) => formData.append('images', file, file.name));
 
     createItemRequest(formData);
   };
 
   const addFileHandler = async (file: File) => {
-    const dataUri = await fileToDataUri(file);
-    setImagesUri((prev) => [...prev, dataUri]);
-    setImagesFile((prev) => [...prev, file]);
+    setImageFiles((prev) => [...prev, file]);
+  };
+
+  const deleteImageHandler = (file: File) => {
+    setImageFiles((prev) =>
+      prev.filter((f) => f.name !== file.name && f.size !== file.size),
+    );
   };
 
   return (
@@ -165,8 +168,12 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
         Фото:
       </Typography>
       <Box sx={styles.imagesContainer}>
-        {imagesUri.map((imageUri, i) => (
-          <UploadedImage key={imageUri} src={imageUri} />
+        {imageFiles.map((file, i) => (
+          <UploadedImage
+            key={file.name}
+            file={file}
+            onDelete={deleteImageHandler}
+          />
         ))}
         <UploadedImage onAdd={addFileHandler} />
       </Box>
