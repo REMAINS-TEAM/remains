@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import PopupMenu from 'components/PopupMenu';
 import MenuItem from 'components/PopupMenu/units/MenuItem';
+import { BACKEND_URL } from 'global/constants';
 
 function ItemCard({
   item,
@@ -34,7 +35,9 @@ function ItemCard({
   return (
     <Container sx={styles.itemContainer}>
       <Box sx={styles.leftSide}>
-        <ItemImage src={item.images[0]} />
+        <ItemImage
+          src={`${BACKEND_URL}/content/items/${item.id}/${item.images[0]}`}
+        />
         <Box>
           <Typography variant="body1" sx={{ mb: 1 }}>
             {item.title}

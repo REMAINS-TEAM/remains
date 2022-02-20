@@ -1,6 +1,6 @@
 // initialize an empty api service that we'll inject endpoints into later as needed
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { LS_KEY_TOKEN } from 'global/constants';
+import { BACKEND_URL, LS_KEY_TOKEN } from 'global/constants';
 
 export const apiTypes = {
   ITEMS: 'items',
@@ -10,7 +10,7 @@ export const apiTypes = {
 
 export default createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8080/api/',
+    baseUrl: `${BACKEND_URL}/api/`,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem(LS_KEY_TOKEN);
       if (token) {
