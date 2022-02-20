@@ -10,11 +10,15 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  UploadedFile,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Item } from '@prisma/client';
 import { ItemsService } from './items.service';
 import { Access } from 'decorators/access.decorator';
 import { MAX_ITEMS_FOR_NOT_REGISTERED_USER } from 'constants/main';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('items')
 export class ItemsController {
@@ -49,20 +53,22 @@ export class ItemsController {
   }
 
   @Post()
+  @UseInterceptors(FilesInterceptor('images', 10))
   async create(
+    @UploadedFiles() images: Express.Multer.File[],
     @Body()
     createItemDto: {
       title: string;
       description: string;
       price: string;
-      categoryId: number;
+      categoryId: string;
     },
     @Headers() headers: { authorization: string | undefined },
   ): Promise<Item> {
     const authHeader = headers.authorization || '';
     const token = authHeader.split(' ')[1];
 
-    return this.itemsService.create(token, createItemDto);
+    return this.itemsService.create(token, createItemDto, images);
   }
 
   @Delete(':id')

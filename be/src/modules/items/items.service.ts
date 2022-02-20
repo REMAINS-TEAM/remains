@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ForbiddenException,
+  HttpException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -8,6 +9,9 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { Item, User, Token } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
+import * as fs from 'fs';
+import path, { join, dirname } from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class ItemsService {
@@ -62,8 +66,9 @@ export class ItemsService {
       title: string;
       description: string;
       price: string;
-      categoryId: number;
+      categoryId: string;
     },
+    images: Express.Multer.File[],
   ) {
     if (!token) {
       throw new ForbiddenException(`You are not authorized to create item`);
@@ -87,16 +92,67 @@ export class ItemsService {
       throw new ForbiddenException(`Please pay service for this action`);
     }
 
-    return this.prisma.item.create({
-      data: {
-        title: data.title,
-        description: data.description,
-        price: +data.price,
-        categoryId: data.categoryId,
-        images: [],
-        userId: foundToken.user.id,
-      },
-    });
+    let newItem: Item | null = null;
+    try {
+      newItem = await this.prisma.item.create({
+        data: {
+          title: data.title,
+          description: data.description,
+          price: +data.price,
+          categoryId: +data.categoryId,
+          images: [],
+          userId: foundToken.user.id,
+        },
+      });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    if (!newItem) {
+      throw new HttpException('Something went wrong when create new item', 500);
+    }
+
+    // save files
+    let savedFileNames: string[] = [];
+    try {
+      await fs.promises.mkdir(
+        join('public', 'content', 'items', String(newItem.id)),
+      );
+      for (const image of images) {
+        const separatedName = image.originalname.split('.');
+        const name = uuidv4();
+        const ext = separatedName[separatedName.length - 1];
+        const imageName = `${name}${ext ? '.' + ext : ''}`;
+
+        const fileName = join(
+          'public',
+          'content',
+          'items',
+          String(newItem.id),
+          imageName,
+        );
+        await fs.promises.writeFile(fileName, image.buffer);
+        savedFileNames.push(imageName);
+      }
+    } catch (err) {
+      throw new HttpException('Something went wrong when save file', 500);
+    }
+
+    let itemWithFiles: Item | null = null;
+    try {
+      if (savedFileNames.length > 0) {
+        itemWithFiles = await this.prisma.item.update({
+          where: { id: newItem.id },
+          data: {
+            images: savedFileNames,
+          },
+        });
+      }
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    return itemWithFiles || newItem;
   }
 
   async delete(token: string | undefined, id: number) {
@@ -140,6 +196,13 @@ export class ItemsService {
         `Cannot delete item with id ${id}. It is not your item`,
       );
     }
+
+    // delete all files
+    fs.rm(
+      join('public', 'content', 'items', String(item.id)),
+      { recursive: true, force: true },
+      () => {},
+    );
 
     return this.prisma.item.delete({
       where: { id },
