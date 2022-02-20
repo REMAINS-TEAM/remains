@@ -7,11 +7,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Item, User, Token } from '@prisma/client';
+import { Item, Token, User } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
 import * as fs from 'fs';
-import path, { join, dirname } from 'path';
+import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { ITEM_FILES_PATH } from 'constants/main';
 
 @Injectable()
 export class ItemsService {
@@ -116,7 +117,7 @@ export class ItemsService {
     let savedFileNames: string[] = [];
     try {
       await fs.promises.mkdir(
-        join('public', 'content', 'items', String(newItem.id)),
+        join(...ITEM_FILES_PATH.split('/'), String(newItem.id)),
       );
       for (const image of images) {
         const separatedName = image.originalname.split('.');
@@ -125,9 +126,7 @@ export class ItemsService {
         const imageName = `${name}${ext ? '.' + ext : ''}`;
 
         const fileName = join(
-          'public',
-          'content',
-          'items',
+          ...ITEM_FILES_PATH.split('/'),
           String(newItem.id),
           imageName,
         );
@@ -199,7 +198,7 @@ export class ItemsService {
 
     // delete all files
     fs.rm(
-      join('public', 'content', 'items', String(item.id)),
+      join(...ITEM_FILES_PATH.split('/'), String(item.id)),
       { recursive: true, force: true },
       () => {},
     );
