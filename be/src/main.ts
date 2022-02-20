@@ -20,8 +20,8 @@ async function bootstrap() {
     new ValidationPipe({
       disableErrorMessages: process.env.NODE_ENV === 'prod',
       transform: true,
-      skipMissingProperties: true,
-      skipUndefinedProperties: true,
+      // skipMissingProperties: true,
+      // skipUndefinedProperties: true,
     }),
   );
 

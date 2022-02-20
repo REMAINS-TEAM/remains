@@ -13,7 +13,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from 'decorators/roles.decorator';
 import { RegisterUserDto } from 'modules/users/dto/register-user.dto';
 import { LoginUserDto } from 'modules/users/dto/login-user.dto';
-import { LogoutUserDto } from 'modules/users/dto/logout-user.dto';
 
 @Controller('users')
 export class UsersController {

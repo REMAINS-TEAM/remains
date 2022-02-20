@@ -21,6 +21,7 @@ import {
   MAX_ITEMS_FOR_NOT_REGISTERED_USER,
 } from 'constants/main';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { CreateItemDto } from 'modules/items/dto/create-item.dto';
 
 @Controller('items')
 export class ItemsController {
@@ -61,12 +62,7 @@ export class ItemsController {
   async create(
     @UploadedFiles() images: Express.Multer.File[],
     @Body()
-    createItemDto: {
-      title: string;
-      description: string;
-      price: string;
-      categoryId: string;
-    },
+    createItemDto: CreateItemDto,
     @Headers() headers: { authorization: string | undefined },
   ): Promise<Item> {
     const authHeader = headers.authorization || '';

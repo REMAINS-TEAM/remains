@@ -93,6 +93,10 @@ export class ItemsService {
       throw new ForbiddenException(`Please pay service for this action`);
     }
 
+    if (!images.length) {
+      throw new BadRequestException(`Add one image at least`);
+    }
+
     let newItem: Item | null = null;
     try {
       newItem = await this.prisma.item.create({
@@ -118,6 +122,7 @@ export class ItemsService {
     try {
       await fs.promises.mkdir(
         join(...ITEM_FILES_PATH.split('/'), String(newItem.id)),
+        { recursive: true },
       );
       for (const image of images) {
         const separatedName = image.originalname.split('.');
