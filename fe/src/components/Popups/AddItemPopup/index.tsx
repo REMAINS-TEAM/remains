@@ -5,10 +5,16 @@ import { Box, InputAdornment, TextField, Typography } from '@mui/material';
 import UploadedImage from './units/UploadedImage';
 import * as styles from './styles';
 import { Controller, useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
 import useLimitTextField from 'hooks/useLimitTextField';
 import itemsApi from 'store/api/items';
 import useResponseNotifications from 'hooks/useResponseNotifications';
 import useNotification, { notificationType } from 'hooks/useNotification';
+import {
+  AddIitemSchema,
+  MAX_LENGTH_DESCRIPTION,
+  MAX_LENGTH_TITLE,
+} from './validation';
 
 const fields = {
   TITLE: 'title',
@@ -17,9 +23,6 @@ const fields = {
 };
 
 type FieldsType = typeof fields[keyof typeof fields];
-
-const MAX_LENGTH_TITLE = 80;
-const MAX_LENGTH_DESCRIPTION = 200;
 
 function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
   const [createItemRequest, result] = itemsApi.useCreateItemMutation();
@@ -34,7 +37,14 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
     onErrorText: 'Ошибка при добавлении товара',
   });
 
-  const { control, handleSubmit, watch, setValue } = useForm({
+  const {
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: joiResolver(AddIitemSchema),
     defaultValues: Object.values(fields).reduce(
       (acc, value) => ({
         ...acc,
@@ -59,6 +69,8 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
   if (!category) return null;
 
   const onSubmit = (fieldsValues: Record<FieldsType, string>) => {
+    if (Object.keys(errors).length) return;
+
     const formData = new FormData();
 
     formData.append('categoryId', String(category.id));
@@ -92,6 +104,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
       title={`Разместить товар в категории "${category.title}"`}
       okButtonText={'Разместить'}
       onOkClick={handleSubmit(onSubmit)}
+      closeWhenSubmit={!Object.keys(errors).length}
       {...{ open, setOpen }}
     >
       <Controller
@@ -101,11 +114,12 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
           <TextField
             autoFocus
             margin="dense"
-            id="title"
+            id={fields.TITLE}
             label="Заголовок"
             type="text"
             fullWidth
             variant="outlined"
+            error={!!errors[fields.TITLE]}
             InputProps={{
               endAdornment: (
                 <InputAdornment
@@ -130,13 +144,14 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
         render={({ field }) => (
           <TextField
             margin="dense"
-            id="description"
+            id={fields.DESCRIPTION}
             label="Описание"
             type="text"
             multiline
             fullWidth
             variant="outlined"
             rows={3}
+            error={!!errors[fields.DESCRIPTION]}
             InputProps={{
               endAdornment: (
                 <InputAdornment
@@ -166,6 +181,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
             label="Цена"
             type="number"
             variant="outlined"
+            error={!!errors[fields.PRICE]}
             InputProps={{
               endAdornment: <InputAdornment position="end">₽</InputAdornment>,
             }}
