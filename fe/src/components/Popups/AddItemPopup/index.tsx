@@ -11,7 +11,7 @@ import itemsApi from 'store/api/items';
 import useResponseNotifications from 'hooks/useResponseNotifications';
 import useNotification, { notificationType } from 'hooks/useNotification';
 import {
-  AddIitemSchema,
+  AddItemSchema,
   MAX_LENGTH_DESCRIPTION,
   MAX_LENGTH_TITLE,
 } from './validation';
@@ -44,7 +44,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
     setValue,
     formState: { errors },
   } = useForm({
-    resolver: joiResolver(AddIitemSchema),
+    resolver: joiResolver(AddItemSchema),
     defaultValues: Object.values(fields).reduce(
       (acc, value) => ({
         ...acc,
@@ -70,6 +70,13 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
 
   const onSubmit = (fieldsValues: Record<FieldsType, string>) => {
     if (Object.keys(errors).length) return;
+    if (!imageFiles.length) {
+      notification.show(
+        notificationType.ERROR,
+        'Добавьте хотя бы одно изображение',
+      );
+      return;
+    }
 
     const formData = new FormData();
 
@@ -80,6 +87,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
     imageFiles.forEach((file) => formData.append('images', file, file.name));
 
     createItemRequest(formData);
+    setOpen(false);
   };
 
   const addFileHandler = async (file: File) => {
@@ -104,7 +112,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
       title={`Разместить товар в категории "${category.title}"`}
       okButtonText={'Разместить'}
       onOkClick={handleSubmit(onSubmit)}
-      closeWhenSubmit={!Object.keys(errors).length}
+      closeWhenSubmit={false}
       {...{ open, setOpen }}
     >
       <Controller
@@ -120,6 +128,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
             fullWidth
             variant="outlined"
             error={!!errors[fields.TITLE]}
+            helperText={errors[fields.TITLE]?.message}
             InputProps={{
               endAdornment: (
                 <InputAdornment
@@ -152,6 +161,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
             variant="outlined"
             rows={3}
             error={!!errors[fields.DESCRIPTION]}
+            helperText={errors[fields.DESCRIPTION]?.message}
             InputProps={{
               endAdornment: (
                 <InputAdornment
@@ -182,6 +192,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
             type="number"
             variant="outlined"
             error={!!errors[fields.PRICE]}
+            helperText={errors[fields.PRICE]?.message}
             InputProps={{
               endAdornment: <InputAdornment position="end">₽</InputAdornment>,
             }}
