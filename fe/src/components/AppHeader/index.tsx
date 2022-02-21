@@ -72,7 +72,7 @@ function AppHeader() {
                 <Tooltip
                   title={
                     daysLeft <= 0
-                      ? `Дата истечения оплаты: ${format(
+                      ? `Функционал ограничен! Дата истечения оплаты: ${format(
                           new Date(user.paymentExpiredDate),
                           'dd.MM.yyyy hh:mm',
                         )}`

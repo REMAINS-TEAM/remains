@@ -15,6 +15,7 @@ import { RootState } from 'store';
 import PopupMenu from 'components/PopupMenu';
 import MenuItem from 'components/PopupMenu/units/MenuItem';
 import { BACKEND_URL } from 'global/constants';
+import { getPaymentExpiredStatus } from 'store/selectors/user';
 
 function ItemCard({
   item,
@@ -25,6 +26,7 @@ function ItemCard({
 }) {
   const theme = useTheme();
   const user = useSelector((state: RootState) => state.user);
+  const paymentExpired = useSelector(getPaymentExpiredStatus); //TODO: createSelector
 
   const [dotsButtonRef, setDotsButtonRef] = useState<HTMLElement | null>(null);
 
@@ -50,7 +52,7 @@ function ItemCard({
 
       <Box sx={styles.rightSide}>
         <Box sx={styles.rightTop}>
-          {item.userId === user?.id && (
+          {item.userId === user?.id && !paymentExpired && (
             <Tooltip title={'Этот товар добавили Вы. Нажмите, чтобы ред.'}>
               <IconButton
                 color="secondary"
