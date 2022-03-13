@@ -16,7 +16,7 @@ import NotFoundPage from 'pages/NotFoundPage';
 import { useSelector } from 'react-redux';
 import { getPaymentNotExpiredStatus } from 'store/selectors/user';
 
-function Categories() {
+function CategoriesPage() {
   const navigate = useNavigate();
   const { categoryId } = useParams();
 
@@ -121,4 +121,4 @@ function Categories() {
   );
 }
 
-export default React.memo(Categories);
+export default React.memo(CategoriesPage);

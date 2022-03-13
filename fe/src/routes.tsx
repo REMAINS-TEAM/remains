@@ -2,7 +2,7 @@ export default {
   main: `/`,
   categories: `/categories`,
   category: `/categories/:categoryId`,
-  item: `/categories/items/:itemId`,
+  item: `/items/:itemId`,
   /*Other*/
   adminPanel: '/admin',
 };
