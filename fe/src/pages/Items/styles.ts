@@ -17,17 +17,16 @@ export const container: SxProps = {
     flexWrap: 'wrap',
   },
   p: 4,
+  '&>*': {
+    flex: '100%',
+    height: '100%',
+  },
 };
 
 export const title: SxProps = {
   display: 'flex',
   alignItems: 'center',
   columnGap: 2,
-};
-
-export const column: SxProps = {
-  flex: '100%',
-  height: '100%',
 };
 
 export const imageContainer: SxProps = {
