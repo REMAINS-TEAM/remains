@@ -14,13 +14,13 @@ import AddItemPopup from 'components/Popups/AddItemPopup';
 import ActionsButtons from 'pages/Categories/units/ActionsButtons';
 import NotFoundPage from 'pages/NotFoundPage';
 import { useSelector } from 'react-redux';
-import { getPaymentExpiredStatus } from 'store/selectors/user';
+import { getPaymentNotExpiredStatus } from 'store/selectors/user';
 
 function Categories() {
   const navigate = useNavigate();
   const { categoryId } = useParams();
 
-  const paymentExpired = useSelector(getPaymentExpiredStatus);
+  const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
 
   const [addItemPopupOpen, setAddItemPopupOpen] = useState(false);
 
@@ -74,7 +74,7 @@ function Categories() {
             <>
               <Box sx={styles.headerContainer}>
                 <BreadCrumbs data={category?.tree} />
-                {!paymentExpired && (
+                {paymentNotExpired && (
                   <IconButton
                     sx={{ p: 0 }}
                     title="Добавить товар в эту категорию"
@@ -91,10 +91,10 @@ function Categories() {
                 <EmptyState
                   text={'Здесь пока нет товаров'}
                   description={`Выберите подкатегорию${
-                    !paymentExpired ? ' или добавьте сюда что-нибудь' : ''
+                    paymentNotExpired ? ' или добавьте сюда что-нибудь' : ''
                   }`}
                 >
-                  {!paymentExpired && (
+                  {paymentNotExpired && (
                     <Button variant={'contained'} onClick={addItemHandler}>
                       Добавить
                     </Button>
@@ -105,7 +105,7 @@ function Categories() {
           )}
         </Box>
       </WithMenuLayout>
-      {!paymentExpired && (
+      {paymentNotExpired && (
         <ActionsButtons
           handlers={{
             addItemHandler,
