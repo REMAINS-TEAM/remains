@@ -2,31 +2,26 @@ import React from 'react';
 import { Box } from '@mui/system';
 import * as styles from 'pages/Items/styles';
 import Carousel from 'react-material-ui-carousel';
+import { BACKEND_URL } from 'global/constants';
 
-function ImagesCarousel() {
+function ImagesCarousel({
+  itemId,
+  images,
+}: {
+  itemId: number;
+  images: string[];
+}) {
   return (
     <Carousel navButtonsAlwaysVisible>
-      <Box sx={styles.imageContainer}>
-        <img
-          style={{ height: '100%' }}
-          src="https://images.pexels.com/photos/11319741/pexels-photo-11319741.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-          alt=""
-        />
-      </Box>
-      <Box sx={styles.imageContainer}>
-        <img
-          style={{ height: '100%' }}
-          src="https://images.pexels.com/photos/3112898/pexels-photo-3112898.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-          alt=""
-        />
-      </Box>
-      <Box sx={styles.imageContainer}>
-        <img
-          style={{ height: '100%' }}
-          src="https://images.pexels.com/photos/1280638/pexels-photo-1280638.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-          alt=""
-        />
-      </Box>
+      {images.map((fileName) => (
+        <Box key={fileName} sx={styles.imageContainer}>
+          <img
+            style={{ height: '100%' }}
+            src={`${BACKEND_URL}/content/items/${itemId}/${fileName}`}
+            alt={`${fileName}`}
+          />
+        </Box>
+      ))}
     </Carousel>
   );
 }

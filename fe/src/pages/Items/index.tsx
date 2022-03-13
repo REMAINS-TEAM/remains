@@ -34,7 +34,7 @@ function ItemPage() {
         </Box>
 
         <Container sx={styles.container}>
-          <ImagesCarousel />
+          <ImagesCarousel itemId={item.id} images={item.images} />
           <DetailsTable item={item} />
         </Container>
       </Box>
