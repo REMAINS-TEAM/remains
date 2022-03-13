@@ -16,6 +16,8 @@ import PopupMenu from 'components/PopupMenu';
 import MenuItem from 'components/PopupMenu/units/MenuItem';
 import { BACKEND_URL } from 'global/constants';
 import { getPaymentNotExpiredStatus } from 'store/selectors/user';
+import { generatePath, useNavigate } from 'react-router-dom';
+import routes from 'routes';
 
 function ItemCard({
   item,
@@ -25,6 +27,7 @@ function ItemCard({
   onDeleteClick: (id: number) => void;
 }) {
   const theme = useTheme();
+  const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user);
   const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
 
@@ -32,6 +35,10 @@ function ItemCard({
 
   const dotsClickHandler = (event: React.MouseEvent<HTMLElement>) => {
     setDotsButtonRef(event.currentTarget);
+  };
+
+  const itemDetailsClickHandler = () => {
+    navigate(generatePath(routes.item, { itemId: String(item.id) }));
   };
 
   return (
@@ -70,7 +77,11 @@ function ItemCard({
           >
             {item.price.toLocaleString('ru')} ₽
           </Typography>
-          <Button variant="contained" size={'small'}>
+          <Button
+            variant="contained"
+            size={'small'}
+            onClick={itemDetailsClickHandler}
+          >
             Подробнее
           </Button>
         </Box>

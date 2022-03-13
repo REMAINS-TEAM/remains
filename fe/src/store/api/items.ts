@@ -18,6 +18,9 @@ export const itemsApi = api.injectEndpoints({
             ]
           : [apiTypes.ITEMS],
     }),
+    getItemById: build.query<Item, number>({
+      query: (id) => `items/${id}`,
+    }),
     createItem: build.mutation<Item, FormData>({
       query: (body) => ({
         url: apiTypes.ITEMS,

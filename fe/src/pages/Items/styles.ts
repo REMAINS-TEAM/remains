@@ -19,6 +19,12 @@ export const container: SxProps = {
   p: 4,
 };
 
+export const title: SxProps = {
+  display: 'flex',
+  alignItems: 'center',
+  columnGap: 2,
+};
+
 export const column: SxProps = {
   flex: '100%',
   height: '100%',
