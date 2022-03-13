@@ -105,13 +105,13 @@ function Categories() {
           )}
         </Box>
       </WithMenuLayout>
-      {paymentNotExpired && (
-        <ActionsButtons
-          handlers={{
-            addItemHandler,
-          }}
-        />
-      )}
+      {/*{paymentNotExpired && (*/}
+      {/*  <ActionsButtons*/}
+      {/*    handlers={{*/}
+      {/*      addItemHandler,*/}
+      {/*    }}*/}
+      {/*  />*/}
+      {/*)}*/}
       <AddItemPopup
         open={addItemPopupOpen}
         setOpen={setAddItemPopupOpen}

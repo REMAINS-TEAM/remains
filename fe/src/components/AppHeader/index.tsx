@@ -19,13 +19,15 @@ import { RootState } from 'store';
 import userApi from 'store/api/user';
 import ProfileMenu from 'components/AppHeader/units/ProfileMenu';
 import CircularProgressWithLabel from 'components/CircularProgressWithLabel';
-import { differenceInDays, format } from 'date-fns';
+import { differenceInDays, differenceInHours, format } from 'date-fns';
+import { getPaymentNotExpiredStatus } from 'store/selectors/user';
 
 function AppHeader() {
   const { isFetching } = userApi.useMeQuery(undefined, {
     skip: !localStorage.getItem(LS_KEY_TOKEN),
   });
   const user = useSelector((state: RootState) => state.user);
+  const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
   const [authPopupOpen, setAuthPopupOpen] = useState(false);
 
   const [profileButtonRef, setProfileButtonRef] = useState<HTMLElement | null>(
@@ -37,6 +39,12 @@ function AppHeader() {
     (new Date() > user.paymentExpiredDate
       ? 0
       : differenceInDays(new Date(user.paymentExpiredDate), new Date()));
+
+  const hoursLeft =
+    user &&
+    (new Date() > user.paymentExpiredDate
+      ? 0
+      : differenceInHours(new Date(user.paymentExpiredDate), new Date()));
 
   const loginClickHandler = () => {
     setAuthPopupOpen(true);
@@ -71,12 +79,14 @@ function AppHeader() {
               {user && daysLeft !== null && (
                 <Tooltip
                   title={
-                    daysLeft <= 0
+                    !paymentNotExpired
                       ? `Функционал ограничен! Дата истечения оплаты: ${format(
                           new Date(user.paymentExpiredDate),
-                          'dd.MM.yyyy hh:mm',
+                          'dd.MM.yyyy HH:mm',
                         )}`
-                      : `Функционал сервиса будет ограничен через ${daysLeft}дн.`
+                      : `Функционал сервиса будет ограничен через ${
+                          daysLeft !== 0 ? daysLeft + 'дн' : hoursLeft + 'ч'
+                        }`
                   }
                 >
                   <div>

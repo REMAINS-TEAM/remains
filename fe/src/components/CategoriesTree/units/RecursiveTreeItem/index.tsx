@@ -1,8 +1,8 @@
 import { Category } from 'store/slices/categories';
 import TreeItem from 'components/CategoriesTree/units/TreeItem';
 import {
-  FiberManualRecord as OneIcon,
-  FiberSmartRecord as ManyIcon,
+  FolderOutlined as OneIcon,
+  Folder as ManyIcon,
 } from '@mui/icons-material';
 import React from 'react';
 import { Skeleton } from '@mui/lab';
