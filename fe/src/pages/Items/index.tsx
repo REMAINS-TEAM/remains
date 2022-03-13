@@ -7,8 +7,9 @@ import { Box } from '@mui/system';
 import Container from 'components/Container';
 import itemsApi from 'store/api/items';
 import BackButton from 'components/BackButton';
+import DetailsTable from 'pages/Items/units/DetailsTable';
 
-function ItemsPage() {
+function ItemPage() {
   const { itemId } = useParams();
   const navigate = useNavigate();
 
@@ -55,11 +56,13 @@ function ItemsPage() {
               />
             </Box>
           </Carousel>
-          <Box sx={styles.column}>desc</Box>
+          <Box sx={styles.column}>
+            <DetailsTable item={item} />
+          </Box>
         </Container>
       </Box>
     </MainLayout>
   );
 }
 
-export default ItemsPage;
+export default ItemPage;
