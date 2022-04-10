@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import Popup from 'components/Popups/index';
-import { InputAdornment, TextField } from '@mui/material';
+import { Box, InputAdornment, Link, TextField } from '@mui/material';
 import { AuthPopupProps } from '../../Popups/AuthPopup/types';
 import {
   PersonRounded as UserIcon,
@@ -9,9 +9,12 @@ import {
 import usersApi from 'store/api/user';
 import { Controller, useForm } from 'react-hook-form';
 import useResponseNotifications from 'hooks/useResponseNotifications';
+import * as styles from './styles';
+import RegisterPopup from 'components/Popups/RegisterPopup';
 
 function AuthPopup({ open, setOpen }: AuthPopupProps) {
   const [loginRequest, result] = usersApi.useLoginMutation();
+  const [registerPopupOpen, setRegisterPopupOpen] = useState(false);
 
   useResponseNotifications({
     result,
@@ -27,8 +30,12 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
     },
   });
 
-  // TODO: регистрация
   // TODO: валидация
+
+  const registerClickHandler = () => {
+    setOpen(false);
+    setRegisterPopupOpen(true);
+  };
 
   const onSubmit = ({
     login,
@@ -44,62 +51,70 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
   };
 
   return (
-    <Popup
-      title={`Авторизация`}
-      okButtonText={'Войти'}
-      closeWhenSubmit={false}
-      onOkClick={handleSubmit(onSubmit)}
-      {...{ open, setOpen }}
-    >
-      <form>
-        <Controller
-          name="login"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              autoFocus
-              margin="dense"
-              id="login"
-              label="Телефон/e-mail"
-              type="text"
-              fullWidth
-              variant="outlined"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <UserIcon />
-                  </InputAdornment>
-                ),
-              }}
-              {...field}
-            />
-          )}
-        />
-        <Controller
-          name="password"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              autoFocus
-              margin="dense"
-              id="password"
-              label="Пароль"
-              type="password"
-              fullWidth
-              variant="outlined"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <PasswordIcon />
-                  </InputAdornment>
-                ),
-              }}
-              {...field}
-            />
-          )}
-        />
-      </form>
-    </Popup>
+    <>
+      <Popup
+        title={`Авторизация`}
+        okButtonText={'Войти'}
+        closeWhenSubmit={false}
+        onOkClick={handleSubmit(onSubmit)}
+        {...{ open, setOpen }}
+      >
+        <form>
+          <Controller
+            name="login"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                autoFocus
+                margin="dense"
+                id="login"
+                label="Телефон/e-mail"
+                type="text"
+                fullWidth
+                variant="outlined"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <UserIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                {...field}
+              />
+            )}
+          />
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                autoFocus
+                margin="dense"
+                id="password"
+                label="Пароль"
+                type="password"
+                fullWidth
+                variant="outlined"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <PasswordIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                {...field}
+              />
+            )}
+          />
+        </form>
+        <Box sx={styles.link}>
+          <Link variant="subtitle2" onClick={registerClickHandler}>
+            Я еще не регистрировался...
+          </Link>
+        </Box>
+      </Popup>
+      <RegisterPopup open={registerPopupOpen} setOpen={setRegisterPopupOpen} />
+    </>
   );
 }
 

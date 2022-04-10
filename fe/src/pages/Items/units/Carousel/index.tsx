@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/system';
-import * as styles from 'pages/Items/styles';
+import * as styles from './styles';
 import Carousel from 'react-material-ui-carousel';
 import { BACKEND_URL } from 'global/constants';
 
@@ -12,11 +12,16 @@ function ImagesCarousel({
   images: string[];
 }) {
   return (
-    <Carousel navButtonsAlwaysVisible>
+    <Carousel
+      navButtonsAlwaysVisible
+      fullHeightHover={false}
+      animation="slide"
+      sx={styles.carousel}
+    >
       {images.map((fileName) => (
         <Box key={fileName} sx={styles.imageContainer}>
           <img
-            style={{ height: '100%' }}
+            style={{ width: '100%' }}
             src={`${BACKEND_URL}/content/items/${itemId}/${fileName}`}
             alt={`${fileName}`}
           />

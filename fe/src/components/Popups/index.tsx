@@ -16,6 +16,7 @@ export default function Popup({
   closeWhenSubmit = true,
   hideActionButtons = false,
   children,
+  sx,
 }: PopupProps) {
   const handleOkClick = () => {
     closeWhenSubmit && setOpen(false);
@@ -27,7 +28,7 @@ export default function Popup({
   };
 
   return (
-    <Dialog open={open} onClose={handleCancelClick} scroll={'paper'}>
+    <Dialog open={open} onClose={handleCancelClick} scroll={'paper'} sx={sx}>
       {title && <DialogTitle id="scroll-dialog-title">{title}</DialogTitle>}
       <DialogContent dividers={true}>{children}</DialogContent>
       {!hideActionButtons && (

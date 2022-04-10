@@ -102,7 +102,7 @@ function AppHeader() {
                 onClick={user ? profileClickHandler : loginClickHandler}
                 sx={{ columnGap: 1 }}
               >
-                {user?.name || 'Login'}
+                {user?.name || 'Вход / регистрация'}
                 <UserIcon />
               </Button>
             </>

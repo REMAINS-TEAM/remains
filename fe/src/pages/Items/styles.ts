@@ -1,4 +1,4 @@
-import { height, SxProps } from '@mui/system';
+import { SxProps } from '@mui/system';
 import { APP_HEADER_HEIGHT } from 'global/constants';
 
 export const page: SxProps = {
@@ -27,9 +27,4 @@ export const title: SxProps = {
   display: 'flex',
   alignItems: 'center',
   columnGap: 2,
-};
-
-export const imageContainer: SxProps = {
-  width: '100%',
-  height: '100%',
 };

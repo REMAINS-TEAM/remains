@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { SxProps } from '@mui/system';
 
 export interface PopupProps {
   open: boolean;
@@ -10,4 +11,5 @@ export interface PopupProps {
   closeWhenSubmit?: boolean;
   hideActionButtons?: boolean;
   children: ReactNode;
+  sx?: SxProps;
 }
