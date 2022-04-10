@@ -15,6 +15,11 @@ import {
 import { RegisterPopupProps } from 'components/Popups/RegisterPopup/types';
 import { fields } from './fields';
 import * as styles from './styles';
+import {
+  Phone as PhoneIcon,
+  AlternateEmail as EmailIcon,
+  VpnKey as PasswordIcon,
+} from '@mui/icons-material';
 
 function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
   const [createItemRequest, result] = itemsApi.useCreateItemMutation();
@@ -122,6 +127,54 @@ function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
               />
             )}
           />
+          <Controller
+            name={fields.user.PHONE}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                margin="dense"
+                id={fields.user.PHONE}
+                label="Ваш тел."
+                type="text"
+                fullWidth
+                variant="outlined"
+                error={!!errors[fields.user.PHONE]}
+                helperText={errors[fields.user.PHONE]?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <PhoneIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                {...field}
+              />
+            )}
+          />
+          <Controller
+            name={fields.user.EMAIL}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                margin="dense"
+                id={fields.user.EMAIL}
+                label="Ваш e-mail"
+                type="text"
+                fullWidth
+                variant="outlined"
+                error={!!errors[fields.user.EMAIL]}
+                helperText={errors[fields.user.EMAIL]?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <EmailIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                {...field}
+              />
+            )}
+          />
         </Box>
         <Box sx={styles.dataContainer}>
           <Typography variant="subtitle1" color="secondary" sx={{ pb: 1.5 }}>
@@ -170,7 +223,7 @@ function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
                 multiline
                 fullWidth
                 variant="outlined"
-                rows={3}
+                rows={4}
                 error={!!errors[fields.company.DESCRIPTION]}
                 helperText={errors[fields.company.DESCRIPTION]?.message}
                 InputProps={{
@@ -184,6 +237,61 @@ function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
                       }
                     >
                       {MAX_LENGTH_DESCRIPTION - companyDescriptionLength}
+                    </InputAdornment>
+                  ),
+                }}
+                {...field}
+              />
+            )}
+          />
+        </Box>
+      </Box>
+      <Typography variant="subtitle1" color="secondary" sx={{ py: 1.5 }}>
+        Пароль:
+      </Typography>
+      <Box sx={styles.generalContainer}>
+        <Box sx={styles.dataContainer}>
+          <Controller
+            name={fields.user.PASSWORD}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                margin="dense"
+                id={fields.user.PASSWORD}
+                label="Придумайте пароль"
+                type="password"
+                variant="outlined"
+                error={!!errors[fields.user.PASSWORD]}
+                helperText={errors[fields.user.PASSWORD]?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <PasswordIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                {...field}
+              />
+            )}
+          />
+        </Box>
+        <Box sx={styles.dataContainer}>
+          <Controller
+            name={fields.user.PASSWORD_CONFIRM}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                margin="dense"
+                id={fields.user.PASSWORD_CONFIRM}
+                label="Подтвердите пароль"
+                type="password"
+                variant="outlined"
+                error={!!errors[fields.user.PASSWORD_CONFIRM]}
+                helperText={errors[fields.user.PASSWORD_CONFIRM]?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <PasswordIcon />
                     </InputAdornment>
                   ),
                 }}

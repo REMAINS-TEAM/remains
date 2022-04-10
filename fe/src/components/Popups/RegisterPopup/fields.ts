@@ -7,5 +7,7 @@ export const fields = {
     NAME: 'userName',
     PHONE: 'userPhone',
     EMAIL: 'userEmail',
+    PASSWORD: 'userPassword',
+    PASSWORD_CONFIRM: 'userPasswordConfirm',
   },
 };
