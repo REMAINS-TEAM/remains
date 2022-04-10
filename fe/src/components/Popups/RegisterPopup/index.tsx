@@ -24,7 +24,7 @@ import {
 import TextMaskInput from 'components/TextMaskInput';
 
 const PhoneMask = (props: any) => (
-  <TextMaskInput {...{ ...props, mask: '+# (#00) 000-0000' }} />
+  <TextMaskInput {...{ ...props, mask: '+# (#00) 000-00-00' }} />
 );
 
 function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
@@ -55,6 +55,8 @@ function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
     },
   });
 
+  console.log('errors', errors);
+
   const companyNameLength = useLimitTextField({
     value: watch(fields.company.NAME),
     setValue: (value) => setValue(fields.company.NAME, value),
@@ -75,6 +77,8 @@ function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
 
   const onSubmit = (fieldsValues: Record<string, string>) => {
     if (Object.keys(errors).length) return;
+
+    console.log(fieldsValues);
 
     const formData = new FormData();
     //
@@ -225,7 +229,7 @@ function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
               <TextField
                 margin="dense"
                 id={fields.company.DESCRIPTION}
-                label="Пара слов о компании (чем занимается, как давно на рынке и т.п."
+                label="Пара слов о компании (чем занимается, как давно на рынке и т.п.)"
                 type="text"
                 multiline
                 fullWidth
