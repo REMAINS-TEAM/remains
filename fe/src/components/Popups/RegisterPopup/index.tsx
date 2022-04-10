@@ -21,6 +21,12 @@ import {
   VpnKey as PasswordIcon,
 } from '@mui/icons-material';
 
+import TextMaskInput from 'components/TextMaskInput';
+
+const PhoneMask = (props: any) => (
+  <TextMaskInput {...{ ...props, mask: '+# (#00) 000-0000' }} />
+);
+
 function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
   const [createItemRequest, result] = itemsApi.useCreateItemMutation();
 
@@ -141,6 +147,7 @@ function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
                 error={!!errors[fields.user.PHONE]}
                 helperText={errors[fields.user.PHONE]?.message}
                 InputProps={{
+                  inputComponent: PhoneMask as any,
                   endAdornment: (
                     <InputAdornment position="end">
                       <PhoneIcon />
@@ -178,7 +185,7 @@ function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
         </Box>
         <Box sx={styles.dataContainer}>
           <Typography variant="subtitle1" color="secondary" sx={{ pb: 1.5 }}>
-            Данные о компании:
+            Данные о вашей компании:
           </Typography>
           <Controller
             name={fields.company.NAME}
@@ -187,7 +194,7 @@ function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
               <TextField
                 margin="dense"
                 id={fields.company.NAME}
-                label="Название компании"
+                label="Название компании или ИП"
                 type="text"
                 fullWidth
                 variant="outlined"
@@ -218,7 +225,7 @@ function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
               <TextField
                 margin="dense"
                 id={fields.company.DESCRIPTION}
-                label="Пара слов о компании"
+                label="Пара слов о компании (чем занимается, как давно на рынке и т.п."
                 type="text"
                 multiline
                 fullWidth
