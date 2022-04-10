@@ -1,7 +1,7 @@
 import { SxProps } from '@mui/system';
 
 export const popup: SxProps = {
-  maxWidth: '2000px',
+  maxWidth: '2000px !important',
 };
 
 export const generalContainer: SxProps = {

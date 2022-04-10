@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { SxProps } from '@mui/system';
+import { DialogProps } from '@mui/material';
 
-export interface PopupProps {
+export interface PopupProps extends DialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   title?: string;
@@ -11,5 +11,4 @@ export interface PopupProps {
   closeWhenSubmit?: boolean;
   hideActionButtons?: boolean;
   children: ReactNode;
-  sx?: SxProps;
 }

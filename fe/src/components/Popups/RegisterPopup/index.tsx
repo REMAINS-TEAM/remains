@@ -82,7 +82,7 @@ function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
       okButtonText={'Зарегистрироваться'}
       onOkClick={handleSubmit(onSubmit)}
       closeWhenSubmit={false}
-      sx={styles.popup}
+      PaperProps={{ sx: styles.popup }}
       {...{ open, setOpen }}
     >
       <Box sx={styles.generalContainer}>
@@ -132,7 +132,6 @@ function RegisterPopup({ open, setOpen }: RegisterPopupProps) {
             control={control}
             render={({ field }) => (
               <TextField
-                autoFocus
                 margin="dense"
                 id={fields.company.NAME}
                 label="Название компании"
