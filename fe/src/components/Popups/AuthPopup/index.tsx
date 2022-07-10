@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Popup from 'components/Popups/index';
 import { Box, InputAdornment, Link, TextField } from '@mui/material';
-import { AuthPopupProps } from '../../Popups/AuthPopup/types';
+import { AuthPopupProps } from './types';
 import {
   PersonRounded as UserIcon,
+  Phone as PhoneIcon,
   VpnKey as PasswordIcon,
 } from '@mui/icons-material';
 import usersApi from 'store/api/user';
@@ -11,6 +12,12 @@ import { Controller, useForm } from 'react-hook-form';
 import useResponseNotifications from 'hooks/useResponseNotifications';
 import * as styles from './styles';
 import RegisterPopup from 'components/Popups/RegisterPopup';
+import { fields } from 'components/Popups/RegisterPopup/fields';
+import TextMaskInput from 'components/TextMaskInput';
+import MuiPhoneNumber from 'material-ui-phone-number';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { registerSchema } from 'components/Popups/RegisterPopup/validation';
+import { authSchema } from 'components/Popups/AuthPopup/validation';
 
 function AuthPopup({ open, setOpen }: AuthPopupProps) {
   const [loginRequest, result] = usersApi.useLoginMutation();
@@ -23,10 +30,14 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
     onErrorText: 'Неверный логин и/или пароль',
   });
 
-  const { control, handleSubmit } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: joiResolver(authSchema),
     defaultValues: {
-      login: '',
-      password: '',
+      phone: '',
     },
   });
 
@@ -37,17 +48,12 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
     setRegisterPopupOpen(true);
   };
 
-  const onSubmit = ({
-    login,
-    password,
-  }: {
-    login: string;
-    password: string;
-  }) => {
-    loginRequest({
-      login,
-      password,
-    });
+  const onSubmit = ({ phone }: { phone: string }) => {
+    // loginRequest({
+    //   login: phone,
+    //   password: 'test',
+    // });
+    console.log(phone.replace(/[\D]+/g, ''));
   };
 
   return (
@@ -61,47 +67,21 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
       >
         <form>
           <Controller
-            name="login"
+            name="phone"
             control={control}
             render={({ field }) => (
-              <TextField
+              <MuiPhoneNumber
+                sx={{ minWidth: '250px' }}
                 autoFocus
                 margin="dense"
-                id="login"
-                label="Телефон/e-mail"
+                id="phone"
+                label="Телефон"
                 type="text"
                 fullWidth
                 variant="outlined"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <UserIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name="password"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                autoFocus
-                margin="dense"
-                id="password"
-                label="Пароль"
-                type="password"
-                fullWidth
-                variant="outlined"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <PasswordIcon />
-                    </InputAdornment>
-                  ),
-                }}
+                defaultCountry={'ru'}
+                helperText={!!errors.phone && 'Введите корректный номер'}
+                error={!!errors.phone}
                 {...field}
               />
             )}
