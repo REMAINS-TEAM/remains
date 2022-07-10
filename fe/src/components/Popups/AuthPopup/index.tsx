@@ -1,27 +1,18 @@
 import React, { useState } from 'react';
 import Popup from 'components/Popups/index';
-import { Box, InputAdornment, Link, TextField } from '@mui/material';
+import { Box, Link } from '@mui/material';
 import { AuthPopupProps } from './types';
-import {
-  PersonRounded as UserIcon,
-  Phone as PhoneIcon,
-  VpnKey as PasswordIcon,
-} from '@mui/icons-material';
 import usersApi from 'store/api/user';
 import { Controller, useForm } from 'react-hook-form';
 import useResponseNotifications from 'hooks/useResponseNotifications';
 import * as styles from './styles';
-import RegisterPopup from 'components/Popups/RegisterPopup';
-import { fields } from 'components/Popups/RegisterPopup/fields';
-import TextMaskInput from 'components/TextMaskInput';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { registerSchema } from 'components/Popups/RegisterPopup/validation';
 import { authSchema } from 'components/Popups/AuthPopup/validation';
 
 function AuthPopup({ open, setOpen }: AuthPopupProps) {
   const [loginRequest, result] = usersApi.useLoginMutation();
-  const [registerPopupOpen, setRegisterPopupOpen] = useState(false);
+  const [registerMode, setRegisterMode] = useState(false);
 
   useResponseNotifications({
     result,
@@ -43,9 +34,8 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
 
   // TODO: валидация
 
-  const registerClickHandler = () => {
-    setOpen(false);
-    setRegisterPopupOpen(true);
+  const modeClickHandler = () => {
+    setRegisterMode((prev) => !prev);
   };
 
   const onSubmit = ({ phone }: { phone: string }) => {
@@ -59,8 +49,8 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
   return (
     <>
       <Popup
-        title={`Авторизация`}
-        okButtonText={'Войти'}
+        title={`${registerMode ? 'Регистрация' : 'Авторизация'}`}
+        okButtonText={`${registerMode ? 'Зарегистрироваться' : 'Войти'}`}
         closeWhenSubmit={false}
         onOkClick={handleSubmit(onSubmit)}
         {...{ open, setOpen }}
@@ -87,13 +77,15 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
             )}
           />
         </form>
+
         <Box sx={styles.link}>
-          <Link variant="subtitle2" onClick={registerClickHandler}>
-            Я еще не регистрировался...
+          <Link variant="subtitle2" onClick={modeClickHandler}>
+            {registerMode
+              ? 'У меня уже есть аккаунт'
+              : 'Я еще не регистрировался'}
           </Link>
         </Box>
       </Popup>
-      <RegisterPopup open={registerPopupOpen} setOpen={setRegisterPopupOpen} />
     </>
   );
 }
