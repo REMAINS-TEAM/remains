@@ -13,31 +13,31 @@ export const Access = createParamDecorator(
     }
 
     // Check auth
-    const tokenFromDb = await prisma.token.findUnique({
-      where: {
-        token,
-      },
-    });
-    if (!tokenFromDb) {
-      return false;
-    }
-
-    // Check paymentExpiredDate
-    const user = await prisma.user.findFirst({
-      where: {
-        tokens: {
-          some: {
-            token,
-          },
-        },
-      },
-    });
-
-    if (!user?.paymentExpiredDate) {
-      return false;
-    } else if (user?.paymentExpiredDate < new Date()) {
-      return false;
-    }
+    // const tokenFromDb = await prisma.token.findUnique({
+    //   where: {
+    //     token,
+    //   },
+    // });
+    // if (!tokenFromDb) {
+    //   return false;
+    // }
+    //
+    // // Check paymentExpiredDate
+    // const user = await prisma.user.findFirst({
+    //   where: {
+    //     tokens: {
+    //       some: {
+    //         token,
+    //       },
+    //     },
+    //   },
+    // });
+    //
+    // if (!user?.paymentExpiredDate) {
+    //   return false;
+    // } else if (user?.paymentExpiredDate < new Date()) {
+    //   return false;
+    // }
 
     return true;
   },

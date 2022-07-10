@@ -13,19 +13,18 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from 'decorators/roles.decorator';
 import { RegisterUserDto } from 'modules/users/dto/register-user.dto';
 import { LoginUserDto } from 'modules/users/dto/login-user.dto';
+import { ConfirmCodeDto } from 'modules/users/dto/confirm-code.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get('me')
-  async getMe(
-    @Headers() headers: { authorization: string | undefined },
-  ): Promise<Omit<User, 'passwordHash'>> {
+  async getMe(@Headers() headers: { authorization: string | undefined }) {
     const authHeader = headers.authorization || '';
     const token = authHeader.split(' ')[1];
 
-    return this.usersService.findOneByToken(token);
+    return 'TODO';
   }
 
   @Get()
@@ -53,8 +52,13 @@ export class UsersController {
   }
 
   @Post('login')
-  async login(@Body() loginUserDto: LoginUserDto): Promise<{ token: string }> {
+  async login(@Body() loginUserDto: LoginUserDto) {
     return this.usersService.login(loginUserDto);
+  }
+
+  @Post('code')
+  async code(@Body() confirmCodeDto: ConfirmCodeDto) {
+    return this.usersService.confirmCode(confirmCodeDto);
   }
 
   @Post('logout')

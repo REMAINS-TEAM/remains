@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Item, Token, User } from '@prisma/client';
+import { Item, User } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
 import * as fs from 'fs';
 import path, { join } from 'path';
@@ -74,24 +74,24 @@ export class ItemsService {
     if (!token) {
       throw new ForbiddenException(`You are not authorized to create item`);
     }
-
-    let foundToken: (Token & { user: User | null }) | null;
-    try {
-      foundToken = await this.prisma.token.findUnique({
-        where: { token },
-        include: { user: true },
-      });
-    } catch (err) {
-      throw new PrismaException(err as Error);
-    }
-
-    if (!foundToken?.user) {
-      throw new UnauthorizedException(`User does not exist`);
-    }
-
-    if (new Date() > foundToken.user.paymentExpiredDate) {
-      throw new ForbiddenException(`Please pay service for this action`);
-    }
+    //
+    // let foundToken: (Token & { user: User | null }) | null;
+    // try {
+    //   foundToken = await this.prisma.token.findUnique({
+    //     where: { token },
+    //     include: { user: true },
+    //   });
+    // } catch (err) {
+    //   throw new PrismaException(err as Error);
+    // }
+    //
+    // if (!foundToken?.user) {
+    //   throw new UnauthorizedException(`User does not exist`);
+    // }
+    //
+    // if (new Date() > foundToken.user.paymentExpiredDate) {
+    //   throw new ForbiddenException(`Please pay service for this action`);
+    // }
 
     if (!images.length) {
       throw new BadRequestException(`Add one image at least`);
@@ -106,7 +106,7 @@ export class ItemsService {
           price: +data.price,
           categoryId: +data.categoryId,
           images: [],
-          userId: foundToken.user.id,
+          userId: 1,
         },
       });
     } catch (err) {
@@ -166,23 +166,23 @@ export class ItemsService {
       throw new ForbiddenException(`You are not authorized to delete item`);
     }
 
-    let foundToken: (Token & { user: User | null }) | null;
-    try {
-      foundToken = await this.prisma.token.findUnique({
-        where: { token },
-        include: { user: true },
-      });
-    } catch (err) {
-      throw new PrismaException(err as Error);
-    }
-
-    if (!foundToken?.user) {
-      throw new UnauthorizedException(`User does not exist`);
-    }
-
-    if (new Date() > foundToken.user.paymentExpiredDate) {
-      throw new ForbiddenException(`Please pay service for this action`);
-    }
+    // let foundToken: (Token & { user: User | null }) | null;
+    // try {
+    //   foundToken = await this.prisma.token.findUnique({
+    //     where: { token },
+    //     include: { user: true },
+    //   });
+    // } catch (err) {
+    //   throw new PrismaException(err as Error);
+    // }
+    //
+    // if (!foundToken?.user) {
+    //   throw new UnauthorizedException(`User does not exist`);
+    // }
+    //
+    // if (new Date() > foundToken.user.paymentExpiredDate) {
+    //   throw new ForbiddenException(`Please pay service for this action`);
+    // }
 
     let item: Item | null;
     try {
@@ -197,11 +197,11 @@ export class ItemsService {
       throw new BadRequestException(`Item with id ${id} not found`);
     }
 
-    if (item.userId !== foundToken?.userId) {
-      throw new ForbiddenException(
-        `Cannot delete item with id ${id}. It is not your item`,
-      );
-    }
+    // if (item.userId !== foundToken?.userId) {
+    //   throw new ForbiddenException(
+    //     `Cannot delete item with id ${id}. It is not your item`,
+    //   );
+    // }
 
     // delete all files
     fs.rm(

@@ -3,16 +3,16 @@ import {
   HttpException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { User } from '@prisma/client';
+import { Code, User } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
-import { checkPassword, generateToken, hashPassword } from './users.utils';
+import { hashPassword } from './users.utils';
 import { LoginUserDto } from './dto/login-user.dto';
-import { LogoutUserDto } from './dto/logout-user.dto';
+import { ConfirmCodeDto } from 'modules/users/dto/confirm-code.dto';
+import jwt from 'jsonwebtoken';
 
 @Injectable()
 export class UsersService {
@@ -43,37 +43,6 @@ export class UsersService {
     return result;
   }
 
-  async findOneByToken(
-    token: string | undefined,
-  ): Promise<Omit<User, 'passwordHash'>> {
-    if (!token) {
-      throw new BadRequestException(`Token is missing`);
-    }
-    let result;
-    try {
-      result = await this.prisma.user.findFirst({
-        where: {
-          tokens: {
-            some: { token },
-          },
-        },
-        include: {
-          company: true,
-        },
-      });
-    } catch (err) {
-      throw new PrismaException(err as Error);
-    }
-
-    if (!result) {
-      throw new NotFoundException(`User with such token does not exist`);
-    }
-
-    const { passwordHash, ...userWithoutPwd } = result;
-
-    return userWithoutPwd;
-  }
-
   async register({ password, email, ...data }: RegisterUserDto) {
     try {
       const passwordHash = await hashPassword(password);
@@ -90,51 +59,95 @@ export class UsersService {
     throw new HttpException('Something went wrong when register new user', 500);
   }
 
-  async login({ login, password }: LoginUserDto) {
+  async login({ phone }: LoginUserDto) {
     let user;
     try {
-      const users = await this.prisma.user.findMany({
-        where: {
-          OR: [{ email: login.toLowerCase() }, { phone: login }],
-        },
+      user = await this.prisma.user.findUnique({
+        where: { phone },
       });
-      user = users[0];
     } catch (err) {
       throw new PrismaException(err as Error);
     }
 
-    if (user) {
-      try {
-        const result = await this.prisma.user.findUnique({
-          where: { id: user.id },
-        });
-        if (result?.passwordHash) {
-          const compared = await checkPassword(password, result.passwordHash);
-          if (compared) {
-            const token = generateToken();
-            await this.prisma.token.create({
-              data: {
-                userId: user.id,
-                token,
-              },
-            });
-            return { token };
-          }
-        }
-      } catch (err) {
-        throw new PrismaException(err as Error);
-      }
+    if (!user) return 'OK';
+
+    let prevCode;
+    try {
+      prevCode = await this.prisma.code.findFirst({
+        where: { user },
+        orderBy: { createdAt: 'desc' },
+      });
+    } catch (err) {
+      throw new PrismaException(err as Error);
     }
 
-    throw new UnauthorizedException('User or password is invalid');
+    if (
+      prevCode &&
+      new Date().getTime() - new Date(prevCode.createdAt).getTime() < 60 * 1000
+    ) {
+      throw new BadRequestException('Code is already sent. Try in 1 min.');
+    }
+
+    // запрос на получение кода и звонок с сервиса
+    const code = 1234; // temp
+    try {
+      await this.prisma.code.deleteMany({
+        where: { user },
+      });
+      await this.prisma.code.create({
+        data: {
+          userId: user.id,
+          value: code,
+        },
+      });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    return 'OK';
+  }
+
+  async confirmCode({ code, phone }: ConfirmCodeDto) {
+    let user: User | null;
+    try {
+      user = await this.prisma.user.findUnique({
+        where: { phone },
+      });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    if (!user) {
+      throw new BadRequestException('User in not existed or code is invalid');
+    }
+
+    let existedCode: Code | null;
+    try {
+      existedCode = await this.prisma.code.findFirst({
+        where: {
+          user,
+          value: code,
+        },
+      });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    if (!existedCode) {
+      throw new BadRequestException('User in not existed or code is invalid');
+    }
+
+    const token = jwt.sign({ sub: user.id }, 'remains-secret-key');
+
+    return { token };
   }
 
   async logout(token: string) {
-    try {
-      await this.prisma.token.delete({ where: { token } });
-    } catch (err) {
-      throw new NotFoundException('No such token');
-    }
+    // try {
+    //   await this.prisma.token.delete({ where: { token } });
+    // } catch (err) {
+    //   throw new NotFoundException('No such token');
+    // }
 
     return { status: 'OK' };
   }
