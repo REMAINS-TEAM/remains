@@ -137,6 +137,12 @@ export class UsersService {
       throw new BadRequestException('User in not existed or code is invalid');
     }
 
+    try {
+      await this.prisma.code.deleteMany({ where: { user } });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
     const token = jwt.sign({ sub: user.id }, 'remains-secret-key');
 
     return { token };
