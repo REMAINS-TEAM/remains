@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Headers,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -24,7 +25,7 @@ export class UsersController {
     const authHeader = headers.authorization || '';
     const token = authHeader.split(' ')[1];
 
-    return 'TODO';
+    return this.usersService.me();
   }
 
   @Get()
@@ -52,11 +53,13 @@ export class UsersController {
   }
 
   @Post('login')
+  @HttpCode(200)
   async login(@Body() loginUserDto: LoginUserDto) {
     return this.usersService.login(loginUserDto);
   }
 
   @Post('code')
+  @HttpCode(200)
   async code(@Body() confirmCodeDto: ConfirmCodeDto) {
     return this.usersService.confirmCode(confirmCodeDto);
   }

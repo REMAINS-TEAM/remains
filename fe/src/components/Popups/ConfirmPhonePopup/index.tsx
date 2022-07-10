@@ -5,14 +5,17 @@ import { ConfirmPhonePopupProps } from './types';
 import { Controller, useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { confirmCodeSchema } from 'components/Popups/ConfirmPhonePopup/validation';
+import usersApi from 'store/api/user';
+import useResponseNotifications from 'hooks/useResponseNotifications';
 
-function ConfirmPhonePopup({ open, setOpen }: ConfirmPhonePopupProps) {
-  // useResponseNotifications({
-  //   result,
-  //   onSuccess: () => setOpen(false),
-  //   onSuccessText: 'Успешно!',
-  //   onErrorText: 'Неверный код',
-  // });
+function ConfirmPhonePopup({ open, setOpen, phone }: ConfirmPhonePopupProps) {
+  const [confirmCodeRequest, result] = usersApi.useConfirmCodeMutation();
+  useResponseNotifications({
+    result,
+    onSuccess: () => setOpen(false),
+    onSuccessText: 'Успешно!',
+    onErrorText: 'Неверный код или телефон',
+  });
 
   const {
     control,
@@ -26,7 +29,7 @@ function ConfirmPhonePopup({ open, setOpen }: ConfirmPhonePopupProps) {
   });
 
   const onSubmit = ({ code }: { code: string }) => {
-    // ...
+    confirmCodeRequest({ phone, code: +code });
   };
 
   return (

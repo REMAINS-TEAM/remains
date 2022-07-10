@@ -22,3 +22,5 @@ export const fileToDataUri = (file: File): Promise<string> =>
     };
     reader.readAsDataURL(file);
   });
+
+export const onlyNumbers = (str: string) => str.replace(/[\D]+/g, '');

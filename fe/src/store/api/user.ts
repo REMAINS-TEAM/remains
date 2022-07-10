@@ -4,23 +4,26 @@ import { setCurrent, User } from 'store/slices/user';
 
 export const usersApi = api.injectEndpoints({
   endpoints: (build) => ({
-    login: build.mutation<
+    login: build.mutation<{ token: string }, { phone: string }>({
+      query: (body) => ({
+        url: `${apiTypes.USERS}/login`,
+        method: 'post',
+        body,
+      }),
+    }),
+
+    confirmCode: build.mutation<
       { token: string },
       {
-        login: string;
-        password: string;
+        phone: string;
+        code: number;
       }
     >({
-      async queryFn(
-        { login, password },
-        _queryApi,
-        _extraOptions,
-        fetchWithBQ,
-      ) {
+      async queryFn({ phone, code }, _queryApi, _extraOptions, fetchWithBQ) {
         const loginResponse = await fetchWithBQ({
-          url: `${apiTypes.USERS}/login`,
+          url: `${apiTypes.USERS}/code`,
           method: 'POST',
-          body: { login, password },
+          body: { phone, code },
         });
 
         if (loginResponse.error) throw loginResponse.error;
@@ -41,7 +44,9 @@ export const usersApi = api.injectEndpoints({
 
         return { data };
       },
+      invalidatesTags: [apiTypes.USERS],
     }),
+
     me: build.query<User, void>({
       async queryFn(_args, _queryApi, _extraOptions, fetchWithBQ) {
         const meResponse = await fetchWithBQ({
@@ -55,6 +60,7 @@ export const usersApi = api.injectEndpoints({
         return { data: userData };
       },
     }),
+
     logout: build.mutation<null, void>({
       async queryFn(_args, _queryApi, _extraOptions, fetchWithBQ) {
         const logoutResponse = await fetchWithBQ({

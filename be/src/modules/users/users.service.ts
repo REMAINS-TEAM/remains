@@ -18,6 +18,18 @@ import jwt from 'jsonwebtoken';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
+  async me() {
+    // TODO
+    let result;
+    try {
+      result = await this.prisma.user.findFirst();
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    return result;
+  }
+
   async findAll(): Promise<User[]> {
     return this.prisma.user.findMany({
       include: {

@@ -4,12 +4,12 @@ import { Box, Link } from '@mui/material';
 import { AuthPopupProps } from './types';
 import usersApi from 'store/api/user';
 import { Controller, useForm } from 'react-hook-form';
-import useResponseNotifications from 'hooks/useResponseNotifications';
 import * as styles from './styles';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { authSchema } from 'components/Popups/AuthPopup/validation';
 import ConfirmPhonePopup from 'components/Popups/ConfirmPhonePopup';
+import { onlyNumbers } from 'utils';
 
 function AuthPopup({ open, setOpen }: AuthPopupProps) {
   const [loginRequest, result] = usersApi.useLoginMutation();
@@ -20,6 +20,7 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm({
     resolver: joiResolver(authSchema),
     defaultValues: {
@@ -32,11 +33,11 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
   };
 
   const onSubmit = ({ phone }: { phone: string }) => {
-    // loginRequest({
-    //   login: phone,
-    //   password: 'test',
-    // });
-    console.log(phone.replace(/[\D]+/g, ''));
+    loginRequest({
+      phone: onlyNumbers(phone),
+    });
+
+    // TODO: errors handlers
     setConfirmCodePopupOpen(true);
     setOpen(false);
   };
@@ -82,6 +83,7 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
         </Box>
       </Popup>
       <ConfirmPhonePopup
+        phone={onlyNumbers(watch('phone'))}
         open={confirmCodePopupOpen}
         setOpen={setConfirmCodePopupOpen}
       />
