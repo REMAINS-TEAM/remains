@@ -9,17 +9,12 @@ import * as styles from './styles';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { authSchema } from 'components/Popups/AuthPopup/validation';
+import ConfirmPhonePopup from 'components/Popups/ConfirmPhonePopup';
 
 function AuthPopup({ open, setOpen }: AuthPopupProps) {
   const [loginRequest, result] = usersApi.useLoginMutation();
   const [registerMode, setRegisterMode] = useState(false);
-
-  useResponseNotifications({
-    result,
-    onSuccess: () => setOpen(false),
-    onSuccessText: 'Вы успешно вошли в свой аккаунт',
-    onErrorText: 'Неверный логин и/или пароль',
-  });
+  const [confirmCodePopupOpen, setConfirmCodePopupOpen] = useState(false);
 
   const {
     control,
@@ -32,8 +27,6 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
     },
   });
 
-  // TODO: валидация
-
   const modeClickHandler = () => {
     setRegisterMode((prev) => !prev);
   };
@@ -44,6 +37,8 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
     //   password: 'test',
     // });
     console.log(phone.replace(/[\D]+/g, ''));
+    setConfirmCodePopupOpen(true);
+    setOpen(false);
   };
 
   return (
@@ -86,6 +81,10 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
           </Link>
         </Box>
       </Popup>
+      <ConfirmPhonePopup
+        open={confirmCodePopupOpen}
+        setOpen={setConfirmCodePopupOpen}
+      />
     </>
   );
 }
