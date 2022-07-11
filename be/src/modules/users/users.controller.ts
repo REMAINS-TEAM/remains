@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { UsersService } from './users.service';
@@ -15,17 +16,17 @@ import { Roles } from 'decorators/roles.decorator';
 import { RegisterUserDto } from 'modules/users/dto/register-user.dto';
 import { LoginUserDto } from 'modules/users/dto/login-user.dto';
 import { ConfirmCodeDto } from 'modules/users/dto/confirm-code.dto';
+import { OnlyForLoggedGuard } from 'guards/auth.guard';
+import { CurrentUserId } from 'decorators/current-user.decorator';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get('me')
-  async getMe(@Headers() headers: { authorization: string | undefined }) {
-    const authHeader = headers.authorization || '';
-    const token = authHeader.split(' ')[1];
-
-    return this.usersService.me();
+  @UseGuards(OnlyForLoggedGuard)
+  async getMe(@CurrentUserId() userId: number | null) {
+    return this.usersService.findOne(userId);
   }
 
   @Get()

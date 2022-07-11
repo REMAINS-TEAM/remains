@@ -18,18 +18,6 @@ import jwt from 'jsonwebtoken';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async me() {
-    // TODO
-    let result;
-    try {
-      result = await this.prisma.user.findFirst();
-    } catch (err) {
-      throw new PrismaException(err as Error);
-    }
-
-    return result;
-  }
-
   async findAll(): Promise<User[]> {
     return this.prisma.user.findMany({
       include: {
@@ -38,7 +26,11 @@ export class UsersService {
     });
   }
 
-  async findOne(id: number): Promise<User> {
+  async findOne(id: number | null): Promise<User> {
+    if (!id) {
+      throw new BadRequestException('No user id');
+    }
+
     let result;
     try {
       result = await this.prisma.user.findUnique({
@@ -155,7 +147,10 @@ export class UsersService {
       throw new PrismaException(err as Error);
     }
 
-    const token = jwt.sign({ sub: user.id }, 'remains-secret-key');
+    const token = jwt.sign(
+      { sub: user.id },
+      process.env.JWT_SECRET_KEY || 'remains-secret-key',
+    );
 
     return { token };
   }
