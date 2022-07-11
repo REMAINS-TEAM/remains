@@ -82,6 +82,13 @@ export class UsersService {
     }
 
     // запрос на получение кода и звонок с сервиса
+    const SMSC_URL = `https://smsc.ru/sys/send.php?login=${process.env.SMSC_LOGIN}&psw=${process.env.SMSC_PASSWORD}&phones=${phone}&mes=code&call=1&fmt=3`
+    try {
+      // const res = await fetch({url: SMSC_URL})
+    } catch (e) {
+      //
+    }
+
     const code = 1234; // temp
     try {
       await this.prisma.code.deleteMany({

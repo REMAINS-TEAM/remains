@@ -6,10 +6,12 @@ import { CategoriesModule } from 'modules/categories/categories.module';
 import { PrismaModule } from 'modules/prisma/prisma.module';
 import { ItemsModule } from 'modules/items/items.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { HttpModule } from '@nestjs/axios'
 import { join } from 'path';
 
 @Module({
   imports: [
+    HttpModule,
     PrismaModule,
     UsersModule,
     CategoriesModule,
