@@ -9,10 +9,10 @@ import { Code, User } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
-import { hashPassword } from './users.utils';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ConfirmCodeDto } from 'modules/users/dto/confirm-code.dto';
 import jwt from 'jsonwebtoken';
+import fetch from 'node-fetch';
 
 @Injectable()
 export class UsersService {
@@ -81,15 +81,20 @@ export class UsersService {
       throw new BadRequestException('Code is already sent. Try in 1 min.');
     }
 
-    // запрос на получение кода и звонок с сервиса
-    const SMSC_URL = `https://smsc.ru/sys/send.php?login=${process.env.SMSC_LOGIN}&psw=${process.env.SMSC_PASSWORD}&phones=${phone}&mes=code&call=1&fmt=3`
+    const SMSC_URL = `https://smsc.ru/sys/send.php?login=${process.env.SMSC_LOGIN}&psw=${process.env.SMSC_PASSWORD}&phones=${phone}&mes=code&call=1&fmt=3`;
+    let smscResponse;
     try {
-      // const res = await fetch({url: SMSC_URL})
+      const res = await fetch(SMSC_URL);
+      smscResponse = (await res.json()) as { code: string };
     } catch (e) {
-      //
+      throw new HttpException(
+        'Something went wrong when try to call ' + JSON.stringify(e),
+        500,
+      );
     }
 
-    const code = 1234; // temp
+    const code = +smscResponse.code.substring(2);
+
     try {
       await this.prisma.code.deleteMany({
         where: { user },
