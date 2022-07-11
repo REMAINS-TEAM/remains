@@ -12,13 +12,12 @@ datasource db {
 
 model User {
   id                  Int         @id @default(autoincrement())
-  email               String      @unique
-  name                String
+  email               String?     @unique
+  name                String?
   phone               String      @unique
-  passwordHash        String?
   paymentExpiredDate  DateTime    @default(now())
-  company             Company     @relation(fields: [companyId], references: [id])
-  companyId           Int
+  company             Company?    @relation(fields: [companyId], references: [id])
+  companyId           Int?
   items               Item[]
   codes               Code[]
   createdAt           DateTime    @default(now())

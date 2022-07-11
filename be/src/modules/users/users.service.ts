@@ -47,20 +47,9 @@ export class UsersService {
     return result;
   }
 
-  async register({ password, email, ...data }: RegisterUserDto) {
-    try {
-      const passwordHash = await hashPassword(password);
-      if (passwordHash) {
-        await this.prisma.user.create({
-          data: { ...data, email: email.toLowerCase(), passwordHash },
-        });
-        return 'REGISTERED';
-      }
-    } catch (err) {
-      throw new PrismaException(err as Error);
-    }
-
-    throw new HttpException('Something went wrong when register new user', 500);
+  async register({ phone }: RegisterUserDto) {
+    // TODO
+    return 'OK';
   }
 
   async login({ phone }: LoginUserDto) {
