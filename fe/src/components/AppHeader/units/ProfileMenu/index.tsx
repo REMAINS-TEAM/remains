@@ -37,6 +37,7 @@ function ProfileMenu({
 
   const handleClickLogout = () => {
     logoutRequest();
+    navigate('/', { replace: true });
   };
 
   return (

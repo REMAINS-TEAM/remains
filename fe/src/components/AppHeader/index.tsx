@@ -16,19 +16,21 @@ import * as styles from './styles';
 import { APP_HEADER_HEIGHT, LS_KEY_TOKEN } from 'global/constants';
 import AuthPopup from 'components/Popups/AuthPopup';
 import { useSelector } from 'react-redux';
-import { RootState } from 'store';
 import userApi from 'store/api/user';
 import ProfileMenu from 'components/AppHeader/units/ProfileMenu';
 import CircularProgressWithLabel from 'components/CircularProgressWithLabel';
 import { differenceInDays, differenceInHours, format } from 'date-fns';
-import { getPaymentNotExpiredStatus } from 'store/selectors/user';
+import {
+  getCurrentUser,
+  getPaymentNotExpiredStatus,
+} from 'store/selectors/user';
 import { Link } from 'react-router-dom';
 
 function AppHeader() {
   const { isFetching } = userApi.useMeQuery(undefined, {
     skip: !localStorage.getItem(LS_KEY_TOKEN),
   });
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector(getCurrentUser);
   const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
   const [authPopupOpen, setAuthPopupOpen] = useState(false);
 
@@ -77,7 +79,7 @@ function AppHeader() {
                   title={
                     !paymentNotExpired
                       ? `Функционал ограничен! Дата истечения оплаты: ${format(
-                          new Date(user.paymentExpiredDate),
+                          new Date(user.paymentExpiredDate || 0),
                           'dd.MM.yyyy HH:mm',
                         )}`
                       : `Функционал сервиса будет ограничен через ${

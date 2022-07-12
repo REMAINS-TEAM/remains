@@ -5,39 +5,35 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableRow,
   Typography,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { RootState } from 'store';
 import * as styles from './styles';
 import { standardFormat } from 'utils';
-
-// TODO: только для авторизованных
+import { getCurrentUser } from 'store/selectors/user';
+import AuthLayout from 'layouts/AuthLayout';
 
 function ProfilePage() {
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector(getCurrentUser);
 
-  if (!user) {
-    return <MainLayout>Вы не авторизованы</MainLayout>;
-  }
+  const rows = user
+    ? [
+        { title: 'Имя', value: user.name },
+        { title: 'Телефон', value: '+' + user.phone },
+        { title: 'E-mail', value: user.email },
 
-  const rows = [
-    { title: 'Имя', value: user.name },
-    { title: 'Телефон', value: '+' + user.phone },
-    { title: 'E-mail', value: user.email },
-
-    { title: 'Компания', value: user.company?.name },
-    { title: 'Описание компании', value: user.company?.description },
-    {
-      title: 'Дата последнего платежа',
-      value: standardFormat(user.paymentExpiredDate, true),
-    },
-  ];
+        { title: 'Компания', value: user.company?.name },
+        { title: 'Описание компании', value: user.company?.description },
+        {
+          title: 'Дата истечения платежа',
+          value: standardFormat(user.paymentExpiredDate, true),
+        },
+      ]
+    : [];
 
   return (
-    <MainLayout>
+    <AuthLayout>
       <Box sx={styles.contentContainer}>
         <Typography variant="h1" color="secondary" sx={{ my: 3 }}>
           Мой профиль
@@ -71,7 +67,7 @@ function ProfilePage() {
           </p>
         </Typography>
       </Box>
-    </MainLayout>
+    </AuthLayout>
   );
 }
 

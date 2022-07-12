@@ -15,14 +15,15 @@ export interface User {
   company: Company | null;
 }
 
-const initialState: User | null = null as User | null;
-
+const initialState: { current: User | null } = {
+  current: null,
+};
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     setCurrent: (state, action: PayloadAction<User | null>) => {
-      state = action.payload;
+      state.current = action.payload;
       return state;
     },
   },

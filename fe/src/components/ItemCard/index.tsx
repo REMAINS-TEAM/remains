@@ -15,7 +15,10 @@ import { RootState } from 'store';
 import PopupMenu from 'components/PopupMenu';
 import MenuItem from 'components/PopupMenu/units/MenuItem';
 import { BACKEND_URL } from 'global/constants';
-import { getPaymentNotExpiredStatus } from 'store/selectors/user';
+import {
+  getCurrentUser,
+  getPaymentNotExpiredStatus,
+} from 'store/selectors/user';
 import { generatePath, useNavigate } from 'react-router-dom';
 import routes from 'routes';
 
@@ -28,7 +31,7 @@ function ItemCard({
 }) {
   const theme = useTheme();
   const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector(getCurrentUser);
   const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
 
   const [dotsButtonRef, setDotsButtonRef] = useState<HTMLElement | null>(null);
