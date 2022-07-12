@@ -64,7 +64,11 @@ function ProfilePage() {
           Мои предложения
         </Typography>
         <Typography variant="inherit" color={'secondary'}>
-          Пока вы ничего не выкладывали
+          <p>Пока вы ничего не выкладывали</p>
+          <p>
+            Чтобы делиться остатками и следить за тем, что выкладывают другие -
+            следите за положительным балансом счета
+          </p>
         </Typography>
       </Box>
     </MainLayout>
