@@ -1,27 +1,4 @@
-import bcrypt from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
+import { SMSC_URL } from 'constants/main';
 
-export async function hashPassword(password: string): Promise<string> {
-  const saltRounds = 10;
-
-  return new Promise((resolve, reject) => {
-    bcrypt.hash(password, saltRounds, function (err, hash) {
-      if (err) reject(err);
-      resolve(hash);
-    });
-  });
-}
-
-export async function checkPassword(
-  password: string,
-  hash: string,
-): Promise<boolean> {
-  return new Promise((resolve, reject) => {
-    bcrypt.compare(password, hash, function (err, result) {
-      if (err || !result) resolve(false);
-      resolve(true);
-    });
-  });
-}
-
-export const generateToken = () => uuidv4();
+export const generateConfirmCallUrl = (phone: string) =>
+  `${SMSC_URL}?login=${process.env.SMSC_LOGIN}&psw=${process.env.SMSC_PASSWORD}&phones=${phone}&mes=code&call=1&fmt=3`;

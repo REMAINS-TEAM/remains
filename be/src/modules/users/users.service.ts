@@ -13,6 +13,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { ConfirmCodeDto } from 'modules/users/dto/confirm-code.dto';
 import jwt from 'jsonwebtoken';
 import fetch from 'node-fetch';
+import { generateConfirmCallUrl } from 'modules/users/users.utils';
 
 @Injectable()
 export class UsersService {
@@ -47,22 +48,21 @@ export class UsersService {
     return result;
   }
 
-  async register({ phone }: RegisterUserDto) {
-    // TODO
-    return 'OK';
-  }
-
-  async login({ phone }: LoginUserDto) {
-    let user;
+  async loginOrRegister({ phone }: LoginUserDto) {
+    let user: User | null;
     try {
       user = await this.prisma.user.findUnique({
         where: { phone },
       });
+
+      if (!user) {
+        user = await this.prisma.user.create({
+          data: { phone },
+        });
+      }
     } catch (err) {
       throw new PrismaException(err as Error);
     }
-
-    if (!user) return 'OK';
 
     let prevCode;
     try {
@@ -81,10 +81,9 @@ export class UsersService {
       throw new BadRequestException('Code is already sent. Try in 1 min.');
     }
 
-    const SMSC_URL = `https://smsc.ru/sys/send.php?login=${process.env.SMSC_LOGIN}&psw=${process.env.SMSC_PASSWORD}&phones=${phone}&mes=code&call=1&fmt=3`;
     let smscResponse;
     try {
-      const res = await fetch(SMSC_URL);
+      const res = await fetch(generateConfirmCallUrl(phone));
       smscResponse = (await res.json()) as { code: string };
     } catch (e) {
       throw new HttpException(
@@ -139,7 +138,7 @@ export class UsersService {
     }
 
     if (!existedCode) {
-      throw new BadRequestException('User in not existed or code is invalid');
+      throw new BadRequestException('Code is invalid');
     }
 
     try {

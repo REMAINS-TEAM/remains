@@ -6,3 +6,4 @@ export const MIME_IMAGES_TYPE_MAP = {
   'image/jpeg': 'jpg',
   'image/jpg': 'jpg',
 } as Record<string, string>;
+export const SMSC_URL = 'https://smsc.ru/sys/send.php';

@@ -48,15 +48,10 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Post('register')
-  async register(@Body() registerUserDto: RegisterUserDto): Promise<string> {
-    return this.usersService.register(registerUserDto);
-  }
-
   @Post('login')
   @HttpCode(200)
   async login(@Body() loginUserDto: LoginUserDto) {
-    return this.usersService.login(loginUserDto);
+    return this.usersService.loginOrRegister(loginUserDto);
   }
 
   @Post('code')
