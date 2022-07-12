@@ -1,9 +1,14 @@
 import React from 'react';
 
-import { Avatar, Divider, ListItemIcon, Menu, MenuItem } from '@mui/material';
-import { Logout } from '@mui/icons-material';
+import { Divider, ListItemIcon, Menu, MenuItem } from '@mui/material';
+import {
+  Logout as LogoutIcon,
+  PersonOutline as ProfileIcon,
+} from '@mui/icons-material';
 import usersApi from 'store/api/user';
 import useResponseNotifications from 'hooks/useResponseNotifications';
+import { useNavigate } from 'react-router-dom';
+import routes from 'routes';
 
 function ProfileMenu({
   anchorEl,
@@ -12,6 +17,7 @@ function ProfileMenu({
   anchorEl: HTMLElement | null;
   setAnchorEl: (anchorEl: HTMLElement | null) => void;
 }) {
+  const navigate = useNavigate();
   const [logoutRequest, result] = usersApi.useLogoutMutation();
 
   useResponseNotifications({
@@ -23,6 +29,10 @@ function ProfileMenu({
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleClickProfile = () => {
+    navigate(routes.profile);
   };
 
   const handleClickLogout = () => {
@@ -65,13 +75,16 @@ function ProfileMenu({
       transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
     >
-      <MenuItem>
-        <Avatar /> Профиль
+      <MenuItem onClick={handleClickProfile}>
+        <ListItemIcon>
+          <ProfileIcon />
+        </ListItemIcon>
+        Профиль
       </MenuItem>
       <Divider />
       <MenuItem onClick={handleClickLogout}>
         <ListItemIcon>
-          <Logout fontSize="small" />
+          <LogoutIcon fontSize="small" />
         </ListItemIcon>
         Выйти
       </MenuItem>

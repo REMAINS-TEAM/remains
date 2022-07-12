@@ -54,7 +54,11 @@ export const usersApi = api.injectEndpoints({
           method: 'GET',
         });
 
-        if (meResponse.error) throw meResponse.error;
+        if (meResponse.error) {
+          localStorage.removeItem(LS_KEY_TOKEN);
+          _queryApi.dispatch(setCurrent(null));
+          throw meResponse.error;
+        }
         const userData = meResponse.data as User;
         _queryApi.dispatch(setCurrent(userData));
         return { data: userData };

@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import { Menu as MenuIcon } from '@mui/icons-material';
+import {
+  InfoOutlined as InfoIcon,
+  PersonRounded as UserIcon,
+} from '@mui/icons-material';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Box, Tooltip } from '@mui/material';
 import Loader from '@mui/material/CircularProgress';
-import {
-  PersonRounded as UserIcon,
-  InfoOutlined as InfoIcon,
-} from '@mui/icons-material';
 import Search from 'components/Search';
 
 import * as styles from './styles';
@@ -24,6 +22,7 @@ import ProfileMenu from 'components/AppHeader/units/ProfileMenu';
 import CircularProgressWithLabel from 'components/CircularProgressWithLabel';
 import { differenceInDays, differenceInHours, format } from 'date-fns';
 import { getPaymentNotExpiredStatus } from 'store/selectors/user';
+import { Link } from 'react-router-dom';
 
 function AppHeader() {
   const { isFetching } = userApi.useMeQuery(undefined, {
@@ -61,16 +60,10 @@ function AppHeader() {
     <AppBar position="fixed" sx={{ height: APP_HEADER_HEIGHT }}>
       <Toolbar sx={styles.toolbar}>
         <Box sx={styles.leftSide}>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
-            Business Remains
+            <Link className="link" to={'/'}>
+              Business Remains
+            </Link>
           </Typography>
           <Search />
         </Box>
