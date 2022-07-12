@@ -4,7 +4,7 @@ import { setCurrent, User } from 'store/slices/user';
 
 export const usersApi = api.injectEndpoints({
   endpoints: (build) => ({
-    login: build.mutation<{ token: string }, { phone: string }>({
+    login: build.mutation<{ status: string }, { phone: string }>({
       query: (body) => ({
         url: `${apiTypes.USERS}/login`,
         method: 'post',

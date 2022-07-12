@@ -48,6 +48,8 @@ export class UsersService {
     return result;
   }
 
+  //TODO: удалять созданные аккаунты для которых не было ни одного входа
+
   async loginOrRegister({ phone }: LoginUserDto) {
     let user: User | null;
     try {
@@ -81,13 +83,21 @@ export class UsersService {
       throw new BadRequestException('Code is already sent. Try in 1 min.');
     }
 
-    let smscResponse;
+    let smscResponse: { error?: string; code?: string };
     try {
       const res = await fetch(generateConfirmCallUrl(phone));
       smscResponse = (await res.json()) as { code: string };
     } catch (e) {
       throw new HttpException(
         'Something went wrong when try to call ' + JSON.stringify(e),
+        500,
+      );
+    }
+
+    if (!smscResponse.code) {
+      const errorMessage = smscResponse.error || 'Unknown error';
+      throw new HttpException(
+        'Something went wrong when try to call. ' + errorMessage,
         500,
       );
     }
@@ -108,7 +118,7 @@ export class UsersService {
       throw new PrismaException(err as Error);
     }
 
-    return 'OK';
+    return { status: 'ok' };
   }
 
   async confirmCode({ code, phone }: ConfirmCodeDto) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Popup from 'components/Popups/index';
 import { AuthPopupProps } from './types';
 import usersApi from 'store/api/user';
@@ -18,6 +18,7 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
     handleSubmit,
     formState: { errors },
     watch,
+    setError,
   } = useForm({
     resolver: joiResolver(authSchema),
     defaultValues: {
@@ -25,14 +26,24 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
     },
   });
 
+  useEffect(() => {
+    if (result.error) {
+      const error = result.error as { data?: { message?: string } };
+      setError('phone', {
+        message: error?.data?.message || 'Неизвестная ошибка',
+      });
+      return;
+    }
+    if (result.data) {
+      setConfirmCodePopupOpen(true);
+      setOpen(false);
+    }
+  }, [result, setError, setOpen]);
+
   const onSubmit = ({ phone }: { phone: string }) => {
     loginRequest({
       phone: onlyNumbers(phone),
     });
-
-    // TODO: errors handlers
-    setConfirmCodePopupOpen(true);
-    setOpen(false);
   };
 
   return (
@@ -59,7 +70,7 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
                 fullWidth
                 variant="outlined"
                 defaultCountry={'ru'}
-                helperText={!!errors.phone && 'Введите корректный номер'}
+                helperText={!!errors.phone && errors.phone.message}
                 error={!!errors.phone}
                 {...field}
               />
