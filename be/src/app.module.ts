@@ -7,6 +7,8 @@ import { PrismaModule } from 'modules/prisma/prisma.module';
 import { ItemsModule } from 'modules/items/items.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ScheduleModule } from '@nestjs/schedule';
+import { SchedulerModule } from 'modules/scheduler/scheduler.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { join } from 'path';
     UsersModule,
     CategoriesModule,
     ItemsModule,
+    ScheduleModule.forRoot(),
+    SchedulerModule,
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }),
   ],
   controllers: [AppController],

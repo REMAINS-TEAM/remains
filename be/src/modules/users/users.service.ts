@@ -11,8 +11,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ConfirmCodeDto } from 'modules/users/dto/confirm-code.dto';
 import jwt from 'jsonwebtoken';
-import fetch from 'node-fetch';
 import { generateConfirmCallUrl } from 'modules/users/users.utils';
+import axios from 'axios';
 
 @Injectable()
 export class UsersService {
@@ -46,8 +46,6 @@ export class UsersService {
 
     return result;
   }
-
-  //TODO: удалять созданные аккаунты для которых не было ни одного входа
 
   async loginOrRegister({ phone }: LoginUserDto) {
     let user: User | null;
@@ -84,8 +82,8 @@ export class UsersService {
 
     let smscResponse: { error?: string; code?: string };
     try {
-      const res = await fetch(generateConfirmCallUrl(phone));
-      smscResponse = (await res.json()) as { code: string };
+      const response = await axios.get(generateConfirmCallUrl(phone));
+      smscResponse = response.data as { code: string };
     } catch (e) {
       throw new HttpException(
         'Something went wrong when try to call ' + JSON.stringify(e),
@@ -152,6 +150,12 @@ export class UsersService {
 
     try {
       await this.prisma.code.deleteMany({ where: { user } });
+      if (!user.isActivated) {
+        await this.prisma.user.update({
+          where: { id: user.id },
+          data: { isActivated: true },
+        });
+      }
     } catch (err) {
       throw new PrismaException(err as Error);
     }
