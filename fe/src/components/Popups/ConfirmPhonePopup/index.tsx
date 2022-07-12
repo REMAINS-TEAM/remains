@@ -41,11 +41,10 @@ function ConfirmPhonePopup({ open, setOpen, phone }: ConfirmPhonePopupProps) {
         {...{ open, setOpen }}
       >
         <Typography variant="subtitle2" sx={{ mb: 2 }}>
-          Сейчас Вам поступит звонок. Не принимайте его. Просто введите
-          последние 4 цифры номера.
+          Сейчас Вам поступит звонок. Введите последние 4 цифры номера.
         </Typography>
 
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="code"
             control={control}

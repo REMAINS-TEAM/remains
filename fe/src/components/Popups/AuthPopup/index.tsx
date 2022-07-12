@@ -55,7 +55,7 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
         onOkClick={handleSubmit(onSubmit)}
         {...{ open, setOpen }}
       >
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="phone"
             control={control}
