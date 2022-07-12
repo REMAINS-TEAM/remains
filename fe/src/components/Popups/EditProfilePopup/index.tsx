@@ -85,11 +85,11 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
       PaperProps={{ sx: styles.popup }}
       {...{ open, setOpen }}
     >
-      <Box sx={styles.generalContainer}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Box sx={styles.generalContainer}>
           <Box sx={styles.dataContainer}>
             <Typography variant="subtitle1" color="secondary" sx={{ pb: 1.5 }}>
-              Данные о Вас:
+              Данные обо мне:
             </Typography>
             <Controller
               name={fields.user.NAME}
@@ -99,7 +99,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
                   autoFocus
                   margin="dense"
                   id={fields.user.NAME}
-                  label="Ваше имя"
+                  label="Имя"
                   type="text"
                   fullWidth
                   variant="outlined"
@@ -131,7 +131,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
                   autoFocus
                   margin="dense"
                   id={fields.user.PHONE}
-                  label="Ваш тел."
+                  label="Телефон"
                   type="text"
                   fullWidth
                   variant="outlined"
@@ -156,7 +156,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
                 <TextField
                   margin="dense"
                   id={fields.user.EMAIL}
-                  label="Ваш e-mail"
+                  label="E-mail"
                   type="text"
                   fullWidth
                   variant="outlined"
@@ -176,7 +176,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
           </Box>
           <Box sx={styles.dataContainer}>
             <Typography variant="subtitle1" color="secondary" sx={{ pb: 1.5 }}>
-              Данные о вашей компании:
+              Данные о моей компании:
             </Typography>
             <Controller
               name={fields.company.NAME}
@@ -243,8 +243,8 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
               )}
             />
           </Box>
-        </form>
-      </Box>
+        </Box>
+      </form>
     </Popup>
   );
 }

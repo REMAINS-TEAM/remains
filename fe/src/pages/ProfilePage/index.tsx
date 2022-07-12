@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   Box,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -48,27 +49,33 @@ function ProfilePage() {
             <EditIcon />
           </IconButton>
         </Box>
-
-        <Table sx={{ maxWidth: 500, ml: -2 }}>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.title}>
-                <TableCell component="th" scope="row" sx={{ fontWeight: 600 }}>
-                  {row.title}:
-                </TableCell>
-                <TableCell align="left">
-                  <Typography variant="inherit" color={'secondary'}>
-                    {row.value || 'Не указано'}
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <Paper sx={{ p: 2 }}>
+          <Table sx={{ maxWidth: 500 }}>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row.title}>
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    sx={{ fontWeight: 600 }}
+                  >
+                    {row.title}:
+                  </TableCell>
+                  <TableCell align="left">
+                    <Typography variant="inherit" color={'secondary'}>
+                      {row.value || 'Не указано'}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
 
         <Typography variant="h1" color="secondary" sx={{ mt: 6, mb: 3 }}>
           Мои предложения
         </Typography>
+
         <Typography variant="inherit" color={'secondary'}>
           <p>Пока вы ничего не выкладывали</p>
           <p>
