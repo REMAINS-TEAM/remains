@@ -33,6 +33,7 @@
     "class-validator": "^0.13.2",
     "helmet": "^4.6.0",
     "jsonwebtoken": "^8.5.1",
+    "node-fetch": "^3.2.7",
     "path": "^0.12.7",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

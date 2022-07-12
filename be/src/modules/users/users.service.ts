@@ -8,7 +8,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Code, User } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ConfirmCodeDto } from 'modules/users/dto/confirm-code.dto';
 import jwt from 'jsonwebtoken';

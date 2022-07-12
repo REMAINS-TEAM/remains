@@ -8,7 +8,10 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Box, Tooltip } from '@mui/material';
 import Loader from '@mui/material/CircularProgress';
-import { PersonRounded as UserIcon } from '@mui/icons-material';
+import {
+  PersonRounded as UserIcon,
+  InfoOutlined as InfoIcon,
+} from '@mui/icons-material';
 import Search from 'components/Search';
 
 import * as styles from './styles';
@@ -102,7 +105,13 @@ function AppHeader() {
                 onClick={user ? profileClickHandler : loginClickHandler}
                 sx={{ columnGap: 1 }}
               >
-                {user?.name || 'Вход / регистрация'}
+                {user?.phone && !user?.name && (
+                  <Tooltip title="Заполните информацию о себе">
+                    <InfoIcon color="warning" />
+                  </Tooltip>
+                )}
+
+                {user?.name || user?.phone || 'Вход / регистрация'}
                 <UserIcon />
               </Button>
             </>
