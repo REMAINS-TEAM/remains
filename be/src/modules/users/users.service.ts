@@ -35,6 +35,7 @@ export class UsersService {
     try {
       result = await this.prisma.user.findUnique({
         where: { id },
+        include: { company: true },
       });
     } catch (err) {
       throw new PrismaException(err as Error);

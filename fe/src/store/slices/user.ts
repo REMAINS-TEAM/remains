@@ -8,11 +8,11 @@ export interface Company {
 
 export interface User {
   id: number;
-  name: string;
+  name: string | null;
   phone: string;
-  email: string;
+  email: string | null;
   paymentExpiredDate: Date;
-  company: Company;
+  company: Company | null;
 }
 
 const initialState: User | null = null as User | null;

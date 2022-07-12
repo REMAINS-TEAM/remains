@@ -1,3 +1,6 @@
+import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
+
 export const getQueryString = (
   obj: Record<string, string | number | undefined | void> | undefined | void,
 ): string => {
@@ -24,3 +27,13 @@ export const fileToDataUri = (file: File): Promise<string> =>
   });
 
 export const onlyNumbers = (str: string) => str.replace(/[\D]+/g, '');
+
+export const standardFormat = (
+  date: string | number | Date | undefined,
+  withTime = false,
+) => {
+  if (!date) return 'Неизв.дата';
+  return format(new Date(date), `dd.MM.yyyy${withTime ? ' HH:mm' : ''}`, {
+    locale: ru,
+  });
+};

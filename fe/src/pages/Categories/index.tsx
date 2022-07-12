@@ -11,7 +11,6 @@ import ItemCards from 'pages/Categories/units/ItemCards';
 import EmptyState from 'components/EmptyState';
 import categoriesApi from 'store/api/categories';
 import AddItemPopup from 'components/Popups/AddItemPopup';
-import ActionsButtons from 'pages/Categories/units/ActionsButtons';
 import NotFoundPage from 'pages/NotFoundPage';
 import { useSelector } from 'react-redux';
 import { getPaymentNotExpiredStatus } from 'store/selectors/user';
@@ -34,12 +33,10 @@ function CategoriesPage() {
     offset: 0,
   });
 
-  const {
-    data: category,
-    error: getCategoryByIdError,
-  } = categoriesApi.useGetCategoryByIdQuery(categoryId || 0, {
-    skip: !categoryId,
-  });
+  const { data: category, error: getCategoryByIdError } =
+    categoriesApi.useGetCategoryByIdQuery(categoryId || 0, {
+      skip: !categoryId,
+    });
 
   const error = (getCategoryItemsError || getCategoryByIdError) as {
     status: number;

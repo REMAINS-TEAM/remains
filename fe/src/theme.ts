@@ -1,4 +1,6 @@
-export default {
+import { ThemeOptions } from '@mui/material';
+
+const defaultTheme: ThemeOptions = {
   palette: {
     primary: {
       main: '#495c9c',
@@ -6,7 +8,15 @@ export default {
       // main: '#5b5e9e',
     },
     secondary: {
-      main: 'rgba(0, 0, 0, 0.6)',
+      main: 'rgba(10, 10, 10, 0.7)',
     },
   },
+  typography: {
+    h1: { fontSize: '2rem' },
+    h2: { fontSize: '1.5rem' },
+    h3: { fontSize: '1rem' },
+    h4: { fontSize: '0.5rem' },
+  },
 };
+
+export default defaultTheme;
