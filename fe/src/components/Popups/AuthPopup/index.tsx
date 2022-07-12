@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import Popup from 'components/Popups/index';
-import { Box, Link } from '@mui/material';
 import { AuthPopupProps } from './types';
 import usersApi from 'store/api/user';
 import { Controller, useForm } from 'react-hook-form';
-import * as styles from './styles';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { authSchema } from 'components/Popups/AuthPopup/validation';
@@ -13,7 +11,6 @@ import { onlyNumbers } from 'utils';
 
 function AuthPopup({ open, setOpen }: AuthPopupProps) {
   const [loginRequest, result] = usersApi.useLoginMutation();
-  const [registerMode, setRegisterMode] = useState(false);
   const [confirmCodePopupOpen, setConfirmCodePopupOpen] = useState(false);
 
   const {
@@ -28,10 +25,6 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
     },
   });
 
-  const modeClickHandler = () => {
-    setRegisterMode((prev) => !prev);
-  };
-
   const onSubmit = ({ phone }: { phone: string }) => {
     loginRequest({
       phone: onlyNumbers(phone),
@@ -45,8 +38,8 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
   return (
     <>
       <Popup
-        title={`${registerMode ? 'Регистрация' : 'Авторизация'}`}
-        okButtonText={`${registerMode ? 'Зарегистрироваться' : 'Войти'}`}
+        title={'Регистрация / вход в аккаунт'}
+        okButtonText={'Зарегистрироваться / войти'}
         closeWhenSubmit={false}
         onOkClick={handleSubmit(onSubmit)}
         {...{ open, setOpen }}
@@ -73,14 +66,6 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
             )}
           />
         </form>
-
-        <Box sx={styles.link}>
-          <Link variant="subtitle2" onClick={modeClickHandler}>
-            {registerMode
-              ? 'У меня уже есть аккаунт'
-              : 'Я еще не регистрировался'}
-          </Link>
-        </Box>
       </Popup>
       <ConfirmPhonePopup
         phone={onlyNumbers(watch('phone'))}
