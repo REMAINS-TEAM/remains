@@ -1,5 +1,4 @@
-import React from 'react';
-import MainLayout from 'layouts/MainLayout';
+import React, { useState } from 'react';
 import {
   Box,
   Table,
@@ -13,9 +12,15 @@ import * as styles from './styles';
 import { standardFormat } from 'utils';
 import { getCurrentUser } from 'store/selectors/user';
 import AuthLayout from 'layouts/AuthLayout';
+import { Edit as EditIcon } from '@mui/icons-material';
+import IconButton from '@mui/material/IconButton';
+import EditProfilePopup from 'components/Popups/EditProfilePopup';
 
 function ProfilePage() {
   const user = useSelector(getCurrentUser);
+  const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
+
+  const openEditProfileModal = () => setEditProfileModalOpen(true);
 
   const rows = user
     ? [
@@ -35,9 +40,14 @@ function ProfilePage() {
   return (
     <AuthLayout>
       <Box sx={styles.contentContainer}>
-        <Typography variant="h1" color="secondary" sx={{ my: 3 }}>
-          Мой профиль
-        </Typography>
+        <Box sx={styles.headerContainer}>
+          <Typography variant="h1" color="secondary">
+            Мой профиль
+          </Typography>
+          <IconButton color="secondary" onClick={openEditProfileModal}>
+            <EditIcon />
+          </IconButton>
+        </Box>
 
         <Table sx={{ maxWidth: 500, ml: -2 }}>
           <TableBody>
@@ -67,6 +77,10 @@ function ProfilePage() {
           </p>
         </Typography>
       </Box>
+      <EditProfilePopup
+        open={editProfileModalOpen}
+        setOpen={setEditProfileModalOpen}
+      />
     </AuthLayout>
   );
 }

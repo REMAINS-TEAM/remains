@@ -6,3 +6,9 @@ export const contentContainer: SxProps = {
   flexDirection: 'column',
   position: 'relative',
 };
+
+export const headerContainer: SxProps = {
+  display: 'flex',
+  columnGap: 2,
+  my: 3,
+};

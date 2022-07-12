@@ -4,7 +4,7 @@ import { fields } from './fields';
 export const MAX_LENGTH_NAME = 40;
 export const MAX_LENGTH_DESCRIPTION = 200;
 
-export const registerSchema = Joi.object({
+export const editProfileSchema = Joi.object({
   [fields.user.NAME]: Joi.string()
     .required()
     .min(3)
