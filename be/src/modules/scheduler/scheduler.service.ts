@@ -1,10 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { Interval } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { PrismaService } from 'modules/prisma/prisma.service';
+import { NOT_ACTIVATED_LIMIT } from 'constants/main';
 
 @Injectable()
 export class SchedulerService {
-  @Interval(5 * 1000)
-  cleanNotActivatedUsers() {
-    console.log('WORKS!!!!');
+  constructor(private prisma: PrismaService) {}
+
+  @Cron(CronExpression.EVERY_DAY_AT_1AM)
+  async everyNight() {
+    // clean not activated users
+    await this.prisma.user.deleteMany({
+      where: {
+        isActivated: false,
+        createdAt: {
+          lt: new Date(new Date().getTime() - NOT_ACTIVATED_LIMIT),
+        },
+      },
+    });
   }
 }
