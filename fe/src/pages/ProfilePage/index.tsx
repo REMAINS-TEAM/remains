@@ -27,7 +27,11 @@ function ProfilePage() {
   const user = useSelector(getCurrentUser);
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
 
-  const { data: myItems, isFetching } = itemsApi.useGetItemsQuery(
+  const {
+    data: myItems,
+    isFetching,
+    isSuccess,
+  } = itemsApi.useGetItemsQuery(
     {
       userId: user?.id,
       limit: 100, // TODO: lazy loading
@@ -93,10 +97,9 @@ function ProfilePage() {
           Мои предложения
         </Typography>
 
-        {myItems?.length ? (
-          <ItemCards items={myItems} isLoading={isFetching} />
-        ) : (
-          <Typography variant="inherit" color={'secondary'}>
+        <ItemCards items={myItems} isLoading={isFetching} />
+        {isSuccess && !myItems?.length && (
+          <Typography variant="inherit" color={'secondary'} sx={{ mt: -2 }}>
             <p>Пока вы ничего не выкладывали.</p>
             <p>
               Чтобы делиться остатками и видеть, что выкладывают другие -

@@ -7,7 +7,7 @@ import itemsApi from 'store/api/items';
 import useResponseNotifications from 'hooks/useResponseNotifications';
 
 function ItemCards({
-  items,
+  items = [],
   isLoading,
 }: {
   items?: Item[];
@@ -23,13 +23,14 @@ function ItemCards({
 
   const deleteHandler = (id: number) => deleteItemRequest(id);
 
-  if (!items) return null;
+  if (!items.length && !isLoading) return null;
 
   return (
     <Box sx={styles.itemsContainer}>
       {items.map((item) => (
         <ItemCard key={item.id} item={item} onDeleteClick={deleteHandler} />
       ))}
+      {isLoading && 'Загрузка...'}
     </Box>
   );
 }
