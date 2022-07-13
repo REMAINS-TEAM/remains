@@ -5,7 +5,7 @@ import { deleteById } from 'store/slices/items';
 
 export const itemsApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getCategoryItems: build.query<
+    getItems: build.query<
       Item[],
       Record<string, string | number | undefined> | void
     >({

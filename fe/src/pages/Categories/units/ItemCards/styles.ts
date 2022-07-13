@@ -5,6 +5,6 @@ export const itemsContainer: SxProps = {
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
-  rowGap: 1,
+  rowGap: 2,
   paddingBottom: 4,
 };

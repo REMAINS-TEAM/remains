@@ -27,9 +27,9 @@ function CategoriesPage() {
     data: categoryItems,
     isFetching,
     error: getCategoryItemsError,
-  } = itemsApi.useGetCategoryItemsQuery({
+  } = itemsApi.useGetItemsQuery({
     categoryId,
-    limit: 10, // TODO: lazy loading
+    limit: 100, // TODO: lazy loading
     offset: 0,
   });
 

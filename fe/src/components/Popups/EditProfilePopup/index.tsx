@@ -49,7 +49,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
     },
   });
 
-  console.log('errors', errors);
+  // console.log('errors', errors);
 
   const companyNameLength = useLimitTextField({
     value: watch(fields.company.NAME),
