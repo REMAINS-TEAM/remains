@@ -22,6 +22,7 @@ import {
 } from 'constants/main';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateItemDto } from 'modules/items/dto/create-item.dto';
+import { FindAllItemsDto } from 'modules/items/dto/find-all-items.dto';
 
 @Controller('items')
 export class ItemsController {
@@ -30,9 +31,7 @@ export class ItemsController {
   @Get()
   async findAll(
     @Access() access: boolean,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-    @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
-    @Query('categoryId') categoryId?: number,
+    @Query() { limit = 10, offset = 0, categoryId, userId }: FindAllItemsDto,
   ): Promise<Item[]> {
     let availableLimit = limit;
     if (!access) {
@@ -43,10 +42,11 @@ export class ItemsController {
         availableLimit = MAX_ITEMS_FOR_NOT_REGISTERED_USER;
       }
     }
+
     return this.itemsService.findAll({
-      categoryId: categoryId || undefined,
       limit: availableLimit,
       offset,
+      filter: { categoryId, userId },
     });
   }
 

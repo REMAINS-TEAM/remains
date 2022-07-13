@@ -19,28 +19,19 @@ export class ItemsService {
   constructor(private prisma: PrismaService) {}
 
   async findAll({
-    categoryId,
     limit = 10,
     offset = 0,
+    filter,
   }: {
-    categoryId?: number;
     limit?: number;
     offset?: number;
+    filter?: { userId?: number; categoryId?: number };
   }): Promise<Item[]> {
     return await this.prisma.item.findMany({
-      where: {
-        categoryId,
-      },
+      where: filter,
       take: limit,
       skip: offset,
-      orderBy: [
-        {
-          updatedAt: 'desc',
-        },
-        {
-          createdAt: 'desc',
-        },
-      ],
+      orderBy: [{ updatedAt: 'desc' }, { createdAt: 'desc' }],
     });
   }
 
