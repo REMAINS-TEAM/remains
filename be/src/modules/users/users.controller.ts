@@ -13,7 +13,6 @@ import { User } from '@prisma/client';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from 'decorators/roles.decorator';
-import { RegisterUserDto } from 'modules/users/dto/register-user.dto';
 import { LoginUserDto } from 'modules/users/dto/login-user.dto';
 import { ConfirmCodeDto } from 'modules/users/dto/confirm-code.dto';
 import { OnlyForLoggedGuard } from 'guards/auth.guard';

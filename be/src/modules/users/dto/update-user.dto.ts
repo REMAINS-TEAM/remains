@@ -1,10 +1,14 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { RegisterUserDto } from '../dto/register-user.dto';
+import { IsEmail, IsNumber, IsString } from 'class-validator';
 
-export class UpdateUserDto extends PartialType(RegisterUserDto) {}
-
-// for not all fields
-// exclude
-// export class UpdateUserDto extends OmitType(CreateUserDto, ['name'] as const) {}
-// only these
-// export class UpdateUserDto extends PickType(CreateUserDto, ['name'] as const) {}
+export class UpdateUserDto {
+  @IsString()
+  name?: string;
+  @IsEmail()
+  email?: string;
+  @IsNumber()
+  companyId?: number;
+  @IsString()
+  companyName?: string;
+  @IsString()
+  companyDescription?: string;
+}

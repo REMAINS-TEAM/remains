@@ -131,6 +131,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
                   autoFocus
                   margin="dense"
                   id={fields.user.PHONE}
+                  disabled={true}
                   label="Телефон"
                   type="text"
                   fullWidth
