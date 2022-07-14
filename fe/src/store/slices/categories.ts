@@ -7,9 +7,7 @@ export interface Category {
   description?: string;
   sort: number;
   parentId: number;
-  countSubCategories?: number;
-  itemsCount: number;
-  // items?: Item[];
+  parentCategory: Partial<Category>;
 }
 
 const initialState: {

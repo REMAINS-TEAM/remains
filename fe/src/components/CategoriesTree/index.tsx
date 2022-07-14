@@ -1,87 +1,45 @@
-import TreeView from '@mui/lab/TreeView';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { CategoriesTreeProps } from './types';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import categoriesApi from 'store/api/categories';
-import { Category } from 'store/slices/categories';
-import { RecursiveTreeItem } from 'components/CategoriesTree/units/RecursiveTreeItem';
-import Skeleton from '@mui/material/Skeleton';
+import * as styles from './styles';
+import BackButton from 'components/BackButton';
+import { AccountTreeOutlined as FolderIcon } from '@mui/icons-material';
+import { Box, IconButton, Typography } from '@mui/material';
 
-export default function CategoriesTree({
-  initCategories,
-  isLoading,
-  onSelect,
-}: CategoriesTreeProps) {
-  const [categories, setCategories] = useState<
-    Record<number, Category[] | undefined>
-  >({});
-  const [currentId, setCurrentId] = useState<number | undefined>();
-  const [expanded, setExpanded] = useState<string[]>([]);
+export default function CategoriesTree() {
+  const [selectedCategoryId, setSelectedCategoryId] = useState(0);
 
-  const { data, isFetching } = categoriesApi.useGetAllCategoriesQuery(
-    { parentId: currentId },
-    { skip: currentId === undefined },
-  );
+  const { data: categories } = categoriesApi.useGetAllCategoriesQuery({
+    parentId: selectedCategoryId,
+  });
 
-  // set level up categories (with parentId === 0)
-  useEffect(() => {
-    setCategories({ 0: initCategories });
-  }, [initCategories]);
-
-  // add loaded data to categories state
-  useEffect(() => {
-    if (currentId !== undefined && !isFetching) {
-      setCategories((prev) => ({ ...prev, [currentId]: data }));
-    }
-  }, [data, isFetching, currentId]);
-
-  // if new category is opened load data for it
-  const handleToggle = (_: React.SyntheticEvent, nodeIds: string[]) => {
-    if (nodeIds.length > expanded.length) {
-      const newExpanded = nodeIds.find((e) => !expanded.includes(e));
-      if (newExpanded) setCurrentId(+newExpanded);
-    }
-
-    setExpanded(nodeIds);
-  };
-
-  const handleSelect = (_: React.SyntheticEvent, categoryId: string) => {
-    onSelect && onSelect(+categoryId);
-  };
-
-  const getSubCategories = (id: number) => categories[id] || [];
-
-  if (isLoading) {
-    return (
-      <>
-        {Array.from(new Array(10)).map((_, i) => (
-          <Skeleton key={i} sx={{ height: '40px' }} />
-        ))}
-      </>
-    );
-  }
+  const categoryTitle = categories?.[0]?.parentCategory?.title;
+  const backClickHandler = () =>
+    setSelectedCategoryId(categories?.[0]?.parentCategory?.parentId || 0);
 
   return (
-    <TreeView
-      aria-label="categories"
-      defaultCollapseIcon={<ArrowDropDownIcon />}
-      defaultExpandIcon={<ArrowRightIcon />}
-      defaultEndIcon={<div style={{ width: 24 }} />}
-      expanded={expanded}
-      onNodeToggle={handleToggle}
-      onNodeSelect={handleSelect}
-      sx={{ height: '100%', maxWidth: 400, overflowY: 'auto' }}
-    >
-      {categories[0]?.map((category) => (
-        <RecursiveTreeItem
-          key={category.id}
-          category={category}
-          subCategories={getSubCategories(category.id)}
-          getSubCategories={getSubCategories}
-          isFetching={isFetching}
-        />
-      ))}
-    </TreeView>
+    <>
+      <Box sx={styles.headerContainer}>
+        {categoryTitle ? (
+          <BackButton onClick={backClickHandler} />
+        ) : (
+          <IconButton sx={{ width: '40px', height: '40px' }}>
+            <FolderIcon />
+          </IconButton>
+        )}
+        <Typography variant="h3" color="secondary">
+          {categoryTitle || 'Все'}
+        </Typography>
+      </Box>
+      <ul>
+        {categories?.map((category) => (
+          <li
+            key={category.id}
+            onClick={() => setSelectedCategoryId(category.id)}
+          >
+            {category.title}
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }

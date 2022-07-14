@@ -4,8 +4,7 @@ const defaultTheme: ThemeOptions = {
   palette: {
     primary: {
       main: '#495c9c',
-      // main: '#495c9c',
-      // main: '#5b5e9e',
+      // main: '#5b889e',
     },
     secondary: {
       main: 'rgba(10, 10, 10, 0.7)',

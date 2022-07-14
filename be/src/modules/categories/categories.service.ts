@@ -32,7 +32,7 @@ export class CategoriesService {
       if (categories?.[0].parentId) {
         parentCategory = await this.prisma.category.findUnique({
           where: { id: categories[0].parentId },
-          select: { title: true },
+          select: { id: true, title: true, parentId: true },
         });
       }
 
