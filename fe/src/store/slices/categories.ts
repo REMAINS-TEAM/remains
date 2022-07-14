@@ -8,6 +8,7 @@ export interface Category {
   sort: number;
   parentId: number;
   parentCategory: Partial<Category>;
+  _count: { subCategories: number; items: number };
 }
 
 const initialState: {
