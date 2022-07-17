@@ -1,9 +1,9 @@
-import React, { ReactNode } from "react";
-import { Box, SxProps } from "@mui/material";
+import React, { ReactNode } from 'react';
+import { Box, SxProps } from '@mui/material';
 
-import * as styles from "./styles";
+import * as styles from './styles';
 
-function Component({ children, sx }: { children: ReactNode; sx?: SxProps }) {
+function Container({ children, sx }: { children: ReactNode; sx?: SxProps }) {
   return (
     <Box
       sx={{
@@ -16,4 +16,4 @@ function Component({ children, sx }: { children: ReactNode; sx?: SxProps }) {
   );
 }
 
-export default React.memo(Component);
+export default React.memo(Container);
