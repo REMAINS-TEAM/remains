@@ -16,6 +16,7 @@ import categoriesApi from 'store/api/categories';
 
 function CategoriesPage() {
   const { categoryId } = useParams();
+  const notEmptyCategoryId = categoryId ? +categoryId : 0;
   const [addItemPopupOpen, setAddItemPopupOpen] = useState(false);
 
   const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
@@ -25,7 +26,7 @@ function CategoriesPage() {
     isFetching: isCategoriesFetching,
     isSuccess: isCategoriesSuccess,
   } = categoriesApi.useGetAllCategoriesQuery({
-    parentId: categoryId ? +categoryId : 0,
+    parentId: notEmptyCategoryId,
   });
 
   const {
@@ -33,7 +34,7 @@ function CategoriesPage() {
     isFetching: isItemFetching,
     error: getCategoryItemsError,
   } = itemsApi.useGetItemsQuery({
-    categoryId,
+    categoryId: notEmptyCategoryId,
     limit: 100, // TODO: lazy loading
     offset: 0,
   });

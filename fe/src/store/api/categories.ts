@@ -9,6 +9,16 @@ export const categoriesApi = api.injectEndpoints({
       Record<string, string | number | undefined> | void
     >({
       query: (params) => apiTypes.CATEGORIES + getQueryString(params),
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              ...result.list.map(({ id }) => ({
+                type: apiTypes.CATEGORIES,
+                id,
+              })),
+              apiTypes.CATEGORIES,
+            ]
+          : [apiTypes.CATEGORIES],
     }),
     getCategoryById: build.query<{ category: Category }, number | string>({
       query: (id) => `${apiTypes.CATEGORIES}/${id}`,
