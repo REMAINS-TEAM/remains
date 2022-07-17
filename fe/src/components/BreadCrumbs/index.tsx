@@ -18,18 +18,23 @@ export default function BreadCrumbs({
   const navigate = useNavigate();
   if (!data) return null;
 
+  const goToCategoryPage =
+    (categoryId: number) =>
+    (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      e.preventDefault();
+      if (categoryId === 0) return navigate(routes.main);
+      navigate(
+        generatePath(routes.category, { categoryId: String(categoryId) }),
+      );
+    };
+
   const breadcrumbs = [{ id: 0, title: 'Все' }, ...data].map((category) => (
     <Link
       underline="hover"
       key={category.id}
       color="inherit"
       href="#"
-      onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        e.preventDefault();
-        navigate(
-          generatePath(routes.category, { categoryId: String(category.id) }),
-        );
-      }}
+      onClick={goToCategoryPage(category.id)}
     >
       {category.title}
     </Link>
