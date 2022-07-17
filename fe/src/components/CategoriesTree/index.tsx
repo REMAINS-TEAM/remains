@@ -2,14 +2,31 @@ import React, { useEffect, useState } from 'react';
 import categoriesApi from 'store/api/categories';
 import * as styles from './styles';
 import BackButton from 'components/BackButton';
-import { AccountTreeOutlined as FolderIcon } from '@mui/icons-material';
-import { Box, Divider, IconButton, Typography } from '@mui/material';
+import {
+  AccountTreeOutlined as FolderIcon,
+  Close as CloseIcon,
+} from '@mui/icons-material';
+import {
+  Box,
+  Divider,
+  IconButton,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import TreeItem from './units/TreeItem';
 import { CategoriesTreeProps } from './types';
 import { useParams } from 'react-router-dom';
+import { setOpen } from 'store/slices/menu';
+import { useDispatch } from 'react-redux';
 
 export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   const { categoryId } = useParams();
+
+  const dispatch = useDispatch();
 
   const [selectedCategoryId, setSelectedCategoryId] = useState(
     categoryId ? +categoryId : 0,
@@ -32,19 +49,28 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
     if (onSelect && data) onSelect(data.tree);
   }, [data]);
 
+  const hideMobileMenu = () => dispatch(setOpen(false));
+
   return (
     <>
       <Box sx={styles.headerContainer}>
-        {categoryTitle ? (
-          <BackButton onClick={backClickHandler} />
-        ) : (
-          <IconButton sx={{ width: '40px', height: '40px' }}>
-            <FolderIcon />
+        <Box sx={styles.headerLeftSide}>
+          {categoryTitle ? (
+            <BackButton onClick={backClickHandler} />
+          ) : (
+            <IconButton sx={{ width: '40px', height: '40px' }}>
+              <FolderIcon />
+            </IconButton>
+          )}
+          <Typography variant="h3" color="secondary">
+            {categoryTitle || 'Все'}
+          </Typography>
+        </Box>
+        {isMobile && (
+          <IconButton onClick={hideMobileMenu}>
+            <CloseIcon />
           </IconButton>
         )}
-        <Typography variant="h3" color="secondary">
-          {categoryTitle || 'Все'}
-        </Typography>
       </Box>
       <Divider />
       {!isFetching && (

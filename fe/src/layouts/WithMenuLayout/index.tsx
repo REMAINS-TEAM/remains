@@ -1,13 +1,20 @@
 import React, { ReactNode } from 'react';
 import * as styles from './styles';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import Container from 'components/Container';
 import CategoriesTree from 'components/CategoriesTree';
 import { Category } from 'store/slices/categories';
 import { generatePath, useNavigate } from 'react-router-dom';
 import routes from 'routes';
+import { useSelector } from 'react-redux';
+import { getMenuState } from 'store/selectors/menu';
 
 const WithMenuLayout = ({ children }: { children: ReactNode }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const menu = useSelector(getMenuState);
+
   const navigate = useNavigate();
 
   const onSelectCategoryHandler = (tree: Category[]) => {
@@ -24,16 +31,20 @@ const WithMenuLayout = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <Box sx={styles.menuWithHeaderContainer}>
-        <Box sx={styles.header}>
-          <Typography variant="h3" color="secondary">
-            Категории
-          </Typography>
+      {menu.open && (
+        <Box sx={styles.menuWithHeaderContainer}>
+          <Box sx={styles.header}>
+            {!isMobile && (
+              <Typography variant="h3" color="secondary">
+                Категории
+              </Typography>
+            )}
+          </Box>
+          <Container sx={styles.menuContainer}>
+            <CategoriesTree onSelect={onSelectCategoryHandler} />
+          </Container>
         </Box>
-        <Container sx={styles.menuContainer}>
-          <CategoriesTree onSelect={onSelectCategoryHandler} />
-        </Container>
-      </Box>
+      )}
       <Box sx={styles.contentContainer}>{children}</Box>
     </>
   );

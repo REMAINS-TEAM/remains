@@ -7,7 +7,7 @@ export const toolbar: SxProps = {
 
 export const leftSide: SxProps = {
   display: 'flex',
-  columnGap: 2,
+  columnGap: 1,
   alignItems: 'center',
 };
 

@@ -4,8 +4,15 @@ export const headerContainer = {
   display: 'flex',
   columnGap: 1,
   alignItems: 'center',
+  justifyContent: 'space-between',
   height: '40px',
   mb: 1,
+};
+
+export const headerLeftSide = {
+  display: 'flex',
+  columnGap: 1,
+  alignItems: 'center',
 };
 
 export const listContainer: SxProps = {

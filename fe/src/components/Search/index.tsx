@@ -10,7 +10,7 @@ function Search() {
         p: '1px 4px',
         display: 'flex',
         alignItems: 'center',
-        width: 310,
+        width: 315,
         height: 36,
         ml: 1,
       }}

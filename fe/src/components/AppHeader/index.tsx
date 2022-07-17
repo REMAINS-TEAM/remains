@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,14 +8,21 @@ import {
 } from '@mui/icons-material';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Box, Tooltip } from '@mui/material';
+import { Menu as MenuIcon } from '@mui/icons-material';
+import {
+  Box,
+  IconButton,
+  Tooltip,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import Loader from '@mui/material/CircularProgress';
 import Search from 'components/Search';
 
 import * as styles from './styles';
 import { APP_HEADER_HEIGHT, LS_KEY_TOKEN } from 'global/constants';
 import AuthPopup from 'components/Popups/AuthPopup';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import userApi from 'store/api/user';
 import ProfileMenu from 'components/AppHeader/units/ProfileMenu';
 import CircularProgressWithLabel from 'components/CircularProgressWithLabel';
@@ -25,8 +32,16 @@ import {
   getPaymentNotExpiredStatus,
 } from 'store/selectors/user';
 import { Link } from 'react-router-dom';
+import { setOpen } from 'store/slices/menu';
+import { getMenuState } from 'store/selectors/menu';
 
 function AppHeader() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const dispatch = useDispatch();
+  const mobileMenu = useSelector(getMenuState);
+
   const { isFetching } = userApi.useMeQuery(undefined, {
     skip: !localStorage.getItem(LS_KEY_TOKEN),
   });
@@ -58,13 +73,36 @@ function AppHeader() {
     setProfileButtonRef(event.currentTarget);
   };
 
+  const showMobileMenu = () => dispatch(setOpen(true));
+  const hideMobileMenu = () => dispatch(setOpen(false));
+  const toggleMobileMenu = () => dispatch(setOpen(!mobileMenu.open));
+
+  useEffect(() => {
+    if (!isMobile) {
+      showMobileMenu();
+    } else {
+      hideMobileMenu();
+    }
+  }, [isMobile]);
+
   return (
     <AppBar position="fixed" sx={{ height: APP_HEADER_HEIGHT }}>
       <Toolbar sx={styles.toolbar}>
         <Box sx={styles.leftSide}>
+          {isMobile && (
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={toggleMobileMenu}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
           <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
             <Link className="link" to={'/'}>
-              Business Remains
+              {!isMobile ? 'Business Remains' : 'BR'}
             </Link>
           </Typography>
           <Search />
@@ -95,20 +133,29 @@ function AppHeader() {
                   </div>
                 </Tooltip>
               )}
-              <Button
-                color="inherit"
-                onClick={user ? profileClickHandler : loginClickHandler}
-                sx={{ columnGap: 1 }}
-              >
-                {user?.phone && !user?.name && (
-                  <Tooltip title="Заполните информацию о себе">
-                    <InfoIcon color="warning" />
-                  </Tooltip>
-                )}
+              {!isMobile ? (
+                <Button
+                  color="inherit"
+                  onClick={user ? profileClickHandler : loginClickHandler}
+                  sx={{ columnGap: 1 }}
+                >
+                  {user?.phone && !user?.name && (
+                    <Tooltip title="Заполните информацию о себе">
+                      <InfoIcon color="warning" />
+                    </Tooltip>
+                  )}
 
-                {user?.name || user?.phone || 'Вход / регистрация'}
-                <UserIcon />
-              </Button>
+                  {user?.name || user?.phone || 'Вход / регистрация'}
+                  <UserIcon />
+                </Button>
+              ) : (
+                <IconButton
+                  color={'inherit'}
+                  onClick={user ? profileClickHandler : loginClickHandler}
+                >
+                  <UserIcon />
+                </IconButton>
+              )}
             </>
           )}
         </Box>
