@@ -1,8 +1,8 @@
 import { RootState } from 'store/index';
-import categoriesApi from 'store/api/categories';
 
 export const getCurrentCategory = (state: RootState) =>
-  state.categories.current;
+  state.categories.tree.length
+    ? state.categories.tree[state.categories.tree.length - 1]
+    : null;
 
-export const getCategoriesTree = (state: any) =>
-  categoriesApi.endpoints.getAllCategories.select()(state);
+export const getCategoriesTree = (state: RootState) => state.categories.tree;

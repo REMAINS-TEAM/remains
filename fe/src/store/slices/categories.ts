@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import categoriesApi from '../api/categories';
 
 export interface Category {
@@ -25,7 +25,9 @@ export const categoriesSlice = createSlice({
   name: 'categories',
   initialState,
   reducers: {
-    setNew: (state) => state,
+    setTree: (state, { payload }: PayloadAction<Category[]>) => {
+      state.tree = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
@@ -40,6 +42,6 @@ export const categoriesSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setNew } = categoriesSlice.actions;
+export const { setTree } = categoriesSlice.actions;
 
 export default categoriesSlice.reducer;

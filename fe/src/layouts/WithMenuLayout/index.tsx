@@ -3,15 +3,16 @@ import * as styles from './styles';
 import { Box, Typography } from '@mui/material';
 import Container from 'components/Container';
 import CategoriesTree from 'components/CategoriesTree';
-import { Category } from 'store/slices/categories';
+import { useDispatch } from 'react-redux';
+import { Category, setTree } from 'store/slices/categories';
 
-function WithMenuLayout({
-  children,
-  onSelect,
-}: {
-  children: ReactNode;
-  onSelect?: (tree: Category[]) => void;
-}) {
+const WithMenuLayout = ({ children }: { children: ReactNode }) => {
+  const dispatch = useDispatch();
+
+  const onSelectCategoryHandler = (tree: Category[]) => {
+    dispatch(setTree(tree));
+  };
+
   return (
     <>
       <Box sx={styles.menuWithHeaderContainer}>
@@ -19,12 +20,12 @@ function WithMenuLayout({
           <Typography>Категории</Typography>
         </Box>
         <Container sx={styles.menuContainer}>
-          <CategoriesTree onSelect={onSelect} />
+          <CategoriesTree onSelect={onSelectCategoryHandler} />
         </Container>
       </Box>
       {children}
     </>
   );
-}
+};
 
 export default React.memo(WithMenuLayout);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MainLayout from 'layouts/MainLayout';
 import WithMenuLayout from 'layouts/WithMenuLayout';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
@@ -12,18 +12,27 @@ import AddItemPopup from 'components/Popups/AddItemPopup';
 import NotFoundPage from 'pages/NotFoundPage';
 import { useSelector } from 'react-redux';
 import { getPaymentNotExpiredStatus } from 'store/selectors/user';
-import { Category } from 'store/slices/categories';
 import BreadCrumbs from 'components/BreadCrumbs';
+import { getCategoriesTree } from 'store/selectors/categories';
 
 function CategoriesPage() {
   const navigate = useNavigate();
   const { categoryId } = useParams();
 
-  const [categoriesTree, setCategoriesTree] = useState<Category[]>([]);
-
   const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
+  const categoriesTree = useSelector(getCategoriesTree);
 
   const [addItemPopupOpen, setAddItemPopupOpen] = useState(false);
+
+  useEffect(() => {
+    navigate(
+      categoriesTree.length
+        ? generatePath(routes.category, {
+            categoryId: String(categoriesTree[categoriesTree.length - 1].id),
+          })
+        : routes.main,
+    );
+  }, [categoriesTree]);
 
   const {
     data: categoryItems,
@@ -47,24 +56,13 @@ function CategoriesPage() {
     }
   }
 
-  const selectCategoryHandler = (tree: Category[]) => {
-    setCategoriesTree(tree);
-    navigate(
-      tree.length
-        ? generatePath(routes.category, {
-            categoryId: String(tree[tree.length - 1].id),
-          })
-        : routes.main,
-    );
-  };
-
   const addItemHandler = () => {
     setAddItemPopupOpen(true);
   };
 
   return (
     <MainLayout>
-      <WithMenuLayout onSelect={selectCategoryHandler}>
+      <WithMenuLayout>
         <Box sx={styles.contentContainer}>
           {!categoryId ? (
             <EmptyState
