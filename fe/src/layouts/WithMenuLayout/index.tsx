@@ -3,14 +3,21 @@ import * as styles from './styles';
 import { Box, Typography } from '@mui/material';
 import Container from 'components/Container';
 import CategoriesTree from 'components/CategoriesTree';
-import { useDispatch } from 'react-redux';
-import { Category, setTree } from 'store/slices/categories';
+import { Category } from 'store/slices/categories';
+import { generatePath, useNavigate } from 'react-router-dom';
+import routes from 'routes';
 
 const WithMenuLayout = ({ children }: { children: ReactNode }) => {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSelectCategoryHandler = (tree: Category[]) => {
-    dispatch(setTree(tree));
+    navigate(
+      tree.length
+        ? generatePath(routes.category, {
+            categoryId: String(tree[tree.length - 1].id),
+          })
+        : routes.main,
+    );
   };
 
   return (

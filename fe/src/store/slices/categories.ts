@@ -14,34 +14,27 @@ export interface Category {
 const initialState: {
   current: Category | null;
   list: Category[];
-  tree: Category[];
 } = {
   current: null,
   list: [],
-  tree: [],
 };
 
 export const categoriesSlice = createSlice({
   name: 'categories',
   initialState,
-  reducers: {
-    setTree: (state, { payload }: PayloadAction<Category[]>) => {
-      state.tree = payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
       categoriesApi.endpoints.getAllCategories.matchFulfilled,
       (state, { payload }) => {
         state.list = payload.list;
         state.current = payload.parentCategory;
-        state.tree = payload.tree;
       },
     );
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setTree } = categoriesSlice.actions;
+export const {} = categoriesSlice.actions;
 
 export default categoriesSlice.reducer;

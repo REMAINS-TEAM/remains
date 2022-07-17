@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import MainLayout from 'layouts/MainLayout';
 import WithMenuLayout from 'layouts/WithMenuLayout';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import * as styles from './styles';
 import { Box, Button, IconButton, SpeedDialIcon } from '@mui/material';
 import itemsApi from 'store/api/items';
-import routes from 'routes';
 import ItemCards from 'pages/Categories/units/ItemCards';
 import EmptyState from 'components/EmptyState';
 import AddItemPopup from 'components/Popups/AddItemPopup';
@@ -13,30 +12,25 @@ import NotFoundPage from 'pages/NotFoundPage';
 import { useSelector } from 'react-redux';
 import { getPaymentNotExpiredStatus } from 'store/selectors/user';
 import BreadCrumbs from 'components/BreadCrumbs';
-import { getCategoriesTree } from 'store/selectors/categories';
+import categoriesApi from 'store/api/categories';
 
 function CategoriesPage() {
-  const navigate = useNavigate();
   const { categoryId } = useParams();
-
-  const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
-  const categoriesTree = useSelector(getCategoriesTree);
-
   const [addItemPopupOpen, setAddItemPopupOpen] = useState(false);
 
-  useEffect(() => {
-    navigate(
-      categoriesTree.length
-        ? generatePath(routes.category, {
-            categoryId: String(categoriesTree[categoriesTree.length - 1].id),
-          })
-        : routes.main,
-    );
-  }, [categoriesTree]);
+  const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
+
+  const {
+    data: categories,
+    isFetching: isCategoriesFetching,
+    isSuccess: isCategoriesSuccess,
+  } = categoriesApi.useGetAllCategoriesQuery({
+    parentId: categoryId ? +categoryId : 0,
+  });
 
   const {
     data: categoryItems,
-    isFetching,
+    isFetching: isItemFetching,
     error: getCategoryItemsError,
   } = itemsApi.useGetItemsQuery({
     categoryId,
@@ -72,7 +66,7 @@ function CategoriesPage() {
           ) : (
             <>
               <Box sx={styles.headerContainer}>
-                <BreadCrumbs data={categoriesTree} />
+                <BreadCrumbs data={categories?.tree || []} />
                 {paymentNotExpired && (
                   <IconButton
                     sx={{ p: 0 }}
@@ -85,7 +79,7 @@ function CategoriesPage() {
               </Box>
 
               {categoryItems?.length ? (
-                <ItemCards items={categoryItems} isLoading={isFetching} />
+                <ItemCards items={categoryItems} isLoading={isItemFetching} />
               ) : (
                 <EmptyState
                   text={'Здесь пока нет товаров'}
@@ -114,7 +108,7 @@ function CategoriesPage() {
       <AddItemPopup
         open={addItemPopupOpen}
         setOpen={setAddItemPopupOpen}
-        category={categoriesTree[categoriesTree.length - 1]}
+        category={categories?.tree[categories.tree.length - 1] || null}
       />
     </MainLayout>
   );
