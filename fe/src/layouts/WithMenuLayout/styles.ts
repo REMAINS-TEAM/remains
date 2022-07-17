@@ -6,6 +6,7 @@ export const menuWithHeaderContainer: SxProps = {
   width: '320px',
   height: '100%',
   flexDirection: 'column',
+  position: 'relative',
 };
 
 export const header: SxProps = {
@@ -15,8 +16,9 @@ export const header: SxProps = {
 };
 
 export const menuContainer: SxProps = {
-  width: '100%',
-  minHeight: '400px',
+  width: '320px',
+  minHeight: 'calc(100% - 48px)',
   display: 'flex',
   flexDirection: 'column',
+  overflowY: 'auto',
 };
