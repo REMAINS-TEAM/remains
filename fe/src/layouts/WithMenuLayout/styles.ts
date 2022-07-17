@@ -4,21 +4,28 @@ export const menuWithHeaderContainer: SxProps = {
   display: 'flex',
   flex: 'none',
   width: '320px',
-  height: '100%',
+  height: 'calc(100% - 48px)',
   flexDirection: 'column',
-  position: 'relative',
+  position: 'fixed',
 };
 
 export const header: SxProps = {
-  fontSize: '1rem',
   py: 2,
   px: 1,
 };
 
 export const menuContainer: SxProps = {
   width: '320px',
-  minHeight: 'calc(100% - 48px)',
+  top: '5px',
+  minHeight: 'calc(100% - 114px)',
   display: 'flex',
   flexDirection: 'column',
   overflowY: 'auto',
+  position: 'relative',
+};
+
+export const contentContainer: SxProps = {
+  width: 'calc(100% - 360px)',
+  left: '340px',
+  position: 'relative',
 };

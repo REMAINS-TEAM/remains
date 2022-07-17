@@ -26,13 +26,15 @@ const WithMenuLayout = ({ children }: { children: ReactNode }) => {
     <>
       <Box sx={styles.menuWithHeaderContainer}>
         <Box sx={styles.header}>
-          <Typography>Категории</Typography>
+          <Typography variant="h3" color="secondary">
+            Категории
+          </Typography>
         </Box>
         <Container sx={styles.menuContainer}>
           <CategoriesTree onSelect={onSelectCategoryHandler} />
         </Container>
       </Box>
-      {children}
+      <Box sx={styles.contentContainer}>{children}</Box>
     </>
   );
 };
