@@ -5,15 +5,12 @@ import { getQueryString } from 'utils';
 export const categoriesApi = api.injectEndpoints({
   endpoints: (build) => ({
     getAllCategories: build.query<
-      Category[],
+      { list: Category[]; parentCategory: Category | null; tree: Category[] },
       Record<string, string | number | undefined> | void
     >({
       query: (params) => apiTypes.CATEGORIES + getQueryString(params),
     }),
-    getCategoryById: build.query<
-      { category: Category; tree: Category[] },
-      number | string
-    >({
+    getCategoryById: build.query<{ category: Category }, number | string>({
       query: (id) => `${apiTypes.CATEGORIES}/${id}`,
       // transformResponse: (response: Category, meta, arg) => ({
       //   ...response,

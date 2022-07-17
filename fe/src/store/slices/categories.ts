@@ -14,9 +14,11 @@ export interface Category {
 const initialState: {
   current: Category | null;
   list: Category[];
+  tree: Category[];
 } = {
   current: null,
   list: [],
+  tree: [],
 };
 
 export const categoriesSlice = createSlice({
@@ -27,15 +29,17 @@ export const categoriesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      categoriesApi.endpoints.getCategoryById.matchFulfilled,
+      categoriesApi.endpoints.getAllCategories.matchFulfilled,
       (state, { payload }) => {
-        state.current = payload.category;
+        state.list = payload.list;
+        state.current = payload.parentCategory;
+        state.tree = payload.tree;
       },
     );
     builder.addMatcher(
-      categoriesApi.endpoints.getAllCategories.matchFulfilled,
+      categoriesApi.endpoints.getAllCategories.matchRejected,
       (state, { payload }) => {
-        state.list = payload;
+        console.log('matcher', payload);
       },
     );
   },

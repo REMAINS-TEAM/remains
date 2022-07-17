@@ -9,7 +9,7 @@ function WithMenuLayout({
   onSelect,
 }: {
   children: ReactNode;
-  onSelect?: (id: number) => void;
+  onSelect?: (categoryId: number) => void;
 }) {
   return (
     <>
@@ -18,7 +18,7 @@ function WithMenuLayout({
           <Typography>Категории</Typography>
         </Box>
         <Container sx={styles.menuContainer}>
-          <CategoriesTree />
+          <CategoriesTree onSelect={onSelect} />
         </Container>
       </Box>
       {children}

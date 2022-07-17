@@ -1,1 +1,3 @@
-export interface CategoriesTreeProps {}
+export interface CategoriesTreeProps {
+  onSelect?: (categoryId: number) => void;
+}

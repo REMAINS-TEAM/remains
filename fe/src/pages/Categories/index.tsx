@@ -4,17 +4,19 @@ import WithMenuLayout from 'layouts/WithMenuLayout';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import * as styles from './styles';
 import { Box, Button, IconButton, SpeedDialIcon } from '@mui/material';
-import BreadCrumbs from 'components/BreadCrumbs';
 import itemsApi from 'store/api/items';
 import routes from 'routes';
 import ItemCards from 'pages/Categories/units/ItemCards';
 import EmptyState from 'components/EmptyState';
-import categoriesApi from 'store/api/categories';
 import AddItemPopup from 'components/Popups/AddItemPopup';
 import NotFoundPage from 'pages/NotFoundPage';
 import { useSelector } from 'react-redux';
 import { getPaymentNotExpiredStatus } from 'store/selectors/user';
-
+import {
+  getCategoriesTree,
+  getCurrentCategory,
+} from 'store/selectors/categories';
+import BreadCrumbs from 'components/BreadCrumbs';
 function CategoriesPage() {
   const navigate = useNavigate();
   const { categoryId } = useParams();
@@ -33,12 +35,10 @@ function CategoriesPage() {
     offset: 0,
   });
 
-  const { data: category, error: getCategoryByIdError } =
-    categoriesApi.useGetCategoryByIdQuery(categoryId || 0, {
-      skip: !categoryId,
-    });
+  const category = useSelector(getCurrentCategory);
+  const categoriesTree = useSelector(getCategoriesTree); // TODO: не обновляется если закешировано
 
-  const error = (getCategoryItemsError || getCategoryByIdError) as {
+  const error = getCategoryItemsError as {
     status: number;
   };
 
@@ -50,8 +50,12 @@ function CategoriesPage() {
     }
   }
 
-  const selectCategoryHandler = (categoryId: number) => {
-    navigate(generatePath(routes.category, { categoryId: String(categoryId) }));
+  const selectCategoryHandler = (id: number) => {
+    navigate(
+      id
+        ? generatePath(routes.category, { categoryId: String(id) })
+        : routes.main,
+    );
   };
 
   const addItemHandler = () => {
@@ -70,7 +74,7 @@ function CategoriesPage() {
           ) : (
             <>
               <Box sx={styles.headerContainer}>
-                <BreadCrumbs data={category?.tree} />
+                <BreadCrumbs data={categoriesTree} />
                 {paymentNotExpired && (
                   <IconButton
                     sx={{ p: 0 }}
@@ -112,7 +116,7 @@ function CategoriesPage() {
       <AddItemPopup
         open={addItemPopupOpen}
         setOpen={setAddItemPopupOpen}
-        category={category?.category}
+        category={category}
       />
     </MainLayout>
   );

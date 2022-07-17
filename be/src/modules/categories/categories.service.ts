@@ -15,11 +15,20 @@ export class CategoriesService {
     return this.prisma.category.create({ data });
   }
 
-  async findAll({ parentId }: { parentId?: number }): Promise<Category[]> {
+  async findAll({ parentId }: { parentId?: number }) {
     let countSubCategories;
     let categoriesWithCountSub = [];
+    let parentCategory: Category | null = null;
+    let tree: Category[] = [];
+
     try {
-      let categories = await this.prisma.category.findMany({
+      if (parentId && Number(parentId) !== 0) {
+        parentCategory = await this.prisma.category.findUnique({
+          where: { id: +parentId },
+        });
+      }
+
+      const categories = await this.prisma.category.findMany({
         where: {
           parentId: parentId ? +parentId : undefined,
         },
@@ -27,14 +36,6 @@ export class CategoriesService {
           _count: { select: { items: true } },
         },
       });
-
-      let parentCategory: { title: string } | null = null;
-      if (categories?.[0].parentId) {
-        parentCategory = await this.prisma.category.findUnique({
-          where: { id: categories[0].parentId },
-          select: { id: true, title: true, parentId: true },
-        });
-      }
 
       if (categories.length) {
         for (const category of categories) {
@@ -44,19 +45,36 @@ export class CategoriesService {
 
           categoriesWithCountSub.push({
             ...category,
-            parentCategory,
             _count: { ...category._count, subCategories: countSubCategories },
           });
+        }
+      }
+
+      if (parentCategory) {
+        tree = [parentCategory];
+        let parentId = parentCategory.parentId;
+
+        while (parentId !== 0) {
+          const category = await this.prisma.category.findUnique({
+            where: { id: parentId },
+          });
+          if (category) {
+            parentId = category.parentId;
+            tree.unshift(category);
+          } else {
+            // TODO: может вызвать исключение? Произойдет если одна из категорий удалена например
+            break;
+          }
         }
       }
     } catch (err) {
       throw new PrismaException(err as Error);
     }
 
-    return categoriesWithCountSub;
+    return { list: categoriesWithCountSub, parentCategory, tree };
   }
 
-  async findOne(id: number): Promise<{ category: Category; tree: Category[] }> {
+  async findOne(id: number): Promise<Category | null> {
     let result;
     try {
       result = await this.prisma.category.findUnique({
@@ -70,25 +88,6 @@ export class CategoriesService {
       throw new NotFoundException(`Category with id ${id} does not exist`);
     }
 
-    let tree = [result];
-    let parentId = result.parentId;
-    try {
-      while (parentId !== 0) {
-        const category = await this.prisma.category.findUnique({
-          where: { id: parentId },
-        });
-        if (category) {
-          parentId = category.parentId;
-          tree.unshift(category);
-        } else {
-          // TODO: может вызвать исключение? Произойдет если одна из категорий удалена например
-          break;
-        }
-      }
-    } catch (err) {
-      throw new PrismaException(err as Error);
-    }
-
-    return { category: result, tree };
+    return result;
   }
 }

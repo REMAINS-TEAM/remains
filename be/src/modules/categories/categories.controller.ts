@@ -16,14 +16,12 @@ export class CategoriesController {
   @Get()
   async findAll(
     @Query('parentId') parentId: number | undefined,
-  ): Promise<Category[]> {
+  ): Promise<{ list: Category[]; parentCategory: Category | null }> {
     return this.categoriesService.findAll({ parentId });
   }
 
   @Get(':id')
-  async findOne(
-    @Param() params: { id: string },
-  ): Promise<{ category: Category; tree: Category[] }> {
+  async findOne(@Param() params: { id: string }): Promise<Category | null> {
     return this.categoriesService.findOne(+params.id);
   }
 }
