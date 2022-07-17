@@ -2,7 +2,7 @@ import { TreeItemProps } from './types';
 import React from 'react';
 import { FolderOutlined as FolderIcon } from '@mui/icons-material';
 import * as styles from './styles';
-import { Box } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 
 export default function TreeItem({ title, count, onClick }: TreeItemProps) {
   return (
@@ -13,9 +13,17 @@ export default function TreeItem({ title, count, onClick }: TreeItemProps) {
           <span>{title}</span>
         </Box>
 
-        <span>
-          {count.items}/{count.subCategories}
-        </span>
+        <Tooltip
+          title={
+            !count.items && !count.subCategories
+              ? 'Здесь пусто'
+              : `Элементов ${count.items}, подкатегорий ${count.subCategories}`
+          }
+        >
+          <span>
+            {count.items}/{count.subCategories}
+          </span>
+        </Tooltip>
       </Box>
     </li>
   );
