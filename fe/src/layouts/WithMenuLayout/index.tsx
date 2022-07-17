@@ -3,13 +3,14 @@ import * as styles from './styles';
 import { Box, Typography } from '@mui/material';
 import Container from 'components/Container';
 import CategoriesTree from 'components/CategoriesTree';
+import { Category } from 'store/slices/categories';
 
 function WithMenuLayout({
   children,
   onSelect,
 }: {
   children: ReactNode;
-  onSelect?: (categoryId: number) => void;
+  onSelect?: (tree: Category[]) => void;
 }) {
   return (
     <>

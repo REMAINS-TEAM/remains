@@ -18,7 +18,7 @@ export default function BreadCrumbs({
   const navigate = useNavigate();
   if (!data) return null;
 
-  const breadcrumbs = data.map((category) => (
+  const breadcrumbs = [{ id: 0, title: 'Все' }, ...data].map((category) => (
     <Link
       underline="hover"
       key={category.id}

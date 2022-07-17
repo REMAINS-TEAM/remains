@@ -1,3 +1,5 @@
+import { Category } from 'store/slices/categories';
+
 export interface CategoriesTreeProps {
-  onSelect?: (categoryId: number) => void;
+  onSelect?: (tree: Category[]) => void;
 }

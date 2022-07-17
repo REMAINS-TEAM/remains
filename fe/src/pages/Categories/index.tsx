@@ -12,14 +12,14 @@ import AddItemPopup from 'components/Popups/AddItemPopup';
 import NotFoundPage from 'pages/NotFoundPage';
 import { useSelector } from 'react-redux';
 import { getPaymentNotExpiredStatus } from 'store/selectors/user';
-import {
-  getCategoriesTree,
-  getCurrentCategory,
-} from 'store/selectors/categories';
+import { Category } from 'store/slices/categories';
 import BreadCrumbs from 'components/BreadCrumbs';
+
 function CategoriesPage() {
   const navigate = useNavigate();
   const { categoryId } = useParams();
+
+  const [categoriesTree, setCategoriesTree] = useState<Category[]>([]);
 
   const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
 
@@ -35,9 +35,6 @@ function CategoriesPage() {
     offset: 0,
   });
 
-  const category = useSelector(getCurrentCategory);
-  const categoriesTree = useSelector(getCategoriesTree); // TODO: не обновляется если закешировано
-
   const error = getCategoryItemsError as {
     status: number;
   };
@@ -50,10 +47,13 @@ function CategoriesPage() {
     }
   }
 
-  const selectCategoryHandler = (id: number) => {
+  const selectCategoryHandler = (tree: Category[]) => {
+    setCategoriesTree(tree);
     navigate(
-      id
-        ? generatePath(routes.category, { categoryId: String(id) })
+      tree.length
+        ? generatePath(routes.category, {
+            categoryId: String(tree[tree.length - 1].id),
+          })
         : routes.main,
     );
   };
@@ -116,7 +116,7 @@ function CategoriesPage() {
       <AddItemPopup
         open={addItemPopupOpen}
         setOpen={setAddItemPopupOpen}
-        category={category}
+        category={categoriesTree[categoriesTree.length - 1]}
       />
     </MainLayout>
   );

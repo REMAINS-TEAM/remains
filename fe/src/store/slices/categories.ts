@@ -36,12 +36,6 @@ export const categoriesSlice = createSlice({
         state.tree = payload.tree;
       },
     );
-    builder.addMatcher(
-      categoriesApi.endpoints.getAllCategories.matchRejected,
-      (state, { payload }) => {
-        console.log('matcher', payload);
-      },
-    );
   },
 });
 

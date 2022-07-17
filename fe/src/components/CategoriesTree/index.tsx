@@ -15,6 +15,10 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
     categoryId ? +categoryId : 0,
   );
 
+  useEffect(() => {
+    setSelectedCategoryId(categoryId ? +categoryId : 0);
+  }, [categoryId]);
+
   const { data, isFetching } = categoriesApi.useGetAllCategoriesQuery({
     parentId: selectedCategoryId,
   });
@@ -25,8 +29,8 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
     setSelectedCategoryId(data?.parentCategory?.parentId || 0);
 
   useEffect(() => {
-    if (onSelect) onSelect(selectedCategoryId);
-  }, [selectedCategoryId]);
+    if (onSelect && data) onSelect(data.tree);
+  }, [selectedCategoryId, data]);
 
   return (
     <>
