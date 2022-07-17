@@ -7,10 +7,12 @@ export const headerContainer: SxProps = {
   width: '100%',
   display: 'flex',
   justifyContent: 'space-between',
+  minHeight: '56px',
 };
 
 export const contentContainer: SxProps = {
   width: '100%',
+  height: '100%',
   display: 'flex',
   flexDirection: 'column',
 };

@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { getPaymentNotExpiredStatus } from 'store/selectors/user';
 import BreadCrumbs from 'components/BreadCrumbs';
 import categoriesApi from 'store/api/categories';
+import Container from 'components/Container';
 
 function CategoriesPage() {
   const { categoryId } = useParams();
@@ -60,10 +61,15 @@ function CategoriesPage() {
       <WithMenuLayout>
         <Box sx={styles.contentContainer}>
           {!categoryId ? (
-            <EmptyState
-              text={'Выберите категорию'}
-              description={'Посмотрите, что тут есть, переключая категории'}
-            />
+            <>
+              <Box sx={styles.headerContainer} />
+              <Container sx={{ width: '100%', height: '100%' }}>
+                <EmptyState
+                  text={'Выберите категорию'}
+                  description={'Посмотрите, что тут есть, переключая категории'}
+                />
+              </Container>
+            </>
           ) : (
             <>
               <Box sx={styles.headerContainer}>
@@ -82,18 +88,20 @@ function CategoriesPage() {
               {categoryItems?.length ? (
                 <ItemCards items={categoryItems} isLoading={isItemFetching} />
               ) : (
-                <EmptyState
-                  text={'Здесь пока нет товаров'}
-                  description={`Выберите подкатегорию${
-                    paymentNotExpired ? ' или добавьте сюда что-нибудь' : ''
-                  }`}
-                >
-                  {paymentNotExpired && (
-                    <Button variant={'contained'} onClick={addItemHandler}>
-                      Добавить
-                    </Button>
-                  )}
-                </EmptyState>
+                <Container sx={{ width: '100%', height: '100%' }}>
+                  <EmptyState
+                    text={'Здесь пока нет товаров'}
+                    description={`Выберите подкатегорию${
+                      paymentNotExpired ? ' или добавьте сюда что-нибудь' : ''
+                    }`}
+                  >
+                    {paymentNotExpired && (
+                      <Button variant={'contained'} onClick={addItemHandler}>
+                        Добавить
+                      </Button>
+                    )}
+                  </EmptyState>
+                </Container>
               )}
             </>
           )}
