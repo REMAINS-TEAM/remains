@@ -11,12 +11,14 @@ const WithMenuLayout = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   const onSelectCategoryHandler = (tree: Category[]) => {
+    if (!tree.length || tree[tree.length - 1]?.id === 0) {
+      return navigate(routes.main);
+    }
+
     navigate(
-      tree.length
-        ? generatePath(routes.category, {
-            categoryId: String(tree[tree.length - 1].id),
-          })
-        : routes.main,
+      generatePath(routes.category, {
+        categoryId: String(tree[tree.length - 1].id),
+      }),
     );
   };
 

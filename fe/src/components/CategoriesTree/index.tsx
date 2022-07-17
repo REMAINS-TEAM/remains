@@ -30,7 +30,7 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
 
   useEffect(() => {
     if (onSelect && data) onSelect(data.tree);
-  }, [selectedCategoryId, data]);
+  }, [data]);
 
   return (
     <>
