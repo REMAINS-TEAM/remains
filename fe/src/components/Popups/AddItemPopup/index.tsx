@@ -43,6 +43,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
     watch,
     setValue,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: joiResolver(AddItemSchema),
     defaultValues: Object.values(fields).reduce(
@@ -53,6 +54,11 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
       {} as Record<FieldsType, string>,
     ),
   });
+
+  const resetForm = () => {
+    reset();
+    setImageFiles([]);
+  };
 
   const titleLength = useLimitTextField({
     value: watch(fields.TITLE),
@@ -88,6 +94,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
 
     createItemRequest(formData);
     setOpen(false);
+    resetForm();
   };
 
   const addFileHandler = async (file: File) => {
@@ -112,6 +119,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
       title={`Разместить товар в категории "${category.title}"`}
       okButtonText={'Разместить'}
       onOkClick={handleSubmit(onSubmit)}
+      onClose={resetForm}
       closeWhenSubmit={false}
       {...{ open, setOpen }}
     >

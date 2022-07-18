@@ -13,18 +13,23 @@ export default function Popup({
   okButtonText = 'OK',
   cancelButtonText = 'Отмена',
   onOkClick,
+  onClose,
   closeWhenSubmit = true,
   hideActionButtons = false,
   children,
   ...rest
 }: PopupProps) {
   const handleOkClick = (event: React.MouseEvent<HTMLElement>) => {
-    closeWhenSubmit && setOpen(false);
+    if (closeWhenSubmit) {
+      setOpen(false);
+      if (onClose) onClose();
+    }
     onOkClick && onOkClick(event);
   };
 
   const handleCancelClick = () => {
     setOpen(false);
+    if (onClose) onClose();
   };
 
   return (
