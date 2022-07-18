@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import * as styles from 'components/ItemCard/units/ItemImage/styles';
+import * as styles from './styles';
 import {
   AddPhotoAlternate as AddImageIcon,
   Delete as DeleteIcon,
