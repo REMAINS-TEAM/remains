@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { DialogProps } from '@mui/material';
 
 export interface PopupProps extends DialogProps {
@@ -7,7 +7,7 @@ export interface PopupProps extends DialogProps {
   title?: string;
   okButtonText?: string;
   cancelButtonText?: string;
-  onOkClick?: () => void;
+  onOkClick?: (event: React.MouseEvent<HTMLElement>) => void;
   closeWhenSubmit?: boolean;
   hideActionButtons?: boolean;
   children: ReactNode;

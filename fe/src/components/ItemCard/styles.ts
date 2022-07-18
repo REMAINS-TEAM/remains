@@ -11,6 +11,14 @@ export const itemContainer: SxProps = {
   overflow: 'hidden',
   px: 2,
   py: 4,
+  cursor: 'pointer',
+  transition: 'box-shadow .3s',
+  '&:hover': {
+    boxShadow: '0 0 10px lightgray',
+  },
+  '&:active': {
+    transform: 'scale(0.996)',
+  },
 };
 
 export const leftSide: SxProps = {

@@ -15,7 +15,8 @@ export default function PopupMenu({
 }) {
   const open = Boolean(anchorEl);
 
-  const handleClose = () => {
+  const handleClose = (e: any) => {
+    e.stopPropagation();
     setAnchorEl(null);
   };
 

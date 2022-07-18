@@ -11,7 +11,6 @@ import {
   MoreHoriz as DotsIcon,
 } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
-import { RootState } from 'store';
 import PopupMenu from 'components/PopupMenu';
 import MenuItem from 'components/PopupMenu/units/MenuItem';
 import { BACKEND_URL } from 'global/constants';
@@ -37,6 +36,7 @@ function ItemCard({
   const [dotsButtonRef, setDotsButtonRef] = useState<HTMLElement | null>(null);
 
   const dotsClickHandler = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setDotsButtonRef(event.currentTarget);
   };
 
@@ -44,8 +44,21 @@ function ItemCard({
     navigate(generatePath(routes.item, { itemId: String(item.id) }));
   };
 
+  const itemEditClickHandler = (itemId: number) => {
+    return (event: React.MouseEvent<HTMLElement>) => {
+      event.stopPropagation();
+      // TODO
+    };
+  };
+  const itemDeleteClickHandler = (itemId: number) => {
+    return (event: React.MouseEvent<HTMLElement>) => {
+      event.stopPropagation();
+      onDeleteClick(itemId);
+    };
+  };
+
   return (
-    <Container sx={styles.itemContainer}>
+    <Container sx={styles.itemContainer} onClick={itemDetailsClickHandler}>
       <Box sx={styles.leftSide}>
         <ItemImage
           src={`${BACKEND_URL}/content/items/${item.id}/${item.images[0]}`}
@@ -100,12 +113,12 @@ function ItemCard({
         setAnchorEl={setDotsButtonRef}
       >
         <MenuItem
-          onClick={() => null}
+          onClick={itemEditClickHandler(item.id)}
           Icon={EditIcon}
           label={'Редактировать'}
         />
         <MenuItem
-          onClick={() => onDeleteClick(item.id)}
+          onClick={itemDeleteClickHandler(item.id)}
           Icon={DeleteIcon}
           label={'Удалить'}
           color={theme.palette.error.main}

@@ -18,9 +18,9 @@ export default function Popup({
   children,
   ...rest
 }: PopupProps) {
-  const handleOkClick = () => {
+  const handleOkClick = (event: React.MouseEvent<HTMLElement>) => {
     closeWhenSubmit && setOpen(false);
-    onOkClick && onOkClick();
+    onOkClick && onOkClick(event);
   };
 
   const handleCancelClick = () => {

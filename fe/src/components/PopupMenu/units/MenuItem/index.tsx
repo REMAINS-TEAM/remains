@@ -10,7 +10,7 @@ export default function MenuItem({
   color,
   confirm,
 }: {
-  onClick: () => void;
+  onClick: (event: React.MouseEvent<HTMLElement>) => void;
   Icon: SvgIconComponent;
   label: string;
   color?: string;
