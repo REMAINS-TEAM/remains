@@ -34,6 +34,7 @@ import {
 import { Link } from 'react-router-dom';
 import { setOpen } from 'store/slices/menu';
 import { getMenuState } from 'store/selectors/menu';
+import ExpiredDate from 'components/AppHeader/units/ExpiredDate';
 
 function AppHeader() {
   const theme = useTheme();
@@ -46,24 +47,12 @@ function AppHeader() {
     skip: !localStorage.getItem(LS_KEY_TOKEN),
   });
   const user = useSelector(getCurrentUser);
-  const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
+
   const [authPopupOpen, setAuthPopupOpen] = useState(false);
 
   const [profileButtonRef, setProfileButtonRef] = useState<HTMLElement | null>(
     null,
   );
-
-  const daysLeft =
-    user &&
-    (new Date() > user.paymentExpiredDate
-      ? 0
-      : differenceInDays(new Date(user.paymentExpiredDate), new Date()));
-
-  const hoursLeft =
-    user &&
-    (new Date() > user.paymentExpiredDate
-      ? 0
-      : differenceInHours(new Date(user.paymentExpiredDate), new Date()));
 
   const loginClickHandler = () => {
     setAuthPopupOpen(true);
@@ -112,27 +101,7 @@ function AppHeader() {
             <Loader color={'secondary'} size={20} />
           ) : (
             <>
-              {user && daysLeft !== null && (
-                <Tooltip
-                  title={
-                    !paymentNotExpired
-                      ? `Функционал ограничен! Дата истечения оплаты: ${format(
-                          new Date(user.paymentExpiredDate || 0),
-                          'dd.MM.yyyy HH:mm',
-                        )}`
-                      : `Функционал сервиса будет ограничен через ${
-                          daysLeft !== 0 ? daysLeft + 'дн' : hoursLeft + 'ч'
-                        }`
-                  }
-                >
-                  <div>
-                    <CircularProgressWithLabel
-                      value={daysLeft > 30 ? 100 : (daysLeft * 100) / 30}
-                      label={`${daysLeft < 0 ? 0 : daysLeft}д`}
-                    />
-                  </div>
-                </Tooltip>
-              )}
+              {user && <ExpiredDate date={user.paymentExpiredDate} />}
               {!isMobile ? (
                 <Button
                   color="inherit"

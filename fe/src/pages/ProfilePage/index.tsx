@@ -52,7 +52,7 @@ function ProfilePage() {
         { title: 'Компания', value: user.company?.name },
         { title: 'Описание компании', value: user.company?.description },
         {
-          title: 'Дата истечения платежа',
+          title: 'Дата окончания доступа',
           value: standardFormat(user.paymentExpiredDate, true),
         },
       ]

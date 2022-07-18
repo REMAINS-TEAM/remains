@@ -7,6 +7,9 @@ export const itemContainer: any = {
   pt: 1,
   cursor: 'pointer',
   color: (theme: Theme) => theme.palette.grey[800],
+  '&:hover': {
+    opacity: 0.8,
+  },
 };
 
 export const titleContainer: SxProps = {
