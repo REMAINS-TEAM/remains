@@ -9,10 +9,12 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ScheduleModule } from '@nestjs/schedule';
 import { SchedulerModule } from 'modules/scheduler/scheduler.module';
+import { SearchModule } from 'modules/search/search.module';
 
 @Module({
   imports: [
     PrismaModule,
+    SearchModule,
     UsersModule,
     CategoriesModule,
     ItemsModule,
