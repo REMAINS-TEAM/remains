@@ -66,6 +66,7 @@ function Search() {
       </Paper>
 
       <Menu
+        disablePortal
         autoFocus={false}
         disableAutoFocus
         disableAutoFocusItem
@@ -77,7 +78,7 @@ function Search() {
         onClick={hideDropdown}
         PaperProps={{ elevation: 0, sx: styles.menuPaper }}
         transformOrigin={{ horizontal: 'left', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        sx={{ '& *': { fontSize: 14 } }}
       >
         <MenuItem disabled>
           <ListItemIcon>

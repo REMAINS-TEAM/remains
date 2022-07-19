@@ -10,11 +10,12 @@ export const inputPaper: SxProps = {
 };
 
 export const menuPaper: SxProps = {
-  minWidth: 300,
+  minWidth: 315,
   height: 320,
   overflowX: 'hidden',
   overflowY: 'auto',
   filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
   background: 'rgba(255,255,255,0.95)',
-  mt: 1.5,
+  mt: 1,
+  ml: -1.5,
 };
