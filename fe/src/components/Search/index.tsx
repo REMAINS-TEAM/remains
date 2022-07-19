@@ -54,7 +54,7 @@ function Search() {
         <InputBase
           ref={inputRef}
           sx={{ ml: 1, flex: 1 }}
-          placeholder="Поиск по категориям и товарам"
+          placeholder="Поиск по сайту"
           inputProps={{ 'aria-label': 'search' }}
           value={value}
           onChange={(e) => setValue(e.target.value)}
