@@ -1,6 +1,6 @@
 import React from 'react';
 import { ItemsGroupProps, ItemType } from './types';
-import { Divider, ListItemIcon, MenuItem } from '@mui/material';
+import { ListItemIcon, MenuItem } from '@mui/material';
 import * as styles from './styles';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ const ItemsGroup = ({ title, icon, items, type }: ItemsGroupProps) => {
     <>
       <MenuItem disabled sx={styles.menuItemHeader}>
         <ListItemIcon>{icon}</ListItemIcon>
-        {title}
+        {`${title} (${items?.length || 0})`}
       </MenuItem>
 
       {items?.length ? (
@@ -33,7 +33,6 @@ const ItemsGroup = ({ title, icon, items, type }: ItemsGroupProps) => {
           Тут ничего не нашлось
         </MenuItem>
       )}
-      <Divider />
     </>
   );
 };

@@ -8,13 +8,15 @@ function EmptyState({
   text,
   children,
   description,
+  sx,
 }: {
   text?: string;
   description?: string;
   children?: ReactNode;
+  sx?: any;
 }) {
   return (
-    <Box sx={styles.rootContainer}>
+    <Box sx={{ ...styles.rootContainer, ...sx }}>
       <ErrorOutline color="secondary" fontSize={'large'} />
       <Typography variant="body1" color="secondary">
         {text || 'Нет данных'}

@@ -1,6 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  Box,
   CircularProgress,
+  Divider,
   IconButton,
   InputBase,
   Menu,
@@ -17,8 +19,10 @@ import * as styles from './styles';
 import searchApi from 'store/api/search';
 import useDebounce from 'hooks/useDebounce';
 import ItemsGroup from 'components/Search/ItemsGroup';
+import { ItemType } from 'components/Search/ItemsGroup/types';
+import EmptyState from 'components/EmptyState';
 
-const MIN_SEARCH_LENGTH = 3;
+const MIN_SEARCH_LENGTH = 2;
 
 function Search() {
   const [value, setValue] = useState('');
@@ -52,6 +56,31 @@ function Search() {
   useEffect(() => {
     if (value.length < MIN_SEARCH_LENGTH) hideDropdown();
   }, [value]);
+
+  const itemGroups = useMemo(
+    () =>
+      [
+        {
+          title: 'Категории',
+          icon: <CategoriesIcon fontSize="small" />,
+          items: data?.categories,
+          type: 'categories',
+        },
+        {
+          title: 'Продукты',
+          icon: <ProductsIcon fontSize="small" />,
+          items: data?.items,
+          type: 'items',
+        },
+        {
+          title: 'Компании',
+          icon: <CompaniesIcon fontSize="small" />,
+          items: data?.companies,
+          type: 'companies',
+        },
+      ].filter((g) => g.items?.length),
+    [data],
+  );
 
   return (
     <>
@@ -89,26 +118,28 @@ function Search() {
         onClick={hideDropdown}
         PaperProps={{ elevation: 0, sx: styles.menuPaper }}
         transformOrigin={{ horizontal: 'left', vertical: 'top' }}
-        sx={{ '& *': { fontSize: 14 } }}
       >
-        <ItemsGroup
-          title={'Категории'}
-          icon={<CategoriesIcon fontSize="small" />}
-          items={data?.categories}
-          type={'categories'}
-        />
-        <ItemsGroup
-          title={'Товары'}
-          icon={<ProductsIcon fontSize="small" />}
-          items={data?.items}
-          type={'items'}
-        />
-        <ItemsGroup
-          title={'Компании'}
-          icon={<CompaniesIcon fontSize="small" />}
-          items={data?.companies}
-          type={'companies'}
-        />
+        {itemGroups.length ? (
+          itemGroups.map((group, i) => (
+            <React.Fragment key={group.title}>
+              <ItemsGroup
+                title={group.title}
+                icon={group.icon}
+                items={group.items}
+                type={group.type as ItemType}
+              />
+              {i !== itemGroups.length - 1 && <Divider />}
+            </React.Fragment>
+          ))
+        ) : (
+          <Box sx={{ position: 'relative', height: 100 }}>
+            <EmptyState
+              text="Ничего не нашлось"
+              description="Попробуйте изменить запрос"
+              sx={styles.emptyState}
+            />
+          </Box>
+        )}
       </Menu>
     </>
   );

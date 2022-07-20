@@ -11,7 +11,6 @@ export const inputPaper: SxProps = {
 
 export const menuPaper: SxProps = {
   minWidth: 315,
-  minHeight: 255,
   maxHeight: 400,
   overflowX: 'hidden',
   overflowY: 'auto',
@@ -19,4 +18,12 @@ export const menuPaper: SxProps = {
   background: 'rgba(255,255,255,0.95)',
   mt: 1,
   ml: -1.5,
+};
+
+export const emptyState: SxProps = {
+  width: '90%',
+  p: 0,
+  mt: 1,
+  '& *:not(svg)': { fontSize: 14 },
+  '& svg': { fontSize: 24 },
 };
