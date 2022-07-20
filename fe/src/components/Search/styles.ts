@@ -6,7 +6,6 @@ export const inputPaper: SxProps = {
   alignItems: 'center',
   width: 315,
   height: 36,
-  ml: 1,
 };
 
 export const menuPaper: SxProps = {

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Box, SxProps } from '@mui/material';
+import { Box, SxProps, Theme } from '@mui/material';
 
 import * as styles from './styles';
 
@@ -10,7 +10,7 @@ function Container({
 }: {
   children: ReactNode;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
-  sx?: SxProps;
+  sx?: SxProps<Theme>;
 }) {
   return (
     <Box

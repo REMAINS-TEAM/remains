@@ -61,7 +61,7 @@ function ItemCard({
           src={`${BACKEND_URL}/content/items/${item.id}/${item.images[0]}`}
         />
         <Box>
-          <Typography variant="body1" sx={{ mb: 1 }}>
+          <Typography variant="body1" component={'h3'} sx={{ mb: 1 }}>
             {item.title}
           </Typography>
           <Typography variant="body2" color={'secondary'}>
@@ -91,7 +91,8 @@ function ItemCard({
             {item.price.toLocaleString('ru')} ₽
           </Typography>
           <Button
-            variant="contained"
+            aria-controls="details"
+            variant="outlined"
             size={'small'}
             onClick={itemDetailsClickHandler}
           >

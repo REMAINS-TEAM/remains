@@ -84,7 +84,7 @@ function AppHeader() {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="h1" sx={{ flexGrow: 1, mr: 2 }}>
             <Link className="link" to={'/'}>
               {!isMobile ? 'Business Remains' : 'BR'}
             </Link>

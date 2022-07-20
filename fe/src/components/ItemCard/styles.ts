@@ -1,6 +1,7 @@
 import { SxProps } from '@mui/system';
+import { Theme } from '@mui/material';
 
-export const itemContainer: SxProps = {
+export const itemContainer: SxProps<Theme> = {
   position: 'relative',
   width: '100%',
   display: 'flex',
@@ -14,7 +15,14 @@ export const itemContainer: SxProps = {
   cursor: 'pointer',
   transition: 'box-shadow .3s',
   '&:hover': {
-    boxShadow: '0 0 10px lightgray',
+    boxShadow: (theme: Theme) => `0 0 10px ${theme.palette.grey[200]}`,
+    '& button[aria-controls=details]': {
+      backgroundColor: (theme: Theme) => theme.palette.primary.main,
+      color: (theme: Theme) => theme.palette.primary.contrastText,
+    },
+    '& h3': {
+      color: (theme: Theme) => theme.palette.primary.dark,
+    },
   },
   '&:active': {
     transform: 'scale(0.996)',
@@ -42,7 +50,7 @@ export const rightSide: SxProps = {
 export const rightTop: SxProps = {
   display: 'flex',
   alignItems: 'flex-end',
-  rowGap: 1.5,
+  rowGap: 3.5,
   flexDirection: 'column',
 };
 
