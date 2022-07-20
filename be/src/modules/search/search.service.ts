@@ -16,17 +16,17 @@ export class SearchService {
 
     try {
       const categories = await this.prisma.category.findMany({
-        where: { title: { contains: searchString } },
+        where: { title: { contains: searchString, mode: 'insensitive' } },
         select: { id: true, title: true },
         take: 10,
       });
       const items = await this.prisma.item.findMany({
-        where: { title: { contains: searchString } },
+        where: { title: { contains: searchString, mode: 'insensitive' } },
         select: { id: true, title: true },
         take: 10,
       });
       const companies = await this.prisma.company.findMany({
-        where: { name: { contains: searchString } },
+        where: { name: { contains: searchString, mode: 'insensitive' } },
         select: { id: true, name: true },
         take: 10,
       });

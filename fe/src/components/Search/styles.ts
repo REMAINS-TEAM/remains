@@ -12,7 +12,7 @@ export const inputPaper: SxProps = {
 
 export const menuPaper: SxProps = {
   minWidth: 315,
-  minHeight: 280,
+  minHeight: 270,
   maxHeight: 400,
   overflowX: 'hidden',
   overflowY: 'auto',
@@ -34,6 +34,6 @@ export const menuItemHeader = {
 };
 
 export const menuItem = {
-  pl: 6,
+  pl: '52px',
   color: (theme: Theme) => theme.palette.grey[700],
 };
