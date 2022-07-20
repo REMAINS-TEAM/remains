@@ -120,17 +120,15 @@ function Search() {
         transformOrigin={{ horizontal: 'left', vertical: 'top' }}
       >
         {itemGroups.length ? (
-          itemGroups.map((group, i) => (
-            <React.Fragment key={group.title}>
-              <ItemsGroup
-                title={group.title}
-                icon={group.icon}
-                items={group.items}
-                type={group.type}
-              />
-              {i !== itemGroups.length - 1 && <Divider />}
-            </React.Fragment>
-          ))
+          itemGroups.map((group, i) => [
+            <ItemsGroup
+              title={group.title}
+              icon={group.icon}
+              items={group.items}
+              type={group.type}
+            />,
+            i !== itemGroups.length - 1 && <Divider />,
+          ])
         ) : (
           <Box sx={{ position: 'relative', height: 100 }}>
             <EmptyState
