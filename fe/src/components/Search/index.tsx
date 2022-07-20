@@ -1,12 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   CircularProgress,
-  Divider,
   IconButton,
   InputBase,
-  ListItemIcon,
   Menu,
-  MenuItem,
   Paper,
 } from '@mui/material';
 import {
@@ -19,19 +16,17 @@ import {
 import * as styles from './styles';
 import searchApi from 'store/api/search';
 import useDebounce from 'hooks/useDebounce';
-import { useNavigate } from 'react-router-dom';
+import ItemsGroup from 'components/Search/ItemsGroup';
 
 const MIN_SEARCH_LENGTH = 3;
 
 function Search() {
-  const navigate = useNavigate();
   const [value, setValue] = useState('');
   const debouncedValue = useDebounce(value, MIN_SEARCH_LENGTH);
+
   const { data, isFetching, isSuccess } = searchApi.useSearchQuery(
     debouncedValue,
-    {
-      skip: !debouncedValue.length,
-    },
+    { skip: !debouncedValue.length },
   );
 
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -39,9 +34,7 @@ function Search() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const clearInput = () => {
-    setValue('');
-  };
+  const clearInput = () => setValue('');
 
   const showDropdown = () => {
     if (inputRef?.current && value.length >= MIN_SEARCH_LENGTH) {
@@ -50,9 +43,7 @@ function Search() {
     }
   };
 
-  const hideDropdown = () => {
-    setAnchorEl(null);
-  };
+  const hideDropdown = () => setAnchorEl(null);
 
   useEffect(() => {
     if (isSuccess && !isFetching) showDropdown();
@@ -62,13 +53,9 @@ function Search() {
     if (value.length < MIN_SEARCH_LENGTH) hideDropdown();
   }, [value]);
 
-  const itemClickHandler =
-    (type: 'categories' | 'items' | 'companies', id: number) => () =>
-      navigate(`/${type}/${id}`);
-
   return (
     <>
-      <Paper component="div" sx={styles.inputPaper}>
+      <Paper sx={styles.inputPaper}>
         <InputBase
           ref={inputRef}
           sx={{ ml: 1, flex: 1 }}
@@ -78,7 +65,12 @@ function Search() {
           onChange={(e) => setValue(e.target.value)}
           onClick={showDropdown}
         />
-        <IconButton sx={{ p: '10px' }} aria-label="search" onClick={clearInput}>
+        <IconButton
+          sx={{ p: 1 }}
+          aria-label="search"
+          disabled={isFetching}
+          onClick={clearInput}
+        >
           {isFetching && <CircularProgress size={18} />}
           {!isFetching && (!value.length ? <SearchIcon /> : <CloseIcon />)}
         </IconButton>
@@ -99,76 +91,24 @@ function Search() {
         transformOrigin={{ horizontal: 'left', vertical: 'top' }}
         sx={{ '& *': { fontSize: 14 } }}
       >
-        {/*TODO: выделить в отдельный компонент*/}
-        <MenuItem disabled sx={styles.menuItemHeader}>
-          <ListItemIcon>
-            <CategoriesIcon fontSize="small" />
-          </ListItemIcon>
-          Категории
-        </MenuItem>
-        {/*<Divider />*/}
-        {}
-        {data?.categories.length ? (
-          data.categories.map((category) => (
-            <MenuItem
-              key={category.id}
-              sx={styles.menuItem}
-              onClick={itemClickHandler('categories', category.id)}
-            >
-              {category.title}
-            </MenuItem>
-          ))
-        ) : (
-          <MenuItem disabled sx={styles.menuItem}>
-            Тут ничего не нашли
-          </MenuItem>
-        )}
-        <Divider />
-        <MenuItem disabled sx={styles.menuItemHeader}>
-          <ListItemIcon>
-            <ProductsIcon fontSize="small" />
-          </ListItemIcon>
-          Товары
-        </MenuItem>
-        {/*<Divider />*/}
-        {data?.items.length ? (
-          data.items.map((item) => (
-            <MenuItem
-              key={item.id}
-              sx={styles.menuItem}
-              onClick={itemClickHandler('items', item.id)}
-            >
-              {item.title}
-            </MenuItem>
-          ))
-        ) : (
-          <MenuItem disabled sx={styles.menuItem}>
-            Тут ничего не нашли
-          </MenuItem>
-        )}
-        <Divider />
-        <MenuItem disabled sx={styles.menuItemHeader}>
-          <ListItemIcon>
-            <CompaniesIcon fontSize="small" />
-          </ListItemIcon>
-          Компании
-        </MenuItem>
-        {/*<Divider />*/}
-        {data?.companies.length ? (
-          data.companies.map((company) => (
-            <MenuItem
-              key={company.id}
-              sx={styles.menuItem}
-              onClick={itemClickHandler('companies', company.id)}
-            >
-              {company.name}
-            </MenuItem>
-          ))
-        ) : (
-          <MenuItem disabled sx={styles.menuItem}>
-            Тут ничего не нашли
-          </MenuItem>
-        )}
+        <ItemsGroup
+          title={'Категории'}
+          icon={<CategoriesIcon fontSize="small" />}
+          items={data?.categories}
+          type={'categories'}
+        />
+        <ItemsGroup
+          title={'Товары'}
+          icon={<ProductsIcon fontSize="small" />}
+          items={data?.items}
+          type={'items'}
+        />
+        <ItemsGroup
+          title={'Компании'}
+          icon={<CompaniesIcon fontSize="small" />}
+          items={data?.companies}
+          type={'companies'}
+        />
       </Menu>
     </>
   );
