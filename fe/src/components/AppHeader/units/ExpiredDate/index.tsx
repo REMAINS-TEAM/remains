@@ -3,11 +3,11 @@ import { differenceInDays, differenceInHours } from 'date-fns';
 import CircularProgressWithLabel from 'components/CircularProgressWithLabel';
 import { Tooltip } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { getPaymentNotExpiredStatus } from 'store/selectors/user';
+import { getPaidStatus } from 'store/selectors/user';
 import { standardFormat } from 'utils';
 
 function ExpiredDate({ date }: { date: Date }) {
-  const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
+  const isPaid = useSelector(getPaidStatus);
 
   const daysLeft =
     new Date() > date ? 0 : differenceInDays(new Date(date), new Date());
@@ -20,7 +20,7 @@ function ExpiredDate({ date }: { date: Date }) {
   return (
     <Tooltip
       title={
-        !paymentNotExpired
+        !isPaid
           ? `Функционал ограничен! Дата окончания доступа: ${standardFormat(
               date,
             )}`

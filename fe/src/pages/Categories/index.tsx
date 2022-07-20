@@ -10,7 +10,7 @@ import EmptyState from 'components/EmptyState';
 import AddItemPopup from 'components/Popups/AddItemPopup';
 import NotFoundPage from 'pages/NotFoundPage';
 import { useSelector } from 'react-redux';
-import { getPaymentNotExpiredStatus } from 'store/selectors/user';
+import { getPaidStatus } from 'store/selectors/user';
 import BreadCrumbs from 'components/BreadCrumbs';
 import categoriesApi from 'store/api/categories';
 import Container from 'components/Container';
@@ -20,13 +20,9 @@ function CategoriesPage() {
   const notEmptyCategoryId = categoryId ? +categoryId : 0;
   const [addItemPopupOpen, setAddItemPopupOpen] = useState(false);
 
-  const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
+  const isPaid = useSelector(getPaidStatus);
 
-  const {
-    data: categories,
-    isFetching: isCategoriesFetching,
-    isSuccess: isCategoriesSuccess,
-  } = categoriesApi.useGetAllCategoriesQuery({
+  const { data: categories } = categoriesApi.useGetAllCategoriesQuery({
     parentId: notEmptyCategoryId,
   });
 
@@ -74,7 +70,7 @@ function CategoriesPage() {
             <>
               <Box sx={styles.headerContainer}>
                 <BreadCrumbs data={categories?.tree || []} />
-                {paymentNotExpired && (
+                {isPaid && (
                   <IconButton
                     sx={{ p: 0 }}
                     title="Добавить товар в эту категорию"
@@ -92,10 +88,10 @@ function CategoriesPage() {
                   <EmptyState
                     text={'Здесь пока нет товаров'}
                     description={`Выберите подкатегорию${
-                      paymentNotExpired ? ' или добавьте сюда что-нибудь' : ''
+                      isPaid ? ' или добавьте сюда что-нибудь' : ''
                     }`}
                   >
-                    {paymentNotExpired && (
+                    {isPaid && (
                       <Button variant={'contained'} onClick={addItemHandler}>
                         Добавить
                       </Button>
@@ -107,7 +103,7 @@ function CategoriesPage() {
           )}
         </Box>
       </WithMenuLayout>
-      {/*{paymentNotExpired && (*/}
+      {/*{isPaid && (*/}
       {/*  <ActionsButtons*/}
       {/*    handlers={{*/}
       {/*      addItemHandler,*/}

@@ -4,11 +4,11 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import {
   InfoOutlined as InfoIcon,
+  Menu as MenuIcon,
   PersonRounded as UserIcon,
 } from '@mui/icons-material';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Menu as MenuIcon } from '@mui/icons-material';
 import {
   Box,
   IconButton,
@@ -25,12 +25,7 @@ import AuthPopup from 'components/Popups/AuthPopup';
 import { useDispatch, useSelector } from 'react-redux';
 import userApi from 'store/api/user';
 import ProfileMenu from 'components/AppHeader/units/ProfileMenu';
-import CircularProgressWithLabel from 'components/CircularProgressWithLabel';
-import { differenceInDays, differenceInHours, format } from 'date-fns';
-import {
-  getCurrentUser,
-  getPaymentNotExpiredStatus,
-} from 'store/selectors/user';
+import { getCurrentUser } from 'store/selectors/user';
 import { Link } from 'react-router-dom';
 import { setOpen } from 'store/slices/menu';
 import { getMenuState } from 'store/selectors/menu';

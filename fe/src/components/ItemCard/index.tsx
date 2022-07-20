@@ -14,10 +14,7 @@ import { useSelector } from 'react-redux';
 import PopupMenu from 'components/PopupMenu';
 import MenuItem from 'components/PopupMenu/units/MenuItem';
 import { BACKEND_URL } from 'global/constants';
-import {
-  getCurrentUser,
-  getPaymentNotExpiredStatus,
-} from 'store/selectors/user';
+import { getCurrentUser, getPaidStatus } from 'store/selectors/user';
 import { generatePath, useNavigate } from 'react-router-dom';
 import routes from 'routes';
 
@@ -31,7 +28,7 @@ function ItemCard({
   const theme = useTheme();
   const navigate = useNavigate();
   const user = useSelector(getCurrentUser);
-  const paymentNotExpired = useSelector(getPaymentNotExpiredStatus);
+  const isPaid = useSelector(getPaidStatus);
 
   const [dotsButtonRef, setDotsButtonRef] = useState<HTMLElement | null>(null);
 
@@ -75,7 +72,7 @@ function ItemCard({
 
       <Box sx={styles.rightSide}>
         <Box sx={styles.rightTop}>
-          {item.userId === user?.id && paymentNotExpired && (
+          {item.userId === user?.id && isPaid && (
             <Tooltip title={'Этот товар добавили Вы. Нажмите, чтобы ред.'}>
               <IconButton
                 color="secondary"
