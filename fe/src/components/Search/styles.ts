@@ -12,7 +12,7 @@ export const inputPaper: SxProps = {
 
 export const menuPaper: SxProps = {
   minWidth: 315,
-  minHeight: 270,
+  minHeight: 255,
   maxHeight: 400,
   overflowX: 'hidden',
   overflowY: 'auto',
@@ -23,9 +23,9 @@ export const menuPaper: SxProps = {
 };
 
 export const menuItemHeader = {
-  fontSize: 16,
+  fontSize: 14,
   opacity: '1 !important',
-  fontWeight: 'bold',
+  fontWeight: 600,
   color: (theme: Theme) => theme.palette.grey[700],
   '& svg': {
     fontSize: 20,
@@ -35,5 +35,6 @@ export const menuItemHeader = {
 
 export const menuItem = {
   pl: '52px',
+  fontSize: 14,
   color: (theme: Theme) => theme.palette.grey[700],
 };

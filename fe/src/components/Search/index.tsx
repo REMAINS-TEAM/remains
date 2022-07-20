@@ -11,24 +11,28 @@ import {
 } from '@mui/material';
 import {
   AccountTreeOutlined as CategoriesIcon,
-  Close as CloseIcon,
-  Search as SearchIcon,
-  Inventory2Outlined as ProductsIcon,
   BusinessOutlined as CompaniesIcon,
+  Close as CloseIcon,
+  Inventory2Outlined as ProductsIcon,
+  Search as SearchIcon,
 } from '@mui/icons-material';
 import * as styles from './styles';
 import searchApi from 'store/api/search';
 import useDebounce from 'hooks/useDebounce';
-import { generatePath, useNavigate } from 'react-router-dom';
-import routes from 'routes';
+import { useNavigate } from 'react-router-dom';
+
+const MIN_SEARCH_LENGTH = 3;
 
 function Search() {
   const navigate = useNavigate();
   const [value, setValue] = useState('');
-  const debouncedValue = useDebounce(value);
-  const { data, isFetching } = searchApi.useSearchQuery(debouncedValue, {
-    skip: !debouncedValue.length,
-  });
+  const debouncedValue = useDebounce(value, MIN_SEARCH_LENGTH);
+  const { data, isFetching, isSuccess } = searchApi.useSearchQuery(
+    debouncedValue,
+    {
+      skip: !debouncedValue.length,
+    },
+  );
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -40,7 +44,7 @@ function Search() {
   };
 
   const showDropdown = () => {
-    if (inputRef?.current && value.length) {
+    if (inputRef?.current && value.length >= MIN_SEARCH_LENGTH) {
       setAnchorEl((prev) => (!prev ? inputRef?.current : prev));
       inputRef.current.focus();
     }
@@ -51,11 +55,11 @@ function Search() {
   };
 
   useEffect(() => {
-    if (value.length) {
-      showDropdown();
-    } else {
-      hideDropdown();
-    }
+    if (isSuccess && !isFetching) showDropdown();
+  }, [isSuccess, debouncedValue, isFetching]);
+
+  useEffect(() => {
+    if (value.length < MIN_SEARCH_LENGTH) hideDropdown();
   }, [value]);
 
   const itemClickHandler =
@@ -64,7 +68,7 @@ function Search() {
 
   return (
     <>
-      <Paper component="form" sx={styles.inputPaper}>
+      <Paper component="div" sx={styles.inputPaper}>
         <InputBase
           ref={inputRef}
           sx={{ ml: 1, flex: 1 }}
@@ -75,7 +79,8 @@ function Search() {
           onClick={showDropdown}
         />
         <IconButton sx={{ p: '10px' }} aria-label="search" onClick={clearInput}>
-          {!value.length ? <SearchIcon /> : <CloseIcon />}
+          {isFetching && <CircularProgress size={18} />}
+          {!isFetching && (!value.length ? <SearchIcon /> : <CloseIcon />)}
         </IconButton>
       </Paper>
 
@@ -94,6 +99,7 @@ function Search() {
         transformOrigin={{ horizontal: 'left', vertical: 'top' }}
         sx={{ '& *': { fontSize: 14 } }}
       >
+        {/*TODO: выделить в отдельный компонент*/}
         <MenuItem disabled sx={styles.menuItemHeader}>
           <ListItemIcon>
             <CategoriesIcon fontSize="small" />
@@ -114,11 +120,7 @@ function Search() {
           ))
         ) : (
           <MenuItem disabled sx={styles.menuItem}>
-            {isFetching ? (
-              <CircularProgress size={28} />
-            ) : (
-              'Тут ничего не нашли'
-            )}
+            Тут ничего не нашли
           </MenuItem>
         )}
         <Divider />
@@ -141,11 +143,7 @@ function Search() {
           ))
         ) : (
           <MenuItem disabled sx={styles.menuItem}>
-            {isFetching ? (
-              <CircularProgress size={28} />
-            ) : (
-              'Тут ничего не нашли'
-            )}
+            Тут ничего не нашли
           </MenuItem>
         )}
         <Divider />
@@ -168,11 +166,7 @@ function Search() {
           ))
         ) : (
           <MenuItem disabled sx={styles.menuItem}>
-            {isFetching ? (
-              <CircularProgress size={28} />
-            ) : (
-              'Тут ничего не нашли'
-            )}
+            Тут ничего не нашли
           </MenuItem>
         )}
       </Menu>
