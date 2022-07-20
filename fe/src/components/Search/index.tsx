@@ -112,7 +112,7 @@ function Search() {
         disableAutoFocusItem
         disableEnforceFocus
         anchorEl={anchorEl}
-        id="account-menu"
+        id="search-menu"
         open={open}
         onClose={hideDropdown}
         onClick={hideDropdown}
