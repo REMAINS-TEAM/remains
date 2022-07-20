@@ -6,6 +6,7 @@ export const apiTypes = {
   ITEMS: 'items',
   CATEGORIES: 'categories',
   USERS: 'users',
+  SEARCH: 'search',
 };
 
 export default createApi({
