@@ -9,4 +9,8 @@ export interface ItemsGroupProps {
   type: ItemType;
 }
 
-export type ItemType = 'categories' | 'items' | 'companies';
+export enum ItemType {
+  CATEGORIES = 'categories',
+  ITEMS = 'items',
+  COMPANIES = 'companies',
+}

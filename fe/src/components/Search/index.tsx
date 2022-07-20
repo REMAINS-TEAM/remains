@@ -64,19 +64,19 @@ function Search() {
           title: 'Категории',
           icon: <CategoriesIcon fontSize="small" />,
           items: data?.categories,
-          type: 'categories',
+          type: ItemType.CATEGORIES,
         },
         {
           title: 'Продукты',
           icon: <ProductsIcon fontSize="small" />,
           items: data?.items,
-          type: 'items',
+          type: ItemType.ITEMS,
         },
         {
           title: 'Компании',
           icon: <CompaniesIcon fontSize="small" />,
           items: data?.companies,
-          type: 'companies',
+          type: ItemType.COMPANIES,
         },
       ].filter((g) => g.items?.length),
     [data],
@@ -126,7 +126,7 @@ function Search() {
                 title={group.title}
                 icon={group.icon}
                 items={group.items}
-                type={group.type as ItemType}
+                type={group.type}
               />
               {i !== itemGroups.length - 1 && <Divider />}
             </React.Fragment>
