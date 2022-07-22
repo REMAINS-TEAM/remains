@@ -1,34 +1,15 @@
 import React from 'react';
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-} from '@mui/material';
+import { Box } from '@mui/material';
 import { Item } from 'store/slices/items';
-import { fields } from './config';
+import { itemFields, userFields } from 'pages/Items/units/DetailsTable/config';
+import InfoGroup from './InfoGroup';
 
 function DetailsTable({ item }: { item: Item }) {
   return (
-    <TableContainer>
-      <Table aria-label="simple table">
-        <TableBody>
-          {fields.map(({ name, accessor }) => (
-            <TableRow
-              key={name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row" sx={{ fontWeight: 600 }}>
-                {name}
-              </TableCell>
-              <TableCell align="right">{item[accessor]}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Box>
+      <InfoGroup title="Товар" fields={itemFields} item={item} />
+      <InfoGroup title="Владелец" fields={userFields} item={item} />
+    </Box>
   );
 }
 

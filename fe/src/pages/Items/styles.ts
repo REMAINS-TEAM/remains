@@ -9,9 +9,9 @@ export const page: SxProps = {
 
 export const container: SxProps = {
   width: '100%',
-  height: `calc(100vh - ${APP_HEADER_HEIGHT}px)`,
+  // minHeight: `calc(100vh - ${APP_HEADER_HEIGHT}px)`,
   display: 'flex',
-  columnGap: 2,
+  columnGap: 6,
   rowGap: 2,
   '@media screen and (max-width: 800px)': {
     flexWrap: 'wrap',
