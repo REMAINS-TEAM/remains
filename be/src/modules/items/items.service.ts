@@ -4,10 +4,9 @@ import {
   HttpException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Item, User } from '@prisma/client';
+import { Item } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
 import * as fs from 'fs';
 import path, { join } from 'path';
@@ -35,11 +34,19 @@ export class ItemsService {
     });
   }
 
-  async findOne(id: number): Promise<Item> {
+  async findOne(id: number) {
     let result;
     try {
       result = await this.prisma.item.findUnique({
         where: { id },
+        include: {
+          user: {
+            include: {
+              company: { select: { id: true, name: true, description: true } },
+            },
+          },
+          category: { select: { title: true, description: true } },
+        },
       });
     } catch (err) {
       throw new PrismaException(err as Error);
@@ -49,7 +56,22 @@ export class ItemsService {
       throw new NotFoundException(`Item with id ${id} does not exist`);
     }
 
-    return result;
+    const {
+      user: { company, ...user },
+      category,
+      ...item
+    } = result;
+
+    return {
+      ...item,
+      category,
+      user: {
+        name: user.name,
+        phone: user.phone,
+        email: user.email,
+        company,
+      },
+    };
   }
 
   async create(
