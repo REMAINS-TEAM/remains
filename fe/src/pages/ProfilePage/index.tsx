@@ -18,13 +18,9 @@ import IconButton from '@mui/material/IconButton';
 import EditProfilePopup from 'components/Popups/EditProfilePopup';
 import itemsApi from 'store/api/items';
 import ItemCards from 'pages/Categories/units/ItemCards';
-import BackButton from 'components/BackButton';
-import { useNavigate } from 'react-router-dom';
 import Header from 'components/Header';
 
 function ProfilePage() {
-  const navigate = useNavigate();
-
   const user = useSelector(getCurrentUser);
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
 
@@ -42,7 +38,6 @@ function ProfilePage() {
   );
 
   const openEditProfileModal = () => setEditProfileModalOpen(true);
-  const backClickHandler = () => navigate(-1);
 
   const rows = user
     ? [
@@ -109,6 +104,7 @@ function ProfilePage() {
           </Typography>
         )}
       </Box>
+
       <EditProfilePopup
         open={editProfileModalOpen}
         setOpen={setEditProfileModalOpen}
