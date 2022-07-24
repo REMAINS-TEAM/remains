@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import itemsApi from 'store/api/items';
 import { User } from 'store/slices/user';
+import { Category } from 'store/slices/categories';
 
 export interface Item {
   id: number;
@@ -15,6 +16,7 @@ export interface Item {
   createdAt: Date;
   updatedAt: Date;
   user: Partial<User>;
+  category: Partial<Category>;
 }
 
 const initialState: {
