@@ -10,12 +10,14 @@ import { join } from 'path';
 import { ScheduleModule } from '@nestjs/schedule';
 import { SchedulerModule } from 'modules/scheduler/scheduler.module';
 import { SearchModule } from 'modules/search/search.module';
+import { CompaniesModule } from 'modules/companies/companies.module';
 
 @Module({
   imports: [
     PrismaModule,
     SearchModule,
     UsersModule,
+    CompaniesModule,
     CategoriesModule,
     ItemsModule,
     ScheduleModule.forRoot(),
