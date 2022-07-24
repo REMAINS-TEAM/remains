@@ -1,12 +1,15 @@
 import React from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { IconButton } from '@mui/material';
-import * as styles from './styles';
+import { useNavigate } from 'react-router-dom';
 
-function BackButton({ onClick }: { onClick: () => void }) {
+function BackButton({ onClick }: { onClick?: () => void }) {
+  const navigate = useNavigate();
+  const backClickHandler = () => navigate(-1);
+
   return (
-    <IconButton sx={styles.button} onClick={onClick}>
-      <ArrowBackIcon />
+    <IconButton onClick={onClick || backClickHandler}>
+      <ArrowBackIcon fontSize="medium" />
     </IconButton>
   );
 }

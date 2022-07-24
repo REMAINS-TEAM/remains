@@ -1,57 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as styles from './styles';
 import Container from 'components/Container';
 import { Item } from 'store/slices/items';
 import ItemImage from 'components/ItemCard/units/ItemImage';
-import { Box, Button, Tooltip, Typography, useTheme } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import {
-  Delete as DeleteIcon,
-  Edit as EditIcon,
-  MoreHoriz as DotsIcon,
-} from '@mui/icons-material';
+import { Box, Button, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
-import PopupMenu from 'components/PopupMenu';
-import MenuItem from 'components/PopupMenu/units/MenuItem';
 import { BACKEND_URL } from 'global/constants';
 import { getCurrentUser, getPaidStatus } from 'store/selectors/user';
 import { generatePath, useNavigate } from 'react-router-dom';
 import routes from 'routes';
+import ItemEditPopupMenu from 'components/PopupMenus/ItemEditPopupMenu';
+import { standardFormat } from 'utils';
 
-function ItemCard({
-  item,
-  onDeleteClick,
-}: {
-  item: Item;
-  onDeleteClick: (id: number) => void;
-}) {
-  const theme = useTheme();
+function ItemCard({ item }: { item: Item }) {
   const navigate = useNavigate();
   const user = useSelector(getCurrentUser);
   const isPaid = useSelector(getPaidStatus);
 
-  const [dotsButtonRef, setDotsButtonRef] = useState<HTMLElement | null>(null);
-
-  const dotsClickHandler = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
-    setDotsButtonRef(event.currentTarget);
-  };
-
   const itemDetailsClickHandler = () => {
     navigate(generatePath(routes.item, { itemId: String(item.id) }));
-  };
-
-  const itemEditClickHandler = (itemId: number) => {
-    return (event: React.MouseEvent<HTMLElement>) => {
-      event.stopPropagation();
-      // TODO
-    };
-  };
-  const itemDeleteClickHandler = (itemId: number) => {
-    return (event: React.MouseEvent<HTMLElement>) => {
-      event.stopPropagation();
-      onDeleteClick(itemId);
-    };
   };
 
   return (
@@ -73,15 +40,7 @@ function ItemCard({
       <Box sx={styles.rightSide}>
         <Box sx={styles.rightTop}>
           {item.userId === user?.id && isPaid && (
-            <Tooltip title={'Этот товар добавили Вы. Нажмите, чтобы ред.'}>
-              <IconButton
-                color="secondary"
-                sx={styles.dotsButton}
-                onClick={dotsClickHandler}
-              >
-                <DotsIcon />
-              </IconButton>
-            </Tooltip>
+            <ItemEditPopupMenu item={item} sx={styles.dotsButton} />
           )}
 
           <Typography
@@ -101,28 +60,10 @@ function ItemCard({
         </Box>
         <Box sx={styles.rightBottom}>
           <Typography variant="caption" color="secondary">
-            {new Date(item.updatedAt).toLocaleString()}
+            {standardFormat(item.updatedAt, true)}
           </Typography>
         </Box>
       </Box>
-      <PopupMenu
-        id={`ItemMenu${item.id}`}
-        anchorEl={dotsButtonRef}
-        setAnchorEl={setDotsButtonRef}
-      >
-        <MenuItem
-          onClick={itemEditClickHandler(item.id)}
-          Icon={EditIcon}
-          label={'Редактировать'}
-        />
-        <MenuItem
-          onClick={itemDeleteClickHandler(item.id)}
-          Icon={DeleteIcon}
-          label={'Удалить'}
-          color={theme.palette.error.main}
-          confirm
-        />
-      </PopupMenu>
     </Container>
   );
 }

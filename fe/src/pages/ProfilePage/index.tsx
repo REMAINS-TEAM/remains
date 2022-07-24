@@ -20,6 +20,7 @@ import itemsApi from 'store/api/items';
 import ItemCards from 'pages/Categories/units/ItemCards';
 import BackButton from 'components/BackButton';
 import { useNavigate } from 'react-router-dom';
+import Header from 'components/Header';
 
 function ProfilePage() {
   const navigate = useNavigate();
@@ -61,15 +62,16 @@ function ProfilePage() {
   return (
     <AuthLayout>
       <Box sx={styles.contentContainer}>
-        <Box sx={styles.headerContainer}>
-          <BackButton onClick={backClickHandler} />
-          <Typography variant="h1" color="secondary">
-            Мой профиль
-          </Typography>
-          <IconButton color="secondary" onClick={openEditProfileModal}>
-            <EditIcon />
-          </IconButton>
-        </Box>
+        <Header
+          title="Мой профиль"
+          withBackButton
+          left={
+            <IconButton color="secondary" onClick={openEditProfileModal}>
+              <EditIcon />
+            </IconButton>
+          }
+        />
+
         <Paper sx={{ p: 2 }}>
           <Table sx={{ maxWidth: 500 }}>
             <TableBody>
@@ -93,9 +95,8 @@ function ProfilePage() {
           </Table>
         </Paper>
 
-        <Typography variant="h1" color="secondary" sx={{ mt: 6, mb: 3 }}>
-          Мои предложения
-        </Typography>
+        <br />
+        <Header title="Мои предложения" />
 
         <ItemCards items={myItems} isLoading={isFetching} />
         {isSuccess && !myItems?.length && (

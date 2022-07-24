@@ -63,6 +63,6 @@ export const rightBottom: SxProps = {
 export const dotsButton: SxProps = {
   position: 'absolute',
   right: '4px',
-  top: '-2px',
+  top: '-10px',
   p: 1,
 };
