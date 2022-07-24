@@ -1,6 +1,13 @@
 import React from 'react';
 import Popup from 'components/Popups/index';
-import { Box, InputAdornment, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  InputAdornment,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import useLimitTextField from 'hooks/useLimitTextField';
@@ -49,7 +56,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
     },
   });
 
-  // console.log('errors', errors);
+  console.log('errors', errors);
 
   const companyNameLength = useLimitTextField({
     value: watch(fields.company.NAME),
@@ -179,37 +186,58 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
             <Typography variant="subtitle1" color="secondary" sx={{ pb: 1.5 }}>
               Данные о моей компании:
             </Typography>
-            <Controller
-              name={fields.company.NAME}
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  margin="dense"
-                  id={fields.company.NAME}
-                  label="Название компании или ИП"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  error={!!errors[fields.company.NAME]}
-                  helperText={errors[fields.company.NAME]?.message}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment
-                        position="end"
-                        sx={
-                          MAX_LENGTH_NAME - companyNameLength <= 0
-                            ? { color: 'red' }
-                            : null
-                        }
-                      >
-                        {MAX_LENGTH_NAME - companyNameLength}
-                      </InputAdornment>
-                    ),
-                  }}
-                  {...field}
-                />
-              )}
-            />
+            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 1 }}>
+              <Controller
+                name={fields.company.TYPE}
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    margin="dense"
+                    id={fields.company.TYPE}
+                    variant="outlined"
+                    sx={{ height: '56px', mt: 0.5 }}
+                    defaultValue="IP"
+                    {...field}
+                  >
+                    <MenuItem value={'IP'}>ИП</MenuItem>
+                    <MenuItem value={'OOO'}>ООО</MenuItem>
+                    <MenuItem value={'ZAO'}>ЗАО</MenuItem>
+                    <MenuItem value={'OAO'}>ОАО</MenuItem>
+                  </Select>
+                )}
+              />
+              <Controller
+                name={fields.company.NAME}
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    margin="dense"
+                    id={fields.company.NAME}
+                    label="Название компании или ИП"
+                    type="text"
+                    fullWidth
+                    variant="outlined"
+                    error={!!errors[fields.company.NAME]}
+                    helperText={errors[fields.company.NAME]?.message}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment
+                          position="end"
+                          sx={
+                            MAX_LENGTH_NAME - companyNameLength <= 0
+                              ? { color: 'red' }
+                              : null
+                          }
+                        >
+                          {MAX_LENGTH_NAME - companyNameLength}
+                        </InputAdornment>
+                      ),
+                    }}
+                    {...field}
+                  />
+                )}
+              />
+            </Box>
             <Controller
               name={fields.company.DESCRIPTION}
               control={control}

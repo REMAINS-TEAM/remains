@@ -13,30 +13,13 @@ export const editProfileSchema = Joi.object({
       ['string.empty']: 'Заполните поле',
       ['any.required']: 'Заполните поле',
     }),
-  [fields.user.PHONE]: Joi.string()
-    .required()
-    .messages({
-      ['string.empty']: 'Заполните поле',
-      ['any.required']: 'Заполните поле',
-    }),
+  [fields.user.PHONE]: Joi.string().required(),
   [fields.user.EMAIL]: Joi.string()
     .email({ tlds: { allow: false } })
     .lowercase()
     .required()
     .messages({
       ['string.email']: 'Введите корректный e-mail',
-    }),
-  [fields.user.PASSWORD]: Joi.string()
-    .required()
-    .messages({
-      ['string.empty']: 'Заполните поле',
-      ['any.required']: 'Заполните поле',
-    }),
-  [fields.user.PASSWORD_CONFIRM]: Joi.string()
-    .required()
-    .messages({
-      ['string.empty']: 'Заполните поле',
-      ['any.required']: 'Заполните поле',
     }),
   [fields.company.NAME]: Joi.string()
     .required()
@@ -46,6 +29,7 @@ export const editProfileSchema = Joi.object({
       ['string.empty']: 'Заполните поле',
       ['any.required']: 'Заполните поле',
     }),
+  [fields.company.TYPE]: Joi.string().required(),
   [fields.company.DESCRIPTION]: Joi.string()
     .optional()
     .allow('')

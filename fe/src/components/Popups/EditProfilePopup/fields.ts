@@ -2,6 +2,7 @@ export const fields = {
   company: {
     NAME: 'companyName',
     DESCRIPTION: 'companyDescription',
+    TYPE: 'companyType',
   },
   user: {
     NAME: 'userName',
