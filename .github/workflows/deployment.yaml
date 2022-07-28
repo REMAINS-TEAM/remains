@@ -48,7 +48,7 @@ jobs:
       - name: Deploy to kubernetes
         run: |-
           kubectl config set-cluster cluster --server="$CLUSTER_URL" --insecure-skip-tls-verify=true
-          kubectl config set-credentials service-account -token="$SERVICE_ACC_API_KEY"
+          kubectl config set-credentials service-account --token="$SERVICE_ACC_API_KEY"
           kubectl config set-context default --cluster=cluster --user=service-account
           kubectl config use-context default
           kubectl run --attach fe --image cr.yandex/${REGISTRY_ID}/fe/fe:latest
