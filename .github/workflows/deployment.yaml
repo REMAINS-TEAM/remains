@@ -9,7 +9,7 @@ env:
   OAUTH_DOCKER: AQAAAAAM5fwgAATuwc-Y_W32pU11sWdj3ACgcVM
   KUBE_URL: test
   KUBE_TOKEN: test
-  PROJECT_ID: crpf0ksoueue60lg97jm
+  REGISTRY_ID: crpf0ksoueue60lg97jm
   GKE_CLUSTER: cluster
   GKE_ZONE: europe-west3-a
   DEPLOYMENT_NAME: frontend
@@ -34,11 +34,11 @@ jobs:
 
       - name: Build docker image
         run: |-
-          docker build -t cr.yandex/$PROJECT_ID/fe/fe:latest -f dockerfile .
+          docker build -t cr.yandex/$REGISTRY_ID/fe/fe:latest -f dockerfile .
 
       - name: Push docker image
         run: |-
-          docker push cr.yandex/$PROJECT_ID/fe/fe:latest
+          docker push cr.yandex/$REGISTRY_ID/fe/fe:latest
 
 #      - name: Deploy to kubernetes
 #        run: |-
