@@ -34,7 +34,7 @@ jobs:
 
       - name: Build docker image
         run: |-
-          docker build -t cr.yandex/$REGISTRY_ID/fe/fe:latest -f dockerfile .
+          docker build -t cr.yandex/$REGISTRY_ID/fe/fe:latest -f dockerfile ./fe
 
       - name: Push docker image
         run: |-
