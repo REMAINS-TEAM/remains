@@ -1,0 +1,50 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  OAUTH_DOCKER: AQAAAAAM5fwgAATuwc-Y_W32pU11sWdj3ACgcVM
+  KUBE_URL: test
+  KUBE_TOKEN: test
+  PROJECT_ID: crpf0ksoueue60lg97jm
+  GKE_CLUSTER: cluster
+  GKE_ZONE: europe-west3-a
+  DEPLOYMENT_NAME: frontend
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+#      - id: 'auth'
+#        uses: 'google-github-actions/auth@v0'
+#        with:
+#          credentials_json: '${{ secrets.DEV_GCP_CREDENTIALS }}'
+
+      - name: Build docker image
+        run: |-
+          docker login -u oauth -p $OAUTH_DOCKER cr.yandex
+
+      - name: Build docker image
+        run: |-
+          docker build -t cr.yandex/$PROJECT_ID/fe/fe:latest -f dockerfile .
+
+      - name: Push docker image
+        run: |-
+          docker push cr.yandex/$PROJECT_ID/fe/fe:latest
+
+#      - name: Deploy to kubernetes
+#        run: |-
+#          kubectl config set-cluster cluster --server="$KUBE_URL" --insecure-skip-tls-verify=true
+#          kubectl config set-credentials service-account -token="$KUBE_TOKEN"
+#          kubectl config set-context default --cluster=cluster --user=service-account
+#          kubectl config use-context default
+#          kubectl -n ${DEPLOYMENT_NAME} rollout restart deployment ${DEPLOYMENT_NAME}
+
