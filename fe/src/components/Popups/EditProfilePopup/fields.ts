@@ -1,14 +1,12 @@
 export const fields = {
   company: {
-    NAME: 'companyName',
-    DESCRIPTION: 'companyDescription',
-    TYPE: 'companyType',
+    NAME: 'company.name',
+    DESCRIPTION: 'company.description',
+    TYPE: 'company.type',
   },
   user: {
-    NAME: 'userName',
-    PHONE: 'userPhone',
-    EMAIL: 'userEmail',
-    PASSWORD: 'userPassword',
-    PASSWORD_CONFIRM: 'userPasswordConfirm',
+    NAME: 'user.name',
+    PHONE: 'user.phone',
+    EMAIL: 'user.email',
   },
 };

@@ -130,7 +130,7 @@ function Search() {
             i !== itemGroups.length - 1 && <Divider />,
           ])
         ) : (
-          <Box sx={{ position: 'relative', height: 100 }}>
+          <Box sx={{ position: 'relative', height: 120 }}>
             <EmptyState
               text="Ничего не нашлось"
               description="Попробуйте изменить запрос"

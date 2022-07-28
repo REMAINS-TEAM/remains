@@ -30,7 +30,6 @@ import { getCurrentUser } from 'store/selectors/user';
 
 function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
   const user = useSelector(getCurrentUser);
-
   const notification = useNotification();
 
   // useResponseNotifications({
@@ -46,7 +45,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
     setValue,
     formState: { errors },
   } = useForm({
-    resolver: joiResolver(editProfileSchema),
+    // resolver: joiResolver(editProfileSchema), //TODO
     defaultValues: {
       [fields.company.NAME]: user?.company?.name || '',
       [fields.company.DESCRIPTION]: user?.company?.description || '',

@@ -3,8 +3,6 @@ import { Item } from 'store/slices/items';
 import ItemCard from 'components/ItemCard';
 import { Box } from '@mui/material';
 import * as styles from './styles';
-import itemsApi from 'store/api/items';
-import useResponseNotifications from 'hooks/useResponseNotifications';
 
 function ItemCards({
   items = [],
