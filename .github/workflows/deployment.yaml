@@ -7,8 +7,8 @@ on:
 
 env:
   OAUTH_DOCKER: AQAAAAAM5fwgAATuwc-Y_W32pU11sWdj3ACgcVM
-  KUBE_URL: test
-  KUBE_TOKEN: test
+  CLUSTER_URL: https://62.84.124.164
+  SERVICE_ACC_API_KEY: AQVN2ie2khFWrx0H1IIEPyCXMRHYHNr958DcgslR
   REGISTRY_ID: crpf0ksoueue60lg97jm
   DEPLOYMENT_NAME: frontend
 
@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build docker image
+      - name: Docker login
         run: |-
           docker login -u oauth -p $OAUTH_DOCKER cr.yandex
 
@@ -33,14 +33,10 @@ jobs:
         run: |-
           docker push cr.yandex/$REGISTRY_ID/fe/fe:latest
 
-      - name: Check cluster
-        run: |-
-          kubectl cluster-info
-
-      - name: Run in kubernetes cluster
-        run: |-
-          kubectl run --attach fe --image cr.yandex/${REGISTRY_ID}/fe/fe:latest
-
+#      - name: Run in kubernetes cluster
+#        run: |-
+#          kubectl run --attach fe --image cr.yandex/${REGISTRY_ID}/fe/fe:latest
+#
 #      - name: Pull docker in Kub
 #        run: |-
 #          docker pull cr.yandex/${REGISTRY_ID}/fe
@@ -48,12 +44,15 @@ jobs:
 #      - name: Run docker container in Kub
 #        run: |-
 #          docker run cr.yandex/$REGISTRY_ID/fe/fe:latest
-#
-#      - name: Deploy to kubernetes
-#        run: |-
-#          kubectl config set-cluster cluster --server="$KUBE_URL" --insecure-skip-tls-verify=true
-#          kubectl config set-credentials service-account -token="$KUBE_TOKEN"
-#          kubectl config set-context default --cluster=cluster --user=service-account
-#          kubectl config use-context default
-#          kubectl -n ${DEPLOYMENT_NAME} rollout restart deployment ${DEPLOYMENT_NAME}
 
+      - name: Deploy to kubernetes
+        run: |-
+          kubectl config set-cluster cluster --server="$CLUSTER_URL" --insecure-skip-tls-verify=true
+          kubectl config set-credentials service-account -token="$SERVICE_ACC_API_KEY"
+          kubectl config set-context default --cluster=cluster --user=service-account
+          kubectl config use-context default
+          kubectl run --attach fe --image cr.yandex/${REGISTRY_ID}/fe/fe:latest
+
+
+
+#     !!!!! УДАЛЯТЬ СТАРЫЕ ОБРАЗЫ, ИНАЧЕ ОНИ ПЛОДЯТСЯ
