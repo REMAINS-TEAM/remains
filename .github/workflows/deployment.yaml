@@ -10,8 +10,6 @@ env:
   KUBE_URL: test
   KUBE_TOKEN: test
   REGISTRY_ID: crpf0ksoueue60lg97jm
-  GKE_CLUSTER: cluster
-  GKE_ZONE: europe-west3-a
   DEPLOYMENT_NAME: frontend
 
 jobs:
@@ -22,11 +20,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-#      - id: 'auth'
-#        uses: 'google-github-actions/auth@v0'
-#        with:
-#          credentials_json: '${{ secrets.DEV_GCP_CREDENTIALS }}'
 
       - name: Build docker image
         run: |-
@@ -40,6 +33,22 @@ jobs:
         run: |-
           docker push cr.yandex/$REGISTRY_ID/fe/fe:latest
 
+      - name: Check cluster
+        run: |-
+          kubectl cluster-info
+
+      - name: Run in kubernetes cluster
+        run: |-
+          kubectl run --attach fe --image cr.yandex/${REGISTRY_ID}/fe/fe:latest
+
+#      - name: Pull docker in Kub
+#        run: |-
+#          docker pull cr.yandex/${REGISTRY_ID}/fe
+#
+#      - name: Run docker container in Kub
+#        run: |-
+#          docker run cr.yandex/$REGISTRY_ID/fe/fe:latest
+#
 #      - name: Deploy to kubernetes
 #        run: |-
 #          kubectl config set-cluster cluster --server="$KUBE_URL" --insecure-skip-tls-verify=true
