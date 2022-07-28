@@ -1,6 +1,6 @@
 FROM node:16.13.0-alpine
 WORKDIR /fe
-COPY ["fe/package.json", "fe/package-lock.json*", "./"]
+COPY ["package.json", "package-lock.json*", "./"]
 RUN npm install
 COPY . .
 EXPOSE 80
