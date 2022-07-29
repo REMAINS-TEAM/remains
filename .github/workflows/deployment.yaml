@@ -40,13 +40,13 @@ jobs:
 #        run: |-
 #          docker pull cr.yandex/${REGISTRY_ID}/fe
 #
-      - name: Run docker container in Kub
-        run: |-
-          docker run cr.yandex/$REGISTRY_ID/fe/fe:latest
+#      - name: Run docker container in Kub
+#        run: |-
+#          docker run cr.yandex/$REGISTRY_ID/fe/fe:latest
 
       - name: Deploy to kubernetes
         run: |-
-          kubectl config set-cluster cluster --server=$CLUSTER_URL --kubeconfig=test.kubeconfig
+          kubectl config set-cluster cluster --certificate-authority=ca.pem --server=$CLUSTER_URL --kubeconfig=test.kubeconfig
           kubectl config set-credentials admin-user --token=$SA_TOKEN --kubeconfig=test.kubeconfig
           kubectl config set-context default --cluster=cluster --user=admin-user --kubeconfig=test.kubeconfig
           kubectl config use-context default --kubeconfig=test.kubeconfig
