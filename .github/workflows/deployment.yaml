@@ -46,7 +46,7 @@ jobs:
 
       - name: Deploy to kubernetes
         run: |-
-          kubectl config set-cluster cluster --server=$CLUSTER_URL --kubeconfig=test.kubeconfig
+          kubectl config set-cluster cluster --server=$CLUSTER_URL --kubeconfig=test.kubeconfig --insecure-skip-tls-verify=true
           kubectl config set-credentials admin-user --token=$SA_TOKEN --kubeconfig=test.kubeconfig
           kubectl config set-context default --cluster=cluster --user=admin-user --kubeconfig=test.kubeconfig
           kubectl config use-context default --kubeconfig=test.kubeconfig
