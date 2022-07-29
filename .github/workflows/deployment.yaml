@@ -43,3 +43,6 @@ jobs:
 
 
 #     !!!!! УДАЛЯТЬ СТАРЫЕ ОБРАЗЫ, ИНАЧЕ ОНИ ПЛОДЯТСЯ
+
+#     КТО ЗАПУСКАЕТ ПРИЛОЖЕНИЕ В ДОКЕРЕ
+#     стартует сам, но там Error: ENOSPC: System limit for number of file watchers reached, watch '/fe/public'
