@@ -33,18 +33,6 @@ jobs:
         run: |-
           docker push cr.yandex/$REGISTRY_ID/fe/fe:latest
 
-#      - name: Run in kubernetes cluster
-#        run: |-
-#           kubectl run --attach fe --image cr.yandex/${REGISTRY_ID}/fe/fe:latest --kubeconfig=test.kubeconfig
-#
-#      - name: Pull docker in Kub
-#        run: |-
-#          docker pull cr.yandex/${REGISTRY_ID}/fe
-#
-#      - name: Run docker container in Kub
-#        run: |-
-#          docker run cr.yandex/$REGISTRY_ID/fe/fe:latest
-
       - name: Deploy to kubernetes
         run: |-
           kubectl config set-cluster cluster --server=$CLUSTER_URL --kubeconfig=test.kubeconfig --insecure-skip-tls-verify=true
