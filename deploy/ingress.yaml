@@ -5,7 +5,7 @@ metadata:
   annotations:
     ingress.alb.yc.io/subnets: e9bj2v2uie3v390se7fr
     ingress.alb.yc.io/security-groups: enpf89rmguaskup1ipi9
-    ingress.alb.yc.io/external-ipv4-address: auto
+    ingress.alb.yc.io/external-ipv4-address: 51.250.9.40
     ingress.alb.yc.io/group-name: ingress-group
 spec:
   tls:
@@ -23,3 +23,8 @@ spec:
                 name: fe-service
                 port:
                   name: http
+
+
+  # 1. Запустить кластер
+  # 2. kubectl apply -f ingress.yaml
+  # 3. Закоммитить это все
