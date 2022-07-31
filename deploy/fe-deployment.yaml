@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fe-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fe-app
+  template:
+    metadata:
+      labels:
+        app: fe-app
+    spec:
+      containers:
+        - name: fe
+          image: cr.yandex/crpf0ksoueue60lg97jm/fe/fe:latest

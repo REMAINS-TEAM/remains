@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: alb-tls
+  annotations:
+    ingress.alb.yc.io/subnets: e9bj2v2uie3v390se7fr
+    ingress.alb.yc.io/security-groups: enpf89rmguaskup1ipi9
+    ingress.alb.yc.io/external-ipv4-address: auto
+    ingress.alb.yc.io/group-name: ingress-group
+spec:
+  tls:
+    - hosts:
+        - sell-r.ru
+      secretName: yc-certmgr-cert-id-fpqm0mo51bkif5ndq8l3
+  rules:
+    - host: sell-r.ru
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: fe-service
+                port:
+                  name: http
