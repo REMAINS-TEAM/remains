@@ -23,8 +23,3 @@ spec:
                 name: fe-service
                 port:
                   name: http
-
-
-  # 1. Запустить кластер
-  # 2. kubectl apply -f ingress.yaml
-  # 3. Закоммитить это все

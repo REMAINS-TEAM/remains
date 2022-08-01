@@ -86,7 +86,7 @@ function AppHeader() {
           )}
           <Typography variant="h6" component="h1" sx={{ flexGrow: 1, mr: 2 }}>
             <Link className="link" to={'/'}>
-              {!isMobile ? 'Business Remains' : 'BR'}
+              {!isMobile ? 'Sell Remains' : 'SELL-R'}
             </Link>
           </Typography>
           <Search />
