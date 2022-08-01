@@ -3,6 +3,5 @@ WORKDIR /fe
 COPY ["package.json", "package-lock.json*", "./"]
 RUN npm ci
 COPY . .
-EXPOSE 80
 RUN npm run build
-CMD ["npm", "start", "-p", "3000"]
+CMD ["npm", "start", "-p", "80"]
