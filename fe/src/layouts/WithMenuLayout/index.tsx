@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import * as styles from './styles';
-import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
 import Container from 'components/Container';
 import CategoriesTree from 'components/CategoriesTree';
 import { Category } from 'store/slices/categories';
@@ -33,13 +33,6 @@ const WithMenuLayout = ({ children }: { children: ReactNode }) => {
     <>
       {menu.open && (
         <Box sx={styles.menuWithHeaderContainer}>
-          <Box sx={styles.header}>
-            {!isMobile && (
-              <Typography variant="h3" color="secondary">
-                Категории
-              </Typography>
-            )}
-          </Box>
           <Container sx={styles.menuContainer}>
             <CategoriesTree onSelect={onSelectCategoryHandler} />
           </Container>
