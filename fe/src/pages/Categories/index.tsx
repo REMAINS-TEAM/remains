@@ -86,7 +86,7 @@ function CategoriesPage() {
               ) : (
                 <Container sx={{ width: '100%', height: '100%' }}>
                   <EmptyState
-                    text={'Здесь пока нет товаров.'}
+                    text={'Здесь пока нет товаров'}
                     description={`Выберите подкатегорию${
                       isPaid ? ' или добавьте сюда что-нибудь' : ''
                     }`}
