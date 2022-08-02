@@ -61,7 +61,7 @@ function CategoriesPage() {
               <Box sx={styles.headerContainer} />
               <Container sx={{ width: '100%', height: '100%' }}>
                 <EmptyState
-                  text={'Выберите категорию!'}
+                  text={'Выберите категорию...'}
                   description={'Посмотрите, что тут есть, переключая категории'}
                 />
               </Container>
