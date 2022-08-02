@@ -28,16 +28,34 @@ jobs:
 
       - name: Build docker image
         run: |-
-          docker build -t cr.yandex/$REGISTRY_ID/fe/fe:latest -f dockerfile ./fe
+          docker build  -f dockerfile ./fe -t cr.yandex/$REGISTRY_ID/fe:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/fe:latest
 
       - name: Push docker image
         run: |-
-          docker push cr.yandex/$REGISTRY_ID/fe/fe:latest
+          docker push cr.yandex/$REGISTRY_ID/fe
 
-      - name: Deploy to kubernetes
-        run: |-
-          kubectl config set-cluster cluster-1 --server=$CLUSTER_URL --kubeconfig=test.kubeconfig --insecure-skip-tls-verify=true
-          kubectl config set-credentials admin-user --token=$SA_TOKEN --kubeconfig=test.kubeconfig
-          kubectl config set-context default --cluster=cluster-1 --user=admin-user --kubeconfig=test.kubeconfig
-          kubectl config use-context default --kubeconfig=test.kubeconfig
-          kubectl -n default rollout restart deployment ${DEPLOYMENT_NAME} --kubeconfig=test.kubeconfig
+      - name: Set the Kubernetes context
+        uses: azure/k8s-set-context@v2
+        with:
+          method: admin-user
+          k8s-url: $CLUSTER_URL
+          k8s-secret: $SA_TOKEN
+
+      - name: Deploy to the Kubernetes cluster
+        uses: azure/k8s-deploy@v1
+        with:
+          namespace: default
+          manifests:  |
+            deploy/fe-deployment.yaml
+            deploy/ingress.yaml
+            deploy/fe-service.yaml
+          images: |
+            cr.yandex/$REGISTRY_ID/fe:${{ github.sha }}
+
+#      - name: Deploy to kubernetes
+#        run: |-
+#          kubectl config set-cluster cluster-1 --server=$CLUSTER_URL --kubeconfig=test.kubeconfig --insecure-skip-tls-verify=true
+#          kubectl config set-credentials admin-user --token=$SA_TOKEN --kubeconfig=test.kubeconfig
+#          kubectl config set-context default --cluster=cluster-1 --user=admin-user --kubeconfig=test.kubeconfig
+#          kubectl config use-context default --kubeconfig=test.kubeconfig
+#          kubectl -n default rollout restart deployment ${DEPLOYMENT_NAME} --kubeconfig=test.kubeconfig
