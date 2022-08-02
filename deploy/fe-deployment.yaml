@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: fe-container
-          image: cr.yandex/crpf0ksoueue60lg97jm/fe:latest
+          image: cr.yandex/crpf0ksoueue60lg97jm/fe
           readinessProbe:
             tcpSocket:
               port: 3000
