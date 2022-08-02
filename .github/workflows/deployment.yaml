@@ -44,7 +44,7 @@ jobs:
           k8s-secret: $SA_TOKEN
 
       - name: Deploy to the Kubernetes cluster
-        uses: azure/k8s-deploy@v2
+        uses: azure/k8s-deploy@v1
         with:
           namespace: default
           manifests:  |
