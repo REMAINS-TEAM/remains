@@ -38,15 +38,15 @@ jobs:
       - name: Set the Kubernetes context
         uses: azure/k8s-set-context@v2
         with:
+          kubeconfig: test.kubeconfig
           method: admin-user
           k8s-url: $CLUSTER_URL
           k8s-secret: $SA_TOKEN
 
       - name: Deploy to the Kubernetes cluster
-        uses: azure/k8s-deploy@v1
+        uses: azure/k8s-deploy@v2
         with:
           namespace: default
-          kubeconfig: test.kubeconfig
           manifests:  |
             deploy/fe-deployment.yaml
             deploy/ingress.yaml
