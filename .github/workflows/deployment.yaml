@@ -30,11 +30,6 @@ jobs:
         run: |-
           docker build  -f dockerfile ./fe -t cr.yandex/$REGISTRY_ID/fe:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/fe:latest
 
-      - name: print
-        run: |-
-          print test6546546s
-          print ${{ github.sha }}
-
       - name: Push docker image
         run: |-
           docker push cr.yandex/$REGISTRY_ID/fe:${{ github.sha }}
