@@ -46,4 +46,4 @@ jobs:
             deploy/ingress.yaml
             deploy/fe-service.yaml
           images: |
-            cr.yandex/$REGISTRY_ID/fe:${{ github.sha }}
+            cr.yandex/crpf0ksoueue60lg97jm/fe:${{ github.sha }}
