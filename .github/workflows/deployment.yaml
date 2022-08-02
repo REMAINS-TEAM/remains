@@ -38,7 +38,7 @@ jobs:
       - name: Set the Kubernetes context
         uses: azure/k8s-set-context@v2
         with:
-          kubeconfig: test.kubeconfig
+          kubeconfig: kubeconfig
           method: admin-user
           k8s-url: $CLUSTER_URL
           k8s-secret: $SA_TOKEN
