@@ -30,10 +30,16 @@ jobs:
         run: |-
           docker build  -f dockerfile ./fe -t cr.yandex/$REGISTRY_ID/fe:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/fe:latest
 
+      - name: print
+        run: |-
+          print test6546546s
+          print ${{ github.sha }}
+
       - name: Push docker image
         run: |-
-          docker push cr.yandex/$REGISTRY_ID/fe
+          docker push cr.yandex/$REGISTRY_ID/fe:${{ github.sha }}
 
+#      TODO: https://nicwortel.nl/blog/2022/05/27/continuous-deployment-to-kubernetes-with-github-actions
       - name: Set the Kubernetes context
         uses: azure/k8s-set-context@v2
         with:
@@ -45,6 +51,7 @@ jobs:
         uses: azure/k8s-deploy@v1
         with:
           namespace: default
+          kubeconfig: test.kubeconfig
           manifests:  |
             deploy/fe-deployment.yaml
             deploy/ingress.yaml
