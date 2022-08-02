@@ -6,12 +6,9 @@ on:
       - main
 
 env:
-  DEPLOYMENT_NAME: fe-app
   REGISTRY_ID: crpf0ksoueue60lg97jm
   OAUTH_DOCKER: AQAAAAAM5fwgAATuwc-Y_W32pU11sWdj3ACgcVM
-  CLUSTER_URL: https://51.250.95.10
-  # https://cloud.yandex.ru/docs/managed-kubernetes/operations/connect/create-static-conf
-  SA_TOKEN: eyJhbGciOiJSUzI1NiIsImtpZCI6IkhkQmxsbmlDTTFobm01NkU5TVJTUUJPQWs1UGFIMW9MUEFjdlRMa1V4MEEifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLWJsbW04Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiI1ZWIyYmJiOC01OGQ3LTRlNTktYThjZi03OTA1MmFmYWY3ZDEiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06YWRtaW4tdXNlciJ9.TpCReUPEccaYALKckHAcirYWDAcfcwD_gfTNQLNFo9yFr-ABmM9D8nhCOe0AMcHKw4AbrNJJAlMaHaZFSpPRQjkf-uIRGM6W6kgPgfGoBlLHfCUWinSKlLynnENIdvpdato76QE6RorkUnQXA37wDq6Q90tTL0ggpoKVLZTtxN1u_Qq-y-Hb0HZ1R1lUc2paGLyfOutXyCNr1hZQVV_NPwFxVRuRD9TETzaMYM0j8iZ4T7qvTFw0LnYIuPzUwj1XPF9oEnx6d_MupxcESiMCERf2NoQnh8r0ygv25ctrSdHGZBllLlzyovEjWkjdZ3cflh_R8E0BX-Mp_Y8rGpdQ4Q
+  # SA_TOKEN: get here https://cloud.yandex.ru/docs/managed-kubernetes/operations/connect/create-static-conf
 
 jobs:
   setup-build-publish-deploy:
@@ -34,14 +31,11 @@ jobs:
         run: |-
           docker push cr.yandex/$REGISTRY_ID/fe --all-tags
 
-#      TODO: https://nicwortel.nl/blog/2022/05/27/continuous-deployment-to-kubernetes-with-github-actions
+#     https://nicwortel.nl/blog/2022/05/27/continuous-deployment-to-kubernetes-with-github-actions
       - name: Set the Kubernetes context
         uses: azure/k8s-set-context@v2
         with:
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
-#          method: admin-user
-#          k8s-url: $CLUSTER_URL
-#          k8s-secret: $SA_TOKEN
 
       - name: Deploy to the Kubernetes cluster
         uses: azure/k8s-deploy@v1
@@ -53,11 +47,3 @@ jobs:
             deploy/fe-service.yaml
           images: |
             cr.yandex/$REGISTRY_ID/fe:${{ github.sha }}
-
-#      - name: Deploy to kubernetes
-#        run: |-
-#          kubectl config set-cluster cluster-1 --server=$CLUSTER_URL --kubeconfig=kubeconfig --insecure-skip-tls-verify=true
-#          kubectl config set-credentials admin-user --token=$SA_TOKEN --kubeconfig=kubeconfig
-#          kubectl config set-context default --cluster=cluster-1 --user=admin-user --kubeconfig=kubeconfig
-#          kubectl config use-context default --kubeconfig=kubeconfig
-#          kubectl -n default rollout restart deployment ${DEPLOYMENT_NAME} --kubeconfig=kubeconfig
