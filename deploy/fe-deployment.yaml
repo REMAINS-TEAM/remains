@@ -15,15 +15,9 @@ spec:
       containers:
         - name: fe-container
           image: cr.yandex/crpf0ksoueue60lg97jm/fe
-          readinessProbe:
-            tcpSocket:
-              port: 3000
-            initialDelaySeconds: 20
-            periodSeconds: 5
-            successThreshold: 1
-            timeoutSeconds: 3
           startupProbe:
-            tcpSocket:
+            httpGet:
               port: 3000
+              path: /
             failureThreshold: 30
             periodSeconds: 10
