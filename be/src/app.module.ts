@@ -11,18 +11,27 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { SchedulerModule } from 'modules/scheduler/scheduler.module';
 import { SearchModule } from 'modules/search/search.module';
 import { CompaniesModule } from 'modules/companies/companies.module';
+import { ConfigModule } from '@nestjs/config';
+import configuration from 'configuration';
 
 @Module({
   imports: [
-    // PrismaModule,
-    // SearchModule,
-    // UsersModule,
-    // CompaniesModule,
-    // CategoriesModule,
-    // ItemsModule,
-    // ScheduleModule.forRoot(),
-    // SchedulerModule,
-    // ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }),
+    ConfigModule.forRoot({
+      envFilePath: `${__dirname}/.env.${
+        process.env.NODE_ENV === 'prod' ? '.prod' : ''
+      }`,
+      isGlobal: true,
+      load: [configuration],
+    }),
+    PrismaModule,
+    SearchModule,
+    UsersModule,
+    CompaniesModule,
+    CategoriesModule,
+    ItemsModule,
+    ScheduleModule.forRoot(),
+    SchedulerModule,
+    ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }),
   ],
   controllers: [AppController],
   providers: [AppService],
