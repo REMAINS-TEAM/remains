@@ -18,6 +18,6 @@ spec:
           startupProbe:
             httpGet:
               port: 8080
-              path: /
+              path: /api
             failureThreshold: 30
             periodSeconds: 10
