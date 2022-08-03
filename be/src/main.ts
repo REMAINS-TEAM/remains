@@ -13,7 +13,7 @@ async function bootstrap() {
   app.use(helmet());
 
   // Prefix
-  // app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api');
 
   // Validation
   app.useGlobalPipes(
