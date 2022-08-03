@@ -25,8 +25,8 @@ jobs:
 
       - name: Build docker images
         run: |-
-          docker build  -f fe/dockerfile -t cr.yandex/$REGISTRY_ID/fe:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/fe:latest
-          docker build  -f be/dockerfile -t cr.yandex/$REGISTRY_ID/be:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/be:latest
+          docker build ./fe -f fe/dockerfile -t cr.yandex/$REGISTRY_ID/fe:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/fe:latest
+          docker build ./be -f be/dockerfile -t cr.yandex/$REGISTRY_ID/be:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/be:latest
 
       - name: Push docker images
         run: |-
