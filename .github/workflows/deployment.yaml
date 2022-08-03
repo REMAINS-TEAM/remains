@@ -11,8 +11,8 @@ env:
   # SA_TOKEN: get here https://cloud.yandex.ru/docs/managed-kubernetes/operations/connect/create-static-conf
 
 jobs:
-  setup-build-publish-deploy:
-    name: Setup, Build, Publish, and Deploy
+  be-deploy:
+    name: BE Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -25,12 +25,10 @@ jobs:
 
       - name: Build docker images
         run: |-
-          docker build ./fe -f fe/dockerfile -t cr.yandex/$REGISTRY_ID/fe:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/fe:latest
           docker build ./be -f be/dockerfile -t cr.yandex/$REGISTRY_ID/be:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/be:latest
 
       - name: Push docker images
         run: |-
-          docker push cr.yandex/$REGISTRY_ID/fe --all-tags
           docker push cr.yandex/$REGISTRY_ID/be --all-tags
 
 #     https://nicwortel.nl/blog/2022/05/27/continuous-deployment-to-kubernetes-with-github-actions
@@ -44,11 +42,43 @@ jobs:
         with:
           namespace: default
           manifests:  |
-            deploy/fe-deployment.yaml
             deploy/be-deployment.yaml
-            deploy/fe-service.yaml
             deploy/be-service.yaml
             deploy/ingress.yaml
           images: |
-            cr.yandex/crpf0ksoueue60lg97jm/fe:${{ github.sha }}
             cr.yandex/crpf0ksoueue60lg97jm/be:${{ github.sha }}
+  fe-deploy:
+    name: FE Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Docker login
+        run: |-
+          docker login -u oauth -p $OAUTH_DOCKER cr.yandex
+
+      - name: Build docker images
+        run: |-
+          docker build ./fe -f fe/dockerfile -t cr.yandex/$REGISTRY_ID/fe:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/fe:latest
+
+      - name: Push docker images
+        run: |-
+          docker push cr.yandex/$REGISTRY_ID/fe --all-tags
+
+      - name: Set the Kubernetes context
+        uses: azure/k8s-set-context@v2
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+
+      - name: Deploy to the Kubernetes cluster
+        uses: azure/k8s-deploy@v1
+        with:
+          namespace: default
+          manifests: |
+            deploy/fe-deployment.yaml
+            deploy/fe-service.yaml
+            deploy/ingress.yaml
+          images: |
+            cr.yandex/crpf0ksoueue60lg97jm/fe:${{ github.sha }}
