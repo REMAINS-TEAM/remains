@@ -17,9 +17,7 @@ import configuration from 'configuration';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `${__dirname}/.env.${
-        process.env.NODE_ENV === 'prod' ? '.prod' : ''
-      }`,
+      envFilePath: `${__dirname}/.env`,
       isGlobal: true,
       load: [configuration],
     }),
