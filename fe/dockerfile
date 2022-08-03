@@ -1,5 +1,4 @@
 FROM node:16.13.0-alpine
-WORKDIR /fe
 COPY ["package.json", "package-lock.json*", "./"]
 RUN npm ci
 COPY . .

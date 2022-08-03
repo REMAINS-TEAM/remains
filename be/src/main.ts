@@ -13,7 +13,7 @@ async function bootstrap() {
   app.use(helmet());
 
   // Prefix
-  app.setGlobalPrefix('api');
+  // app.setGlobalPrefix('api');
 
   // Validation
   app.useGlobalPipes(
@@ -37,7 +37,7 @@ async function bootstrap() {
 
   await app.listen(8080);
 
-  const prismaService: PrismaService = app.get(PrismaService);
-  prismaService.enableShutdownHooks(app);
+  // const prismaService: PrismaService = app.get(PrismaService);
+  // prismaService.enableShutdownHooks(app);
 }
 bootstrap();

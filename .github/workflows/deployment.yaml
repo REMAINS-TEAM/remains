@@ -23,13 +23,15 @@ jobs:
         run: |-
           docker login -u oauth -p $OAUTH_DOCKER cr.yandex
 
-      - name: Build docker image
+      - name: Build docker images
         run: |-
-          docker build  -f dockerfile ./fe -t cr.yandex/$REGISTRY_ID/fe:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/fe:latest
+          docker build  -f fe/dockerfile -t cr.yandex/$REGISTRY_ID/fe:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/fe:latest
+          docker build  -f be/dockerfile -t cr.yandex/$REGISTRY_ID/be:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/be:latest
 
-      - name: Push docker image
+      - name: Push docker images
         run: |-
           docker push cr.yandex/$REGISTRY_ID/fe --all-tags
+          docker push cr.yandex/$REGISTRY_ID/be --all-tags
 
 #     https://nicwortel.nl/blog/2022/05/27/continuous-deployment-to-kubernetes-with-github-actions
       - name: Set the Kubernetes context
@@ -43,7 +45,10 @@ jobs:
           namespace: default
           manifests:  |
             deploy/fe-deployment.yaml
-            deploy/ingress.yaml
+            deploy/be-deployment.yaml
             deploy/fe-service.yaml
+            deploy/be-service.yaml
+            deploy/ingress.yaml
           images: |
             cr.yandex/crpf0ksoueue60lg97jm/fe:${{ github.sha }}
+            cr.yandex/crpf0ksoueue60lg97jm/be:${{ github.sha }}

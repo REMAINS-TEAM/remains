@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: be-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: be-app
+  template:
+    metadata:
+      labels:
+        app: be-app
+    spec:
+      containers:
+        - name: be-container
+          image: cr.yandex/crpf0ksoueue60lg97jm/be
+          startupProbe:
+            httpGet:
+              port: 8080
+              path: /
+            failureThreshold: 30
+            periodSeconds: 10

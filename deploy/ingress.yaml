@@ -23,3 +23,10 @@ spec:
                 name: fe-service
                 port:
                   name: http
+          - pathType: Prefix
+              path: "/api"
+              backend:
+                service:
+                  name: be-service
+                  port:
+                    name: http
