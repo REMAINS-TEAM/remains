@@ -13,6 +13,7 @@ import { SearchModule } from 'modules/search/search.module';
 import { CompaniesModule } from 'modules/companies/companies.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from 'configuration';
+import { StorageModule } from 'modules/storage/storage.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import configuration from 'configuration';
     CompaniesModule,
     CategoriesModule,
     ItemsModule,
+    StorageModule,
     ScheduleModule.forRoot(),
     SchedulerModule,
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }),

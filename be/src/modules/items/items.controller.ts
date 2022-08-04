@@ -2,14 +2,13 @@ import {
   BadRequestException,
   Body,
   Controller,
-  DefaultValuePipe,
   Delete,
   Get,
   Headers,
   Param,
-  ParseIntPipe,
   Post,
   Query,
+  Response,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -48,6 +47,12 @@ export class ItemsController {
       offset,
       filter: { categoryId, userId },
     });
+  }
+
+  @Get('test')
+  async test(@Response() res: any) {
+    const imageBuffer = await this.itemsService.test();
+    res.set({ 'Content-Type': 'image/jpeg' }).end(imageBuffer);
   }
 
   @Get(':id')

@@ -12,6 +12,7 @@ import * as fs from 'fs';
 import path, { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { ITEM_FILES_PATH, MIME_IMAGES_TYPE_MAP } from 'constants/main';
+const YandexStorage = require('easy-yandex-s3');
 
 @Injectable()
 export class ItemsService {
@@ -62,6 +63,8 @@ export class ItemsService {
       ...item
     } = result;
 
+    // Здесь загружаем картинки из бакета и генерим ссылки
+
     return {
       ...item,
       category,
@@ -72,6 +75,23 @@ export class ItemsService {
         company,
       },
     };
+  }
+
+  // TODO: сделать нормальную загрузку
+  async test() {
+    const yandexStorage = new YandexStorage({
+      auth: {
+        accessKeyId: 'YCAJEHvYwbT6pY4pejq6jxPq-',
+        secretAccessKey: 'YCOEmJ-Gxznu4evxZFjlUkS--X5i0SpVyp4iKhKz',
+      },
+      Bucket: 'remains',
+      debug: true, //  удалить в релизе
+    });
+
+    const yandex = await yandexStorage.Download('/items/1/do_class.jpeg');
+    const file = yandex.data.Body;
+
+    return file;
   }
 
   async create(
