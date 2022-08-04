@@ -63,6 +63,7 @@ jobs:
           cache-dependency-path: fe/package-lock.json
 
       - name: Install
+        working-directory: fe
         run: npm ci
 
       - name: Docker login
