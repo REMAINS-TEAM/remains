@@ -17,7 +17,7 @@ spec:
           image: cr.yandex/crpf0ksoueue60lg97jm/fe
           startupProbe:
             httpGet:
-              port: 3000
+              port: 80
               path: /
             failureThreshold: 30
             periodSeconds: 10
