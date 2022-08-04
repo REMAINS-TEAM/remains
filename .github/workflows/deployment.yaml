@@ -23,11 +23,11 @@ jobs:
         run: |-
           docker login -u oauth -p $OAUTH_DOCKER cr.yandex
 
-      - name: Build docker images
+      - name: Build docker image
         run: |-
           docker build ./be -f be/dockerfile -t cr.yandex/$REGISTRY_ID/be:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/be:latest
 
-      - name: Push docker images
+      - name: Push docker image
         run: |-
           docker push cr.yandex/$REGISTRY_ID/be --all-tags
 
@@ -68,17 +68,17 @@ jobs:
 
       - name: Build app
         working-directory: fe
-        run: npm run build
+        run: CI=false npm run build
 
       - name: Docker login
         run: |-
           docker login -u oauth -p $OAUTH_DOCKER cr.yandex
 
-      - name: Build docker images
+      - name: Build docker image
         run: |-
           docker build ./fe -f fe/dockerfile -t cr.yandex/$REGISTRY_ID/fe:${{ github.sha }} -t cr.yandex/$REGISTRY_ID/fe:latest
 
-      - name: Push docker images
+      - name: Push docker image
         run: |-
           docker push cr.yandex/$REGISTRY_ID/fe --all-tags
 
