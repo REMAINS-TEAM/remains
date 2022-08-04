@@ -1,6 +1,3 @@
-FROM node:16.13.0-alpine
-COPY ["package.json", "package-lock.json*", "./"]
-RUN npm ci
-COPY . .
-RUN npm run build
-CMD ["npm", "start", "-p", "3000"]
+FROM nginx:stable-alpine
+
+COPY build/ /usr/share/nginx/html
