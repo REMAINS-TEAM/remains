@@ -25,6 +25,7 @@ import { FindAllItemsDto } from 'modules/items/dto/find-all-items.dto';
 import { OnlyForPaidGuard } from 'guards/onlyForPaid.guard';
 import { CurrentUserId } from 'decorators/current-user.decorator';
 import { GetIsPaidGuard } from 'guards/getIsPaid.guard';
+import { Pagination } from 'decorators/pagination.decorator';
 
 @Controller('items')
 export class ItemsController {
@@ -34,20 +35,11 @@ export class ItemsController {
   @UseGuards(GetIsPaidGuard)
   async findAll(
     @IsPaid() isPaid: boolean,
-    @Query() { limit = 10, offset = 0, categoryId, userId }: FindAllItemsDto,
+    @Query() { categoryId, userId }: FindAllItemsDto,
+    @Pagination() { limit, offset }: { limit: number; offset: number },
   ): Promise<Item[]> {
-    let availableLimit = limit;
-    if (!isPaid) {
-      if (offset > MAX_ITEMS_FOR_NOT_REGISTERED_USER) {
-        throw new BadRequestException('Access is not paid for');
-      }
-      if (limit > MAX_ITEMS_FOR_NOT_REGISTERED_USER) {
-        availableLimit = MAX_ITEMS_FOR_NOT_REGISTERED_USER;
-      }
-    }
-
     return this.itemsService.findAll({
-      limit: availableLimit,
+      limit,
       offset,
       filter: { categoryId, userId },
     });
