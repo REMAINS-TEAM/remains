@@ -14,9 +14,9 @@ export const AddItemSchema = Joi.object({
     .min(10)
     .max(MAX_LENGTH_DESCRIPTION)
     .message('Длина поля должна быть 10-200 символов'),
-  price: Joi.string()
+  price: Joi.number()
     .required()
-    .min(1)
-    .max(8)
-    .message('Длина поля должна быть 1-8 символов'),
+    .positive()
+    .less(1_000_000)
+    .message('Введите корректную цену'),
 });

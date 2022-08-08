@@ -78,25 +78,8 @@ export class ItemsService {
     };
   }
 
-  // TODO: сделать нормальную загрузку
-  async test() {
-    const yandexStorage = new YandexStorage({
-      auth: {
-        accessKeyId: 'YCAJEHvYwbT6pY4pejq6jxPq-',
-        secretAccessKey: 'YCOEmJ-Gxznu4evxZFjlUkS--X5i0SpVyp4iKhKz',
-      },
-      Bucket: 'remains',
-      debug: true, //  удалить в релизе
-    });
-
-    const yandex = await yandexStorage.Download('/items/1/do_class.jpeg');
-    const file = yandex.data.Body;
-
-    return file;
-  }
-
   async create(
-    token: string | undefined,
+    userId: number,
     data: {
       title: string;
       description: string;
@@ -140,7 +123,7 @@ export class ItemsService {
           price: +data.price,
           categoryId: +data.categoryId,
           images: [],
-          userId: 1,
+          userId,
         },
       });
     } catch (err) {

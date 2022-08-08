@@ -8,7 +8,6 @@ import {
   Param,
   Post,
   Query,
-  Response,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -24,6 +23,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateItemDto } from 'modules/items/dto/create-item.dto';
 import { FindAllItemsDto } from 'modules/items/dto/find-all-items.dto';
 import { OnlyForPaidGuard } from 'guards/onlyForPaid.guard';
+import { CurrentUserId } from 'decorators/current-user.decorator';
 
 @Controller('items')
 export class ItemsController {
@@ -51,13 +51,6 @@ export class ItemsController {
     });
   }
 
-  @Get('test')
-  @UseGuards(OnlyForPaidGuard)
-  async test(@Response() res: any) {
-    const imageBuffer = await this.itemsService.test();
-    res.set({ 'Content-Type': 'image/jpeg' }).end(imageBuffer);
-  }
-
   @Get(':id')
   async findOne(@Param() params: { id: string }) {
     return this.itemsService.findOne(+params.id);
@@ -66,18 +59,17 @@ export class ItemsController {
   @Post()
   @UseGuards(OnlyForPaidGuard)
   @UseInterceptors(
-    FilesInterceptor('images', 10, { limits: { fileSize: MAX_FILE_SIZE } }),
+    FilesInterceptor('images', 10, {
+      limits: { fileSize: MAX_FILE_SIZE },
+    }),
   )
   async create(
     @UploadedFiles() images: Express.Multer.File[],
-    @Body()
-    createItemDto: CreateItemDto,
+    @Body() createItemDto: CreateItemDto,
     @Headers() headers: { authorization: string | undefined },
+    @CurrentUserId() userId: number,
   ): Promise<Item> {
-    const authHeader = headers.authorization || '';
-    const token = authHeader.split(' ')[1];
-
-    return this.itemsService.create(token, createItemDto, images);
+    return this.itemsService.create(userId, createItemDto, images);
   }
 
   @Delete(':id')
