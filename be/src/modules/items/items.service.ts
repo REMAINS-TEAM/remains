@@ -64,8 +64,6 @@ export class ItemsService {
       ...item
     } = result;
 
-    // Здесь загружаем картинки из бакета и генерим ссылки
-
     return {
       ...item,
       category,
