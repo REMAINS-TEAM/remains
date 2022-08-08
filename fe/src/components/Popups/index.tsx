@@ -16,6 +16,7 @@ export default function Popup({
   onClose,
   closeWhenSubmit = true,
   hideActionButtons = false,
+  okButtonProps,
   children,
   ...rest
 }: PopupProps) {
@@ -39,7 +40,11 @@ export default function Popup({
       {!hideActionButtons && (
         <DialogActions sx={{ p: 3 }}>
           <Button onClick={handleCancelClick}>{cancelButtonText}</Button>
-          <Button variant={'contained'} onClick={handleOkClick}>
+          <Button
+            variant={'contained'}
+            onClick={handleOkClick}
+            {...okButtonProps}
+          >
             {okButtonText}
           </Button>
         </DialogActions>

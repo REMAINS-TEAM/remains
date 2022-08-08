@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { DialogProps } from '@mui/material';
+import { ButtonProps, DialogProps } from '@mui/material';
 
 export interface PopupProps extends DialogProps {
   open: boolean;
@@ -12,4 +12,5 @@ export interface PopupProps extends DialogProps {
   closeWhenSubmit?: boolean;
   hideActionButtons?: boolean;
   children: ReactNode;
+  okButtonProps?: ButtonProps;
 }

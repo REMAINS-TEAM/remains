@@ -15,6 +15,9 @@ import {
   MAX_LENGTH_DESCRIPTION,
   MAX_LENGTH_TITLE,
 } from './validation';
+import { useSelector } from 'react-redux';
+import { getPaidStatus } from 'store/selectors/user';
+import NotificationPlate from 'components/NotificationPlate';
 
 const fields = {
   TITLE: 'title',
@@ -25,6 +28,8 @@ const fields = {
 type FieldsType = typeof fields[keyof typeof fields];
 
 function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
+  const isPaid = useSelector(getPaidStatus);
+
   const [createItemRequest, result] = itemsApi.useCreateItemMutation();
 
   const [imageFiles, setImageFiles] = useState<File[]>([]);
@@ -119,10 +124,18 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
       title={`Разместить товар в категории "${category.title}"`}
       okButtonText={'Разместить'}
       onOkClick={handleSubmit(onSubmit)}
+      okButtonProps={{ disabled: !isPaid }}
       onClose={resetForm}
       closeWhenSubmit={false}
       {...{ open, setOpen }}
     >
+      {!isPaid && (
+        <NotificationPlate
+          title="Оплатите сервис для размещения товаров"
+          color="red"
+        />
+      )}
+      <br />
       <Controller
         name="title"
         control={control}

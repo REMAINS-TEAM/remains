@@ -70,15 +70,13 @@ function CategoriesPage() {
             <>
               <Box sx={styles.headerContainer}>
                 <BreadCrumbs data={categories?.tree || []} />
-                {isPaid && (
-                  <IconButton
-                    sx={{ p: 0 }}
-                    title="Добавить товар в эту категорию"
-                    onClick={addItemHandler}
-                  >
-                    <SpeedDialIcon />
-                  </IconButton>
-                )}
+                <IconButton
+                  sx={{ p: 0 }}
+                  title="Добавить товар в эту категорию"
+                  onClick={addItemHandler}
+                >
+                  <SpeedDialIcon />
+                </IconButton>
               </Box>
 
               {categoryItems?.length ? (
@@ -91,11 +89,9 @@ function CategoriesPage() {
                       isPaid ? ' или добавьте сюда что-нибудь' : ''
                     }`}
                   >
-                    {isPaid && (
-                      <Button variant={'contained'} onClick={addItemHandler}>
-                        Добавить
-                      </Button>
-                    )}
+                    <Button variant={'contained'} onClick={addItemHandler}>
+                      Добавить
+                    </Button>
                   </EmptyState>
                 </Container>
               )}
