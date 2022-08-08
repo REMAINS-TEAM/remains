@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { StorageProvider } from 'modules/storage/storage.types';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { StorageProvider } from './storage.types';
 
 @Injectable()
 export class StorageService {
@@ -8,10 +8,18 @@ export class StorageService {
   ) {}
 
   async download(path: string) {
-    return this.storageProvider.download(path);
+    try {
+      return this.storageProvider.download(path);
+    } catch (e) {
+      throw new BadRequestException('Something went wrong when download file');
+    }
   }
 
-  // async upload() {
-  //   return this.storageProvider.upload();
-  // }
+  async upload(path: string, buffer: Buffer) {
+    try {
+      return this.storageProvider.upload(path, buffer);
+    } catch (e) {
+      throw new BadRequestException('Something went wrong when upload file');
+    }
+  }
 }

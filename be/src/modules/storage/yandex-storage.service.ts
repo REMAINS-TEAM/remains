@@ -12,7 +12,7 @@ export class YandexStorageService implements StorageProvider {
         secretAccessKey: process.env.YA_STORAGE_ACCESS_KEY,
       },
       Bucket: 'remains',
-      debug: true, // TODO:  удалить в релизе
+      debug: process.env.NODE_ENV !== 'prod',
     });
   }
 
@@ -22,6 +22,6 @@ export class YandexStorageService implements StorageProvider {
   }
 
   async upload(path: string, buffer: Buffer) {
-    return true;
+    return (await this.yandexStorage.Upload({ buffer }, path))?.Location || '';
   }
 }

@@ -9,14 +9,15 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Item } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
 import * as fs from 'fs';
-import path, { join } from 'path';
-import { v4 as uuidv4 } from 'uuid';
+import { join } from 'path';
+
 import { ITEM_FILES_PATH, MIME_IMAGES_TYPE_MAP } from 'constants/main';
+import { StorageService } from 'modules/storage/storage.service';
 const YandexStorage = require('easy-yandex-s3');
 
 @Injectable()
 export class ItemsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private storage: StorageService) {}
 
   async findAll({
     limit = 10,
@@ -99,8 +100,8 @@ export class ItemsService {
     data: {
       title: string;
       description: string;
-      price: string;
-      categoryId: string;
+      price: number;
+      categoryId: number;
     },
     images: Express.Multer.File[],
   ) {
@@ -150,23 +151,39 @@ export class ItemsService {
       throw new HttpException('Something went wrong when create new item', 500);
     }
 
-    // save files
-    let savedFileNames: string[] = [];
+    // upload files
+    const uploadedImageNames: string[] = [];
     try {
       for (const image of images) {
         const isValid = !!MIME_IMAGES_TYPE_MAP[image.mimetype];
         if (isValid) {
-          const name = uuidv4();
-          const ext = path.extname(image.originalname);
-          const imageName = `${name}${ext || ''}`;
+          const uploadedFileLocation = await this.storage.upload(
+            `/items/${newItem.id}`,
+            image.buffer,
+          );
 
-          // WRITE
+          const splitLocation = uploadedFileLocation.split('/');
+          const filename = splitLocation[splitLocation.length - 1];
 
-          savedFileNames.push(imageName);
+          uploadedImageNames.push(filename);
         }
       }
     } catch (err) {
-      throw new HttpException('Something went wrong when save file', 500);
+      throw new HttpException(
+        'Something went wrong when upload file ' + err,
+        500,
+      );
+    }
+
+    if (uploadedImageNames.length) {
+      try {
+        newItem = await this.prisma.item.update({
+          where: { id: newItem.id },
+          data: { images: uploadedImageNames },
+        });
+      } catch (err) {
+        throw new PrismaException(err as Error);
+      }
     }
 
     return newItem;

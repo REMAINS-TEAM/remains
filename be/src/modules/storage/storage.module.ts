@@ -9,5 +9,6 @@ import { YandexStorageService } from 'modules/storage/yandex-storage.service';
     StorageService,
     { provide: 'STORAGE_PROVIDER', useClass: YandexStorageService },
   ],
+  exports: [StorageService],
 })
 export class StorageModule {}

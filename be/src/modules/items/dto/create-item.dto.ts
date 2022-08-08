@@ -1,4 +1,5 @@
-import { IsString, Length } from 'class-validator';
+import { IsString, Length, IsPositive } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateItemDto {
   @IsString()
@@ -11,11 +12,10 @@ export class CreateItemDto {
     message: 'Длина описания должна быть $constraint1-$constraint2 символов',
   })
   description: string;
-  @IsString()
-  @Length(1, 8, {
-    message: 'Длина цены должна быть $constraint1-$constraint2 символов',
-  })
-  price: string;
-  @IsString()
-  categoryId: string;
+
+  @Type(() => Number)
+  @IsPositive()
+  price: number;
+  @Type(() => Number)
+  categoryId: number;
 }
