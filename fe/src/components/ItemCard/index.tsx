@@ -5,7 +5,6 @@ import { Item } from 'store/slices/items';
 import ItemImage from 'components/ItemCard/units/ItemImage';
 import { Box, Button, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { BACKEND_URL } from 'global/constants';
 import { getCurrentUser, getPaidStatus } from 'store/selectors/user';
 import { generatePath, useNavigate } from 'react-router-dom';
 import routes from 'routes';
@@ -24,9 +23,7 @@ function ItemCard({ item }: { item: Item }) {
   return (
     <Container sx={styles.itemContainer} onClick={itemDetailsClickHandler}>
       <Box sx={styles.leftSide}>
-        <ItemImage
-          src={`${BACKEND_URL}/content/items/${item.id}/${item.images[0]}`}
-        />
+        <ItemImage src={`/api/storage/items/${item.id}/${item.images[0]}`} />
         <Box>
           <Typography variant="body1" component={'h3'} sx={{ mb: 1 }}>
             {item.title}

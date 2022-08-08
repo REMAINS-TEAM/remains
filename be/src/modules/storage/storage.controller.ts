@@ -6,7 +6,7 @@ import { GetItemImage } from 'modules/storage/dto/get-item-image';
 export class StorageController {
   constructor(private storageService: StorageService) {}
 
-  @Get(':itemId/:filename')
+  @Get('/items/:itemId/:filename')
   async getImage(
     @Param() { itemId, filename }: GetItemImage,
     @Response() res: any,

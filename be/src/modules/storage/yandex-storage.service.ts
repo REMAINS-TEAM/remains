@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { StorageProvider } from 'modules/storage/storage.types';
 const YandexStorage = require('easy-yandex-s3');
 
@@ -17,7 +17,17 @@ export class YandexStorageService implements StorageProvider {
   }
 
   async download(path: string) {
-    const response = await this.yandexStorage.Download(path);
+    let response: any;
+    try {
+      response = await this.yandexStorage.Download(path);
+    } catch (e) {
+      // skip
+    }
+
+    if (!response?.data?.Body) {
+      throw new NotFoundException('File not found in storage');
+    }
+
     return response.data.Body;
   }
 
