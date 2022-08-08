@@ -24,14 +24,15 @@ import { CreateItemDto } from 'modules/items/dto/create-item.dto';
 import { FindAllItemsDto } from 'modules/items/dto/find-all-items.dto';
 import { OnlyForPaidGuard } from 'guards/onlyForPaid.guard';
 import { CurrentUserId } from 'decorators/current-user.decorator';
+import { GetIsPaidGuard } from 'guards/getIsPaid.guard';
 
 @Controller('items')
 export class ItemsController {
   constructor(private itemsService: ItemsService) {}
 
   @Get()
+  @UseGuards(GetIsPaidGuard)
   async findAll(
-    // TODO ISPAID
     @IsPaid() isPaid: boolean,
     @Query() { limit = 10, offset = 0, categoryId, userId }: FindAllItemsDto,
   ): Promise<Item[]> {
