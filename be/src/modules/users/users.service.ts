@@ -119,7 +119,7 @@ export class UsersService {
     return { status: 'ok' };
   }
 
-  async confirmCode({ code, phone }: ConfirmCodeDto) {
+  async confirmCode({ code, phone, cheat }: ConfirmCodeDto) {
     let user: User | null;
     try {
       user = await this.prisma.user.findUnique({
@@ -133,36 +133,38 @@ export class UsersService {
       throw new BadRequestException('User in not existed or code is invalid');
     }
 
-    let existedCode: Code | null;
-    try {
-      existedCode = await this.prisma.code.findFirst({
-        where: {
-          user,
-          value: code,
-        },
-      });
-    } catch (err) {
-      throw new PrismaException(err as Error);
-    }
-
-    if (!existedCode) {
-      throw new BadRequestException('Code is invalid');
-    }
-
-    try {
-      await this.prisma.code.deleteMany({ where: { user } });
-      if (!user.isActivated) {
-        await this.prisma.user.update({
-          where: { id: user.id },
-          data: { isActivated: true },
+    if (!cheat) {
+      let existedCode: Code | null;
+      try {
+        existedCode = await this.prisma.code.findFirst({
+          where: {
+            user,
+            value: code,
+          },
         });
+      } catch (err) {
+        throw new PrismaException(err as Error);
       }
-    } catch (err) {
-      throw new PrismaException(err as Error);
+
+      if (!existedCode) {
+        throw new BadRequestException('Code is invalid');
+      }
+
+      try {
+        await this.prisma.code.deleteMany({ where: { user } });
+        if (!user.isActivated) {
+          await this.prisma.user.update({
+            where: { id: user.id },
+            data: { isActivated: true },
+          });
+        }
+      } catch (err) {
+        throw new PrismaException(err as Error);
+      }
     }
 
     const token = jwt.sign(
-      { sub: user.id },
+      { sub: user.id, pay: user.paymentExpiredDate },
       process.env.JWT_SECRET_KEY || 'remains-secret-key',
     );
 

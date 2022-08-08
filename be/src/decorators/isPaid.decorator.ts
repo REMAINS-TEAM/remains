@@ -1,9 +1,8 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { PrismaService } from 'modules/prisma/prisma.service';
 
-export const Access = createParamDecorator(
+export const IsPaid = createParamDecorator(
   async (data: string, ctx: ExecutionContext) => {
-    const prisma = new PrismaService();
+    // const prisma = new PrismaService();
     const request = ctx.switchToHttp().getRequest();
     const authHeader = request.headers.authorization || '';
     const token = authHeader.split(' ')[1];

@@ -15,7 +15,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from 'decorators/roles.decorator';
 import { LoginUserDto } from 'modules/users/dto/login-user.dto';
 import { ConfirmCodeDto } from 'modules/users/dto/confirm-code.dto';
-import { OnlyForLoggedGuard } from 'guards/auth.guard';
+import { OnlyForLoggedGuard } from 'guards/onlyForLogged.guard';
 import { CurrentUserId } from 'decorators/current-user.decorator';
 
 @Controller('users')

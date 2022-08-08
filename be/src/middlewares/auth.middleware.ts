@@ -10,7 +10,7 @@ const decodeToken = (token: string): Promise<JwtPayload> =>
   });
 
 export default async function authMiddleware(
-  req: Request & { user?: { id: number } },
+  req: Request & { user?: { id: number; paymentExpiredDate: Date } },
   res: Response,
   next: NextFunction,
 ) {
@@ -20,9 +20,10 @@ export default async function authMiddleware(
   if (!token) return next();
 
   try {
-    const { sub } = await decodeToken(token);
+    const { sub, pay } = await decodeToken(token);
     req.user = {
       id: sub ? +sub : 0,
+      paymentExpiredDate: pay ? new Date(pay) : new Date(),
     };
   } catch (e) {
     // skip

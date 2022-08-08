@@ -10,11 +10,12 @@ import {
   Query,
   Response,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { Item } from '@prisma/client';
 import { ItemsService } from './items.service';
-import { Access } from 'decorators/access.decorator';
+import { IsPaid } from 'decorators/isPaid.decorator';
 import {
   MAX_FILE_SIZE,
   MAX_ITEMS_FOR_NOT_REGISTERED_USER,
@@ -22,6 +23,7 @@ import {
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateItemDto } from 'modules/items/dto/create-item.dto';
 import { FindAllItemsDto } from 'modules/items/dto/find-all-items.dto';
+import { OnlyForPaidGuard } from 'guards/onlyForPaid.guard';
 
 @Controller('items')
 export class ItemsController {
@@ -29,11 +31,11 @@ export class ItemsController {
 
   @Get()
   async findAll(
-    @Access() access: boolean,
+    @IsPaid() isPaid: boolean,
     @Query() { limit = 10, offset = 0, categoryId, userId }: FindAllItemsDto,
   ): Promise<Item[]> {
     let availableLimit = limit;
-    if (!access) {
+    if (!isPaid) {
       if (offset > MAX_ITEMS_FOR_NOT_REGISTERED_USER) {
         throw new BadRequestException('Access is not paid for');
       }
@@ -50,6 +52,7 @@ export class ItemsController {
   }
 
   @Get('test')
+  @UseGuards(OnlyForPaidGuard)
   async test(@Response() res: any) {
     const imageBuffer = await this.itemsService.test();
     res.set({ 'Content-Type': 'image/jpeg' }).end(imageBuffer);
@@ -61,6 +64,7 @@ export class ItemsController {
   }
 
   @Post()
+  @UseGuards(OnlyForPaidGuard)
   @UseInterceptors(
     FilesInterceptor('images', 10, { limits: { fileSize: MAX_FILE_SIZE } }),
   )
@@ -77,6 +81,7 @@ export class ItemsController {
   }
 
   @Delete(':id')
+  @UseGuards(OnlyForPaidGuard)
   async delete(
     @Param() params: { id: string },
     @Headers() headers: { authorization: string | undefined },
