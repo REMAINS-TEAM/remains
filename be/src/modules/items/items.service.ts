@@ -104,9 +104,9 @@ export class ItemsService {
     },
     images: Express.Multer.File[],
   ) {
-    if (!token) {
-      throw new ForbiddenException(`You are not authorized to create item`);
-    }
+    // if (!token) {
+    //   throw new ForbiddenException(`You are not authorized to create item`);
+    // }
     //
     // let foundToken: (Token & { user: User | null }) | null;
     // try {
@@ -153,10 +153,6 @@ export class ItemsService {
     // save files
     let savedFileNames: string[] = [];
     try {
-      await fs.promises.mkdir(
-        join(...ITEM_FILES_PATH.split('/'), String(newItem.id)),
-        { recursive: true },
-      );
       for (const image of images) {
         const isValid = !!MIME_IMAGES_TYPE_MAP[image.mimetype];
         if (isValid) {
@@ -164,12 +160,8 @@ export class ItemsService {
           const ext = path.extname(image.originalname);
           const imageName = `${name}${ext || ''}`;
 
-          const fileName = join(
-            ...ITEM_FILES_PATH.split('/'),
-            String(newItem.id),
-            imageName,
-          );
-          await fs.promises.writeFile(fileName, image.buffer);
+          // WRITE
+
           savedFileNames.push(imageName);
         }
       }
@@ -177,21 +169,7 @@ export class ItemsService {
       throw new HttpException('Something went wrong when save file', 500);
     }
 
-    let itemWithFiles: Item | null = null;
-    try {
-      if (savedFileNames.length > 0) {
-        itemWithFiles = await this.prisma.item.update({
-          where: { id: newItem.id },
-          data: {
-            images: savedFileNames,
-          },
-        });
-      }
-    } catch (err) {
-      throw new PrismaException(err as Error);
-    }
-
-    return itemWithFiles || newItem;
+    return newItem;
   }
 
   async delete(token: string | undefined, id: number) {
