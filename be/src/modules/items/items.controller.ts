@@ -31,6 +31,7 @@ export class ItemsController {
 
   @Get()
   async findAll(
+    // TODO ISPAID
     @IsPaid() isPaid: boolean,
     @Query() { limit = 10, offset = 0, categoryId, userId }: FindAllItemsDto,
   ): Promise<Item[]> {
@@ -77,10 +78,8 @@ export class ItemsController {
   async delete(
     @Param() params: { id: string },
     @Headers() headers: { authorization: string | undefined },
+    @CurrentUserId() userId: number,
   ): Promise<Item> {
-    const authHeader = headers.authorization || '';
-    const token = authHeader.split(' ')[1];
-
-    return this.itemsService.delete(token, +params.id);
+    return this.itemsService.delete(userId, +params.id);
   }
 }

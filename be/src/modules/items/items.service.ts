@@ -88,28 +88,6 @@ export class ItemsService {
     },
     images: Express.Multer.File[],
   ) {
-    // if (!token) {
-    //   throw new ForbiddenException(`You are not authorized to create item`);
-    // }
-    //
-    // let foundToken: (Token & { user: User | null }) | null;
-    // try {
-    //   foundToken = await this.prisma.token.findUnique({
-    //     where: { token },
-    //     include: { user: true },
-    //   });
-    // } catch (err) {
-    //   throw new PrismaException(err as Error);
-    // }
-    //
-    // if (!foundToken?.user) {
-    //   throw new UnauthorizedException(`User does not exist`);
-    // }
-    //
-    // if (new Date() > foundToken.user.paymentExpiredDate) {
-    //   throw new ForbiddenException(`Please pay service for this action`);
-    // }
-
     if (!images.length) {
       throw new BadRequestException(`Add one image at least`);
     }
@@ -172,29 +150,7 @@ export class ItemsService {
     return newItem;
   }
 
-  async delete(token: string | undefined, id: number) {
-    if (!token) {
-      throw new ForbiddenException(`You are not authorized to delete item`);
-    }
-
-    // let foundToken: (Token & { user: User | null }) | null;
-    // try {
-    //   foundToken = await this.prisma.token.findUnique({
-    //     where: { token },
-    //     include: { user: true },
-    //   });
-    // } catch (err) {
-    //   throw new PrismaException(err as Error);
-    // }
-    //
-    // if (!foundToken?.user) {
-    //   throw new UnauthorizedException(`User does not exist`);
-    // }
-    //
-    // if (new Date() > foundToken.user.paymentExpiredDate) {
-    //   throw new ForbiddenException(`Please pay service for this action`);
-    // }
-
+  async delete(userId: number, id: number) {
     let item: Item | null;
     try {
       item = await this.prisma.item.findUnique({
@@ -208,13 +164,14 @@ export class ItemsService {
       throw new BadRequestException(`Item with id ${id} not found`);
     }
 
-    // if (item.userId !== foundToken?.userId) {
-    //   throw new ForbiddenException(
-    //     `Cannot delete item with id ${id}. It is not your item`,
-    //   );
-    // }
+    if (item.userId !== userId) {
+      throw new ForbiddenException(
+        `Cannot delete item with id ${id}. It is not your item`,
+      );
+    }
 
-    // delete all files
+    // TODO
+    // delete all ITEM files from YANDEX
     fs.rm(
       join(...ITEM_FILES_PATH.split('/'), String(item.id)),
       { recursive: true, force: true },
