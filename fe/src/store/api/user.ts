@@ -64,6 +64,10 @@ export const usersApi = api.injectEndpoints({
         _queryApi.dispatch(setCurrent(userData));
         return { data: userData };
       },
+      providesTags: (result, error, arg) =>
+        result
+          ? [{ type: apiTypes.USERS, name: result.name }, apiTypes.USERS]
+          : [apiTypes.USERS],
     }),
 
     logout: build.mutation<null, void>({
