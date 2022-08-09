@@ -17,11 +17,13 @@ export default function AutocompleteField({
   options,
   textFieldProps,
   onCreate,
+  onSelect,
   defaultValue,
   ...rest
 }: {
   options: OptionType[];
   onCreate: (value: string) => void;
+  onSelect: ({ id, value }: { id: number; value: string }) => void;
   textFieldProps?: TextFieldProps;
   defaultValue?: OptionType | null;
 } & Partial<AutocompleteProps<any, any, any, any>>) {
@@ -33,11 +35,7 @@ export default function AutocompleteField({
     <Autocomplete
       value={value}
       onChange={(event, newValue) => {
-        if (typeof newValue === 'string') {
-          setValue({
-            value: newValue,
-          });
-        } else if (newValue && newValue.inputValue) {
+        if (newValue && newValue.inputValue) {
           // Create a new value from the user input
           onCreate(newValue.inputValue);
           setValue({
@@ -45,6 +43,7 @@ export default function AutocompleteField({
           });
         } else {
           setValue(newValue);
+          onSelect(newValue);
         }
       }}
       {...rest}

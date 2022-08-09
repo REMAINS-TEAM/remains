@@ -193,6 +193,12 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
                 setNewCompanyName(name);
                 setConfirmCreateCompanyPopupOpen(true);
               }}
+              onSelect={(item: any) => {
+                setValue('company', {
+                  id: item.id || 0,
+                  name: item.value || '',
+                });
+              }}
               textFieldProps={{
                 margin: 'dense',
                 id: 'company.name',
