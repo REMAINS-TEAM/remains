@@ -6,5 +6,5 @@ export const itemsContainer: SxProps = {
   display: 'flex',
   flexDirection: 'column',
   rowGap: 2,
-  paddingBottom: 4,
+  paddingBottom: 2,
 };

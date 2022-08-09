@@ -1,6 +1,4 @@
-import { SxProps } from '@mui/system';
-
-export const notificationContainer: SxProps = {
+export const notificationContainer = {
   display: 'flex',
   alignItems: 'center',
   width: '100%',

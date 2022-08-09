@@ -14,6 +14,7 @@ import { getPaidStatus } from 'store/selectors/user';
 import BreadCrumbs from 'components/BreadCrumbs';
 import categoriesApi from 'store/api/categories';
 import Container from 'components/Container';
+import NotificationPlate from 'components/NotificationPlate';
 
 function CategoriesPage() {
   const { categoryId } = useParams();
@@ -80,7 +81,16 @@ function CategoriesPage() {
               </Box>
 
               {categoryItems?.length ? (
-                <ItemCards items={categoryItems} isLoading={isItemFetching} />
+                <>
+                  <ItemCards items={categoryItems} isLoading={isItemFetching} />
+                  {!isPaid && (
+                    <NotificationPlate
+                      title="Без оплаты Вы видите не все товары"
+                      color="secondary"
+                      sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}
+                    />
+                  )}
+                </>
               ) : (
                 <Container sx={{ width: '100%', height: '100%' }}>
                   <EmptyState
