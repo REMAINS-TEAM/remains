@@ -5,14 +5,22 @@ import Autocomplete, {
   createFilterOptions,
 } from '@mui/material/Autocomplete';
 
+interface OptionType {
+  inputValue?: string;
+  id?: number;
+  value: string;
+}
+
 const filter = createFilterOptions<OptionType>();
 
 export default function AutocompleteField({
+  options,
   textFieldProps,
   onCreate,
   defaultValue,
   ...rest
 }: {
+  options: OptionType[];
   onCreate: (value: string) => void;
   textFieldProps?: TextFieldProps;
   defaultValue?: OptionType | null;
@@ -80,16 +88,3 @@ export default function AutocompleteField({
     />
   );
 }
-
-interface OptionType {
-  inputValue?: string;
-  id?: number;
-  value: string;
-}
-
-const options: readonly OptionType[] = [
-  { id: 1, value: 'Рога и копыта' },
-  { id: 2, value: 'test1' },
-  { id: 3, value: 'test2' },
-  { id: 4, value: 'test23' },
-];

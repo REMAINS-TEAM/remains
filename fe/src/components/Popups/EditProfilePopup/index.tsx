@@ -1,19 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Popup from 'components/Popups/index';
-import {
-  Box,
-  InputAdornment,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, InputAdornment, TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import useLimitTextField from 'hooks/useLimitTextField';
-import useNotification from 'hooks/useNotification';
-import { MAX_LENGTH_DESCRIPTION, MAX_LENGTH_NAME } from './validation';
+import { MAX_LENGTH_NAME } from './validation';
 import { RegisterPopupProps } from 'components/Popups/EditProfilePopup/types';
-import { fields } from './fields';
 import * as styles from './styles';
 import {
   AlternateEmail as EmailIcon,
@@ -31,8 +22,12 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
   const [confirmCreateCompanyPopupOpen, setConfirmCreateCompanyPopupOpen] =
     useState(false);
   const [newCompanyName, setNewCompanyName] = useState('');
+
+  const { data: companies, isFetching } =
+    companiesApi.useGetAllCompaniesQuery();
+
   const [createNewCompanyRequest, createNewCompanyResult] =
-    companiesApi.useCreateMutation();
+    companiesApi.useCreateCompanyMutation();
 
   const user = useSelector(getCurrentUser);
 
@@ -51,31 +46,26 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
   } = useForm({
     // resolver: joiResolver(editProfileSchema), //TODO
     defaultValues: {
-      [fields.company.NAME]: user?.company?.name || '',
-      [fields.company.DESCRIPTION]: user?.company?.description || '',
-      [fields.user.NAME]: user?.name || '',
-      [fields.user.PHONE]: user?.phone || '',
-      [fields.user.EMAIL]: user?.email || '',
+      company: { id: 0, name: user?.company?.name || '' },
+      user: {
+        name: user?.name || '',
+        phone: user?.phone || '',
+        email: user?.email || '',
+      },
     },
   });
 
-  console.log('errors', errors);
-
-  const companyNameLength = useLimitTextField({
-    value: watch(fields.company.NAME),
-    setValue: (value) => setValue(fields.company.NAME, value),
-    maxLength: MAX_LENGTH_NAME,
-  });
-
-  const companyDescriptionLength = useLimitTextField({
-    value: watch(fields.company.DESCRIPTION),
-    setValue: (value) => setValue(fields.company.DESCRIPTION, value),
-    maxLength: MAX_LENGTH_DESCRIPTION,
-  });
+  useEffect(() => {
+    if (!createNewCompanyResult) return;
+    setValue('company', {
+      id: createNewCompanyResult.data?.id || 0,
+      name: createNewCompanyResult.data?.name || '',
+    });
+  }, [createNewCompanyResult]);
 
   const userNameLength = useLimitTextField({
-    value: watch(fields.user.NAME),
-    setValue: (value) => setValue(fields.user.NAME, value),
+    value: watch('user.name'),
+    setValue: (value) => setValue('user.name', value),
     maxLength: MAX_LENGTH_NAME,
   });
 
@@ -102,19 +92,19 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Box sx={styles.generalContainer}>
             <Controller
-              name={fields.user.NAME}
+              name={'user.name'}
               control={control}
               render={({ field }) => (
                 <TextField
                   autoFocus
                   margin="dense"
-                  id={fields.user.NAME}
+                  id={'user.name'}
                   label="Имя"
                   type="text"
                   fullWidth
                   variant="outlined"
-                  error={!!errors[fields.user.NAME]}
-                  helperText={errors[fields.user.NAME]?.message}
+                  error={!!errors?.user?.name}
+                  helperText={errors?.user?.name}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment
@@ -134,21 +124,21 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
               )}
             />
             <Controller
-              name={fields.user.PHONE}
+              name={'user.phone'}
               control={control}
               render={({ field }) => (
                 <MuiPhoneNumber
                   autoFocus
                   margin="dense"
-                  id={fields.user.PHONE}
+                  id={'user.phone'}
                   disabled={true}
                   label="Телефон"
                   type="text"
                   fullWidth
                   variant="outlined"
                   defaultCountry={'ru'}
-                  error={!!errors[fields.user.PHONE]}
-                  helperText={errors[fields.user.PHONE]?.message}
+                  error={!!errors?.user?.phone}
+                  helperText={errors?.user?.phone}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -161,18 +151,18 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
               )}
             />
             <Controller
-              name={fields.user.EMAIL}
+              name={'user.email'}
               control={control}
               render={({ field }) => (
                 <TextField
                   margin="dense"
-                  id={fields.user.EMAIL}
+                  id={'user.email'}
                   label="E-mail"
                   type="text"
                   fullWidth
                   variant="outlined"
-                  error={!!errors[fields.user.EMAIL]}
-                  helperText={errors[fields.user.EMAIL]?.message}
+                  error={!!errors?.user?.email}
+                  helperText={errors?.user?.email}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -186,6 +176,14 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
             />
 
             <AutocompleteField
+              options={
+                companies?.length
+                  ? companies.map(({ id, name }) => ({
+                      id,
+                      value: name,
+                    }))
+                  : []
+              }
               defaultValue={
                 user?.company
                   ? { id: user?.company?.id, value: user?.company?.name }
@@ -197,11 +195,11 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
               }}
               textFieldProps={{
                 margin: 'dense',
-                id: fields.company.NAME,
+                id: 'company.name',
                 label: 'Название компании или ИП',
                 fullWidth: true,
-                error: !!errors[fields.company.NAME],
-                helperText: errors[fields.company.NAME]?.message,
+                error: !!errors?.company?.name,
+                helperText: errors?.company?.name,
               }}
             />
           </Box>

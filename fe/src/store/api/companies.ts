@@ -1,9 +1,22 @@
 import api, { apiTypes } from './';
 import { Company } from 'store/slices/user';
 
-export const categoriesApi = api.injectEndpoints({
+export const companiesApi = api.injectEndpoints({
   endpoints: (build) => ({
-    create: build.mutation<Company, { name: string; description?: string }>({
+    getAllCompanies: build.query<Company[], void>({
+      query: () => `companies`,
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: apiTypes.COMPANIES, id })),
+              apiTypes.COMPANIES,
+            ]
+          : [apiTypes.COMPANIES],
+    }),
+    createCompany: build.mutation<
+      Company,
+      { name: string; description?: string }
+    >({
       query: (body) => ({
         url: apiTypes.COMPANIES,
         method: 'post',
@@ -14,4 +27,4 @@ export const categoriesApi = api.injectEndpoints({
   }),
 });
 
-export default categoriesApi;
+export default companiesApi;
