@@ -31,7 +31,7 @@ function UploadedImage({
   const selectImageHandler = () => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = 'image/*';
+    input.accept = '.jpg,.jpeg,.png';
 
     input.onchange = async (e) => {
       const target = e.target as HTMLInputElement;

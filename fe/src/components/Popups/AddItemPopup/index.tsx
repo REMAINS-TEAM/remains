@@ -133,9 +133,9 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
         <NotificationPlate
           title="Оплатите сервис для размещения товаров"
           color="error"
+          sx={{ mb: 2 }}
         />
       )}
-      <br />
       <Controller
         name="title"
         control={control}
