@@ -1,14 +1,21 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, PaletteColor, Typography, useTheme } from '@mui/material';
 import * as styles from './styles';
 import { NotificationPlateProps } from 'components/NotificationPlate/types';
 import { ErrorOutline } from '@mui/icons-material';
 
-function NotificationPlate({ title, color = 'black' }: NotificationPlateProps) {
+function NotificationPlate({ title, color }: NotificationPlateProps) {
+  const theme = useTheme();
+
   return (
-    <Box sx={{ ...styles.notificationContainer, color }}>
+    <Box
+      sx={{
+        ...styles.notificationContainer,
+        color: (theme.palette[color || 'info'] as PaletteColor).main,
+      }}
+    >
       <ErrorOutline color={'inherit'} fontSize={'small'} />
-      <Typography color={'inherit'}>{title}</Typography>
+      <Typography>{title}</Typography>
     </Box>
   );
 }

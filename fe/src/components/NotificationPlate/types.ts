@@ -1,4 +1,6 @@
+import { Palette } from '@mui/material';
+
 export interface NotificationPlateProps {
   title: string;
-  color?: string;
+  color?: keyof Palette;
 }

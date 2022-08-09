@@ -132,7 +132,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
       {!isPaid && (
         <NotificationPlate
           title="Оплатите сервис для размещения товаров"
-          color="red"
+          color="error"
         />
       )}
       <br />
