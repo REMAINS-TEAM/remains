@@ -86,7 +86,7 @@ export const usersApi = api.injectEndpoints({
     >({
       query: (body) => ({
         url: apiTypes.USERS,
-        method: 'patch',
+        method: 'PATCH',
         body,
       }),
       invalidatesTags: [apiTypes.USERS],
