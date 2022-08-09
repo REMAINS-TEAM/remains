@@ -84,181 +84,110 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
       title={`Редактировать профиль`}
       onOkClick={handleSubmit(onSubmit)}
       closeWhenSubmit={false}
-      PaperProps={{ sx: styles.popup }}
       {...{ open, setOpen }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box sx={styles.generalContainer}>
-          <Box sx={styles.dataContainer}>
-            <Typography variant="subtitle1" color="secondary" sx={{ pb: 1.5 }}>
-              Данные обо мне:
-            </Typography>
-            <Controller
-              name={fields.user.NAME}
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id={fields.user.NAME}
-                  label="Имя"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  error={!!errors[fields.user.NAME]}
-                  helperText={errors[fields.user.NAME]?.message}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment
-                        position="end"
-                        sx={
-                          MAX_LENGTH_NAME - userNameLength <= 0
-                            ? { color: 'red' }
-                            : null
-                        }
-                      >
-                        {MAX_LENGTH_NAME - userNameLength}
-                      </InputAdornment>
-                    ),
-                  }}
-                  {...field}
-                />
-              )}
-            />
-            <Controller
-              name={fields.user.PHONE}
-              control={control}
-              render={({ field }) => (
-                <MuiPhoneNumber
-                  autoFocus
-                  margin="dense"
-                  id={fields.user.PHONE}
-                  disabled={true}
-                  label="Телефон"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  defaultCountry={'ru'}
-                  error={!!errors[fields.user.PHONE]}
-                  helperText={errors[fields.user.PHONE]?.message}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <PhoneIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                  {...field}
-                />
-              )}
-            />
-            <Controller
-              name={fields.user.EMAIL}
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  margin="dense"
-                  id={fields.user.EMAIL}
-                  label="E-mail"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  error={!!errors[fields.user.EMAIL]}
-                  helperText={errors[fields.user.EMAIL]?.message}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <EmailIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                  {...field}
-                />
-              )}
-            />
-          </Box>
-          <Box sx={styles.dataContainer}>
-            <Typography variant="subtitle1" color="secondary" sx={{ pb: 1.5 }}>
-              Данные о моей компании:
-            </Typography>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                columnGap: 1,
-              }}
-            >
-              <Controller
-                name={fields.company.TYPE}
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    margin="dense"
-                    id={fields.company.TYPE}
-                    variant="outlined"
-                    sx={{ height: '56px', mt: 0.5 }}
-                    defaultValue="IP"
-                    {...field}
-                  >
-                    <MenuItem value={'IP'}>ИП</MenuItem>
-                    <MenuItem value={'OOO'}>ООО</MenuItem>
-                    <MenuItem value={'ZAO'}>ЗАО</MenuItem>
-                    <MenuItem value={'OAO'}>ОАО</MenuItem>
-                  </Select>
-                )}
+          <Controller
+            name={fields.user.NAME}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                autoFocus
+                margin="dense"
+                id={fields.user.NAME}
+                label="Имя"
+                type="text"
+                fullWidth
+                variant="outlined"
+                error={!!errors[fields.user.NAME]}
+                helperText={errors[fields.user.NAME]?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment
+                      position="end"
+                      sx={
+                        MAX_LENGTH_NAME - userNameLength <= 0
+                          ? { color: 'red' }
+                          : null
+                      }
+                    >
+                      {MAX_LENGTH_NAME - userNameLength}
+                    </InputAdornment>
+                  ),
+                }}
+                {...field}
               />
-              <Controller
-                name={fields.company.NAME}
-                control={control}
-                render={({ field }) => (
-                  <AutocompleteField
-                    textFieldProps={{
-                      margin: 'dense',
-                      id: fields.company.NAME,
-                      label: 'Название компании или ИП',
-                      fullWidth: true,
-                      error: !!errors[fields.company.NAME],
-                      helperText: errors[fields.company.NAME]?.message,
-                      ...field,
-                    }}
-                  />
-                )}
+            )}
+          />
+          <Controller
+            name={fields.user.PHONE}
+            control={control}
+            render={({ field }) => (
+              <MuiPhoneNumber
+                autoFocus
+                margin="dense"
+                id={fields.user.PHONE}
+                disabled={true}
+                label="Телефон"
+                type="text"
+                fullWidth
+                variant="outlined"
+                defaultCountry={'ru'}
+                error={!!errors[fields.user.PHONE]}
+                helperText={errors[fields.user.PHONE]?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <PhoneIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                {...field}
               />
-            </Box>
-            <Controller
-              name={fields.company.DESCRIPTION}
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  margin="dense"
-                  id={fields.company.DESCRIPTION}
-                  label="Пара слов о компании (чем занимается, как давно...)"
-                  type="text"
-                  multiline
-                  fullWidth
-                  variant="outlined"
-                  rows={4}
-                  error={!!errors[fields.company.DESCRIPTION]}
-                  helperText={errors[fields.company.DESCRIPTION]?.message}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment
-                        position="end"
-                        sx={
-                          MAX_LENGTH_DESCRIPTION - companyDescriptionLength <= 0
-                            ? { color: 'red' }
-                            : null
-                        }
-                      >
-                        {MAX_LENGTH_DESCRIPTION - companyDescriptionLength}
-                      </InputAdornment>
-                    ),
-                  }}
-                  {...field}
-                />
-              )}
-            />
-          </Box>
+            )}
+          />
+          <Controller
+            name={fields.user.EMAIL}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                margin="dense"
+                id={fields.user.EMAIL}
+                label="E-mail"
+                type="text"
+                fullWidth
+                variant="outlined"
+                error={!!errors[fields.user.EMAIL]}
+                helperText={errors[fields.user.EMAIL]?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <EmailIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                {...field}
+              />
+            )}
+          />
+
+          <AutocompleteField
+            defaultValue={
+              user?.company
+                ? { id: user?.company?.id, value: user?.company?.name }
+                : null
+            }
+            onCreate={(item) => console.log('Создаем', item)}
+            textFieldProps={{
+              margin: 'dense',
+              id: fields.company.NAME,
+              label: 'Название компании или ИП',
+              fullWidth: true,
+              error: !!errors[fields.company.NAME],
+              helperText: errors[fields.company.NAME]?.message,
+            }}
+          />
         </Box>
       </form>
     </Popup>

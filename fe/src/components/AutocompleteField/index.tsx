@@ -1,15 +1,25 @@
 import * as React from 'react';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import Autocomplete, {
+  AutocompleteProps,
+  createFilterOptions,
+} from '@mui/material/Autocomplete';
 
-const filter = createFilterOptions<FilmOptionType>();
+const filter = createFilterOptions<OptionType>();
 
 export default function AutocompleteField({
   textFieldProps,
+  onCreate,
+  defaultValue,
+  ...rest
 }: {
+  onCreate: (value: string) => void;
   textFieldProps?: TextFieldProps;
-}) {
-  const [value, setValue] = React.useState<FilmOptionType | null>(null);
+  defaultValue?: OptionType | null;
+} & Partial<AutocompleteProps<any, any, any, any>>) {
+  const [value, setValue] = React.useState<OptionType | null>(
+    defaultValue || null,
+  );
 
   return (
     <Autocomplete
@@ -17,17 +27,19 @@ export default function AutocompleteField({
       onChange={(event, newValue) => {
         if (typeof newValue === 'string') {
           setValue({
-            title: newValue,
+            value: newValue,
           });
         } else if (newValue && newValue.inputValue) {
           // Create a new value from the user input
+          onCreate(newValue.inputValue);
           setValue({
-            title: newValue.inputValue,
+            value: newValue.inputValue,
           });
         } else {
           setValue(newValue);
         }
       }}
+      {...rest}
       filterOptions={(options, params) => {
         const filtered = filter(options, params);
 
@@ -39,7 +51,7 @@ export default function AutocompleteField({
         if (inputValue !== '' && !isExisting) {
           filtered.push({
             inputValue,
-            title: `Создать "${inputValue}"`,
+            value: `Создать "${inputValue}"`,
           });
         }
 
@@ -48,7 +60,7 @@ export default function AutocompleteField({
       selectOnFocus
       clearOnBlur
       handleHomeEndKeys
-      options={top100Films}
+      options={options}
       getOptionLabel={(option) => {
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
@@ -59,9 +71,9 @@ export default function AutocompleteField({
           return option.inputValue;
         }
         // Regular option
-        return option.title;
+        return option.value;
       }}
-      renderOption={(props, option) => <li {...props}>{option.title}</li>}
+      renderOption={(props, option) => <li {...props}>{option.value}</li>}
       freeSolo
       sx={{ width: '100%' }}
       renderInput={(params) => <TextField {...textFieldProps} {...params} />}
@@ -69,15 +81,15 @@ export default function AutocompleteField({
   );
 }
 
-interface FilmOptionType {
+interface OptionType {
   inputValue?: string;
-  title: string;
-  year?: number;
+  id?: number;
+  value: string;
 }
 
-const top100Films: readonly FilmOptionType[] = [
-  { title: 'Рога и копыта', year: 1994 },
-  { title: 'The Godfather', year: 1972 },
-  { title: 'The Godfather: Part II', year: 1974 },
-  { title: 'The Dark Knight', year: 2008 },
+const options: readonly OptionType[] = [
+  { id: 1, value: 'Рога и копыта' },
+  { id: 2, value: 'test1' },
+  { id: 3, value: 'test2' },
+  { id: 4, value: 'test23' },
 ];
