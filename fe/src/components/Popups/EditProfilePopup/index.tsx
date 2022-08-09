@@ -9,14 +9,9 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
-import { joiResolver } from '@hookform/resolvers/joi';
 import useLimitTextField from 'hooks/useLimitTextField';
 import useNotification from 'hooks/useNotification';
-import {
-  editProfileSchema,
-  MAX_LENGTH_DESCRIPTION,
-  MAX_LENGTH_NAME,
-} from './validation';
+import { MAX_LENGTH_DESCRIPTION, MAX_LENGTH_NAME } from './validation';
 import { RegisterPopupProps } from 'components/Popups/EditProfilePopup/types';
 import { fields } from './fields';
 import * as styles from './styles';
@@ -27,6 +22,7 @@ import {
 import MuiPhoneNumber from 'material-ui-phone-number';
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from 'store/selectors/user';
+import AutocompleteField from 'components/AutocompleteField';
 
 function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
   const user = useSelector(getCurrentUser);
@@ -185,7 +181,13 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
             <Typography variant="subtitle1" color="secondary" sx={{ pb: 1.5 }}>
               Данные о моей компании:
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 1 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                columnGap: 1,
+              }}
+            >
               <Controller
                 name={fields.company.TYPE}
                 control={control}
@@ -209,30 +211,16 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
                 name={fields.company.NAME}
                 control={control}
                 render={({ field }) => (
-                  <TextField
-                    margin="dense"
-                    id={fields.company.NAME}
-                    label="Название компании или ИП"
-                    type="text"
-                    fullWidth
-                    variant="outlined"
-                    error={!!errors[fields.company.NAME]}
-                    helperText={errors[fields.company.NAME]?.message}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment
-                          position="end"
-                          sx={
-                            MAX_LENGTH_NAME - companyNameLength <= 0
-                              ? { color: 'red' }
-                              : null
-                          }
-                        >
-                          {MAX_LENGTH_NAME - companyNameLength}
-                        </InputAdornment>
-                      ),
+                  <AutocompleteField
+                    textFieldProps={{
+                      margin: 'dense',
+                      id: fields.company.NAME,
+                      label: 'Название компании или ИП',
+                      fullWidth: true,
+                      error: !!errors[fields.company.NAME],
+                      helperText: errors[fields.company.NAME]?.message,
+                      ...field,
                     }}
-                    {...field}
                   />
                 )}
               />
