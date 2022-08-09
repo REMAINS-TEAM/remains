@@ -1,6 +1,7 @@
 import api, { apiTypes } from './';
 import { LS_KEY_TOKEN } from 'global/constants';
 import { setCurrent, User } from 'store/slices/user';
+import { Item } from 'store/slices/items';
 
 export const usersApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -77,6 +78,18 @@ export const usersApi = api.injectEndpoints({
         localStorage.removeItem(LS_KEY_TOKEN);
         return { data: null };
       },
+    }),
+
+    updateUser: build.mutation<
+      User,
+      { name?: string; email?: string; companyId?: number }
+    >({
+      query: (body) => ({
+        url: apiTypes.USERS,
+        method: 'patch',
+        body,
+      }),
+      invalidatesTags: [apiTypes.USERS],
     }),
   }),
 });

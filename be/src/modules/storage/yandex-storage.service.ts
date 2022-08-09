@@ -12,7 +12,7 @@ export class YandexStorageService implements StorageProvider {
         secretAccessKey: process.env.YA_STORAGE_ACCESS_KEY,
       },
       Bucket: 'remains',
-      debug: process.env.NODE_ENV !== 'prod',
+      // debug: process.env.NODE_ENV !== 'prod',
     });
   }
 

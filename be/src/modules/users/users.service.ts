@@ -182,18 +182,12 @@ export class UsersService {
   }
 
   async update(id: number, data: UpdateUserDto) {
-    const { name, email, companyId, companyName, companyDescription } = data;
+    const { name, email, companyId } = data;
     let result;
     try {
-      let newCompany;
-      if (!companyId && companyName) {
-        newCompany = await this.prisma.company.create({
-          data: { name: companyName, description: companyDescription },
-        });
-      }
       result = await this.prisma.user.update({
         where: { id },
-        data: { name, email, companyId: companyId || newCompany?.id },
+        data: { name, email, companyId },
       });
     } catch (err) {
       throw new PrismaException(err as Error);

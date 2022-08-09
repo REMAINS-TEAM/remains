@@ -39,12 +39,14 @@ export class UsersController {
     return this.usersService.findOne(+params.id);
   }
 
-  @Patch(':id')
-  async update(
-    @Param('id') id: number,
+  @Patch()
+  @UseGuards(OnlyForLoggedGuard)
+  async updateCurrent(
+    @CurrentUserId() userId: number,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    return this.usersService.update(id, updateUserDto);
+    console.log(userId, updateUserDto);
+    return this.usersService.update(userId, updateUserDto);
   }
 
   @Post('login')

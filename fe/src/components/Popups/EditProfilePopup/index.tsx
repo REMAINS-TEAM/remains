@@ -17,6 +17,7 @@ import AutocompleteField from 'components/AutocompleteField';
 import ConfirmPopup from 'components/Popups/ConfirmPopup';
 import companiesApi from 'store/api/companies';
 import useResponseNotifications from 'hooks/useResponseNotifications';
+import usersApi from 'store/api/user';
 
 function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
   const [confirmCreateCompanyPopupOpen, setConfirmCreateCompanyPopupOpen] =
@@ -29,12 +30,21 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
   const [createNewCompanyRequest, createNewCompanyResult] =
     companiesApi.useCreateCompanyMutation();
 
+  const [updateUserRequest, updateUserResult] =
+    usersApi.useUpdateUserMutation();
+
   const user = useSelector(getCurrentUser);
 
   useResponseNotifications({
     result: createNewCompanyResult,
     onSuccessText: 'Компания создана',
     onErrorText: 'Ошибка при создании компании',
+  });
+
+  useResponseNotifications({
+    result: updateUserResult,
+    onSuccessText: 'Профиль обновлен',
+    onErrorText: 'Ошибка при обновлении профиля',
   });
 
   const {
@@ -69,10 +79,14 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
     maxLength: MAX_LENGTH_NAME,
   });
 
-  const onSubmit = (fieldsValues: Record<string, string>) => {
+  const onSubmit = (fieldsValues: any) => {
     if (Object.keys(errors).length) return;
 
-    console.log(fieldsValues);
+    updateUserRequest({
+      name: fieldsValues.user.name,
+      email: fieldsValues.user.email,
+      companyId: fieldsValues.company.id || undefined,
+    });
 
     setOpen(false);
   };
