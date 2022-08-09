@@ -14,6 +14,8 @@ export class StorageController {
     const imageBuffer = await this.storageService.download(
       `/items/${itemId}/${filename}`,
     );
-    res.set({ 'Content-Type': 'image/jpeg' }).end(imageBuffer);
+    res
+      .set({ 'Content-Type': 'image/jpeg', 'Cache-control': 'max-age=2592000' })
+      .end(imageBuffer);
   }
 }
