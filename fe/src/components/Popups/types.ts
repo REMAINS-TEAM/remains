@@ -7,7 +7,7 @@ export interface PopupProps extends DialogProps {
   title?: string;
   okButtonText?: string;
   cancelButtonText?: string;
-  onOkClick?: (event: React.MouseEvent<HTMLElement>) => void;
+  onOkClick?: (data?: any) => void;
   onClose?: () => void;
   closeWhenSubmit?: boolean;
   hideActionButtons?: boolean;

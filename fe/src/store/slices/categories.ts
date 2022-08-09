@@ -25,7 +25,7 @@ export const categoriesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
-      categoriesApi.endpoints.getAllCategories.matchFulfilled,
+      categoriesApi.endpoints.getAll.matchFulfilled,
       (state, { payload }) => {
         state.list = payload.list;
         state.current = payload.parentCategory;

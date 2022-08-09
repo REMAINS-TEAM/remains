@@ -4,17 +4,25 @@ import { ConfirmPopupProps } from 'components/Popups/ConfirmPopup/types';
 import { Box, Typography } from '@mui/material';
 import { ReportGmailerrorred as Icon } from '@mui/icons-material';
 
-function ConfirmPopup({ onOkClick, open, setOpen }: ConfirmPopupProps) {
+function ConfirmPopup<T>({
+  onOkClick,
+  open,
+  setOpen,
+  title,
+  text,
+}: ConfirmPopupProps<T>) {
   return (
     <Popup
-      title={`Вы уверены?`}
+      title={title || `Вы уверены?`}
       okButtonText={'Да'}
       onOkClick={onOkClick}
       {...{ open, setOpen }}
     >
       <Box sx={{ display: 'flex', columnGap: 2 }}>
-        <Icon color={'error'} />
-        <Typography>Отменить действие будет невозможно!</Typography>
+        <Icon color={'warning'} />
+        <Typography color="secondary">
+          {text || 'Отменить действие будет невозможно!'}
+        </Typography>
       </Box>
     </Popup>
   );

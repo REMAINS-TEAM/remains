@@ -23,7 +23,7 @@ function CategoriesPage() {
 
   const isPaid = useSelector(getPaidStatus);
 
-  const { data: categories } = categoriesApi.useGetAllCategoriesQuery({
+  const { data: categories } = categoriesApi.useGetAllQuery({
     parentId: notEmptyCategoryId,
   });
 

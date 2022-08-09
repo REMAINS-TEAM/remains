@@ -6,6 +6,7 @@ export const apiTypes = {
   ITEMS: 'items',
   CATEGORIES: 'categories',
   USERS: 'users',
+  COMPANIES: 'companies',
   SEARCH: 'search',
 };
 

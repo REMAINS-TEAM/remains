@@ -60,7 +60,6 @@ export class ItemsController {
   async create(
     @UploadedFiles() images: Express.Multer.File[],
     @Body() createItemDto: CreateItemDto,
-    @Headers() headers: { authorization: string | undefined },
     @CurrentUserId() userId: number,
   ): Promise<Item> {
     return this.itemsService.create(userId, createItemDto, images);

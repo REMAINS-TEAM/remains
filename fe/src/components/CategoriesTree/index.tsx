@@ -36,7 +36,7 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
     setSelectedCategoryId(categoryId ? +categoryId : 0);
   }, [categoryId]);
 
-  const { data, isFetching } = categoriesApi.useGetAllCategoriesQuery({
+  const { data, isFetching } = categoriesApi.useGetAllQuery({
     parentId: selectedCategoryId,
   });
 

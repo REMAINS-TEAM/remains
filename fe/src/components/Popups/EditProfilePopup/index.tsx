@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Popup from 'components/Popups/index';
 import {
   Box,
@@ -23,16 +23,24 @@ import MuiPhoneNumber from 'material-ui-phone-number';
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from 'store/selectors/user';
 import AutocompleteField from 'components/AutocompleteField';
+import ConfirmPopup from 'components/Popups/ConfirmPopup';
+import companiesApi from 'store/api/companies';
+import useResponseNotifications from 'hooks/useResponseNotifications';
 
 function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
-  const user = useSelector(getCurrentUser);
-  const notification = useNotification();
+  const [confirmCreateCompanyPopupOpen, setConfirmCreateCompanyPopupOpen] =
+    useState(false);
+  const [newCompanyName, setNewCompanyName] = useState('');
+  const [createNewCompanyRequest, createNewCompanyResult] =
+    companiesApi.useCreateMutation();
 
-  // useResponseNotifications({
-  //   result,
-  //   onSuccessText: 'Товар добавлен в выбранную категорию',
-  //   onErrorText: 'Ошибка при добавлении товара',
-  // });
+  const user = useSelector(getCurrentUser);
+
+  useResponseNotifications({
+    result: createNewCompanyResult,
+    onSuccessText: 'Компания создана',
+    onErrorText: 'Ошибка при создании компании',
+  });
 
   const {
     control,
@@ -79,118 +87,133 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
     setOpen(false);
   };
 
-  return (
-    <Popup
-      title={`Редактировать профиль`}
-      onOkClick={handleSubmit(onSubmit)}
-      closeWhenSubmit={false}
-      {...{ open, setOpen }}
-    >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Box sx={styles.generalContainer}>
-          <Controller
-            name={fields.user.NAME}
-            control={control}
-            render={({ field }) => (
-              <TextField
-                autoFocus
-                margin="dense"
-                id={fields.user.NAME}
-                label="Имя"
-                type="text"
-                fullWidth
-                variant="outlined"
-                error={!!errors[fields.user.NAME]}
-                helperText={errors[fields.user.NAME]?.message}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment
-                      position="end"
-                      sx={
-                        MAX_LENGTH_NAME - userNameLength <= 0
-                          ? { color: 'red' }
-                          : null
-                      }
-                    >
-                      {MAX_LENGTH_NAME - userNameLength}
-                    </InputAdornment>
-                  ),
-                }}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name={fields.user.PHONE}
-            control={control}
-            render={({ field }) => (
-              <MuiPhoneNumber
-                autoFocus
-                margin="dense"
-                id={fields.user.PHONE}
-                disabled={true}
-                label="Телефон"
-                type="text"
-                fullWidth
-                variant="outlined"
-                defaultCountry={'ru'}
-                error={!!errors[fields.user.PHONE]}
-                helperText={errors[fields.user.PHONE]?.message}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <PhoneIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name={fields.user.EMAIL}
-            control={control}
-            render={({ field }) => (
-              <TextField
-                margin="dense"
-                id={fields.user.EMAIL}
-                label="E-mail"
-                type="text"
-                fullWidth
-                variant="outlined"
-                error={!!errors[fields.user.EMAIL]}
-                helperText={errors[fields.user.EMAIL]?.message}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <EmailIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                {...field}
-              />
-            )}
-          />
+  const createNewCompanyHandler = () => {
+    createNewCompanyRequest({ name: newCompanyName, description: '' });
+  };
 
-          <AutocompleteField
-            defaultValue={
-              user?.company
-                ? { id: user?.company?.id, value: user?.company?.name }
-                : null
-            }
-            onCreate={(item) => console.log('Создаем', item)}
-            textFieldProps={{
-              margin: 'dense',
-              id: fields.company.NAME,
-              label: 'Название компании или ИП',
-              fullWidth: true,
-              error: !!errors[fields.company.NAME],
-              helperText: errors[fields.company.NAME]?.message,
-            }}
-          />
-        </Box>
-      </form>
-    </Popup>
+  return (
+    <>
+      <Popup
+        title={`Редактировать профиль`}
+        onOkClick={handleSubmit(onSubmit)}
+        closeWhenSubmit={false}
+        {...{ open, setOpen }}
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Box sx={styles.generalContainer}>
+            <Controller
+              name={fields.user.NAME}
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id={fields.user.NAME}
+                  label="Имя"
+                  type="text"
+                  fullWidth
+                  variant="outlined"
+                  error={!!errors[fields.user.NAME]}
+                  helperText={errors[fields.user.NAME]?.message}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment
+                        position="end"
+                        sx={
+                          MAX_LENGTH_NAME - userNameLength <= 0
+                            ? { color: 'red' }
+                            : null
+                        }
+                      >
+                        {MAX_LENGTH_NAME - userNameLength}
+                      </InputAdornment>
+                    ),
+                  }}
+                  {...field}
+                />
+              )}
+            />
+            <Controller
+              name={fields.user.PHONE}
+              control={control}
+              render={({ field }) => (
+                <MuiPhoneNumber
+                  autoFocus
+                  margin="dense"
+                  id={fields.user.PHONE}
+                  disabled={true}
+                  label="Телефон"
+                  type="text"
+                  fullWidth
+                  variant="outlined"
+                  defaultCountry={'ru'}
+                  error={!!errors[fields.user.PHONE]}
+                  helperText={errors[fields.user.PHONE]?.message}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <PhoneIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  {...field}
+                />
+              )}
+            />
+            <Controller
+              name={fields.user.EMAIL}
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  margin="dense"
+                  id={fields.user.EMAIL}
+                  label="E-mail"
+                  type="text"
+                  fullWidth
+                  variant="outlined"
+                  error={!!errors[fields.user.EMAIL]}
+                  helperText={errors[fields.user.EMAIL]?.message}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <EmailIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  {...field}
+                />
+              )}
+            />
+
+            <AutocompleteField
+              defaultValue={
+                user?.company
+                  ? { id: user?.company?.id, value: user?.company?.name }
+                  : null
+              }
+              onCreate={(name) => {
+                setNewCompanyName(name);
+                setConfirmCreateCompanyPopupOpen(true);
+              }}
+              textFieldProps={{
+                margin: 'dense',
+                id: fields.company.NAME,
+                label: 'Название компании или ИП',
+                fullWidth: true,
+                error: !!errors[fields.company.NAME],
+                helperText: errors[fields.company.NAME]?.message,
+              }}
+            />
+          </Box>
+        </form>
+      </Popup>
+      <ConfirmPopup
+        open={confirmCreateCompanyPopupOpen}
+        setOpen={setConfirmCreateCompanyPopupOpen}
+        onOkClick={createNewCompanyHandler}
+        text={'Создать новую компанию?'}
+      />
+    </>
   );
 }
 
