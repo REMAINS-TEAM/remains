@@ -8,12 +8,9 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { Item } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
-import * as fs from 'fs';
-import { join } from 'path';
 
-import { ITEM_FILES_PATH, MIME_IMAGES_TYPE_MAP } from 'constants/main';
+import { MIME_IMAGES_TYPE_MAP } from 'constants/main';
 import { StorageService } from 'modules/storage/storage.service';
-const YandexStorage = require('easy-yandex-s3');
 
 @Injectable()
 export class ItemsService {
