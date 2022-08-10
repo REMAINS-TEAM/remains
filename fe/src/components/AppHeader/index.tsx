@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import {
+  TuneOutlined as FiltersIcon,
   InfoOutlined as InfoIcon,
   Menu as MenuIcon,
   PersonRounded as UserIcon,
@@ -70,7 +71,7 @@ function AppHeader() {
   }, [isMobile]);
 
   return (
-    <AppBar position="fixed" sx={{ height: APP_HEADER_HEIGHT }}>
+    <AppBar position="fixed" sx={{ height: APP_HEADER_HEIGHT, zIndex: 9999 }}>
       <Toolbar sx={styles.toolbar}>
         <Box sx={styles.leftSide}>
           {isMobile && (
@@ -90,6 +91,9 @@ function AppHeader() {
             </Link>
           </Typography>
           <Search />
+          <IconButton color="inherit" onClick={() => null}>
+            <FiltersIcon />
+          </IconButton>
         </Box>
         <Box sx={styles.rightSide}>
           {isFetching ? (

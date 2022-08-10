@@ -17,6 +17,17 @@ export default function MainNavigation() {
   return (
     <BrowserRouter>
       <AppHeader />
+      {/*<Box*/}
+      {/*  sx={{*/}
+      {/*    width: '100%',*/}
+      {/*    height: '200px',*/}
+      {/*    // mt: `${APP_HEADER_HEIGHT}px`,*/}
+      {/*    mt: `-140px`,*/}
+      {/*    backgroundColor: 'blue',*/}
+      {/*  }}*/}
+      {/*>*/}
+      {/*  TODO: Тут будет всплывающий drawer для фильтров*/}
+      {/*</Box>*/}
       <Box sx={{ mt: `${APP_HEADER_HEIGHT}px` }}>
         <Routes>
           <Route path={routes.main} element={<CategoriesPage />} />
