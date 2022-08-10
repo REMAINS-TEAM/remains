@@ -16,8 +16,10 @@ export const menuWithHeaderContainer = (theme: Theme) => ({
 });
 
 export const header: SxProps = {
-  py: 2,
-  px: 1,
+  display: 'flex',
+  alignItems: 'center',
+  py: 0.8,
+  pl: 1,
 };
 
 export const menuContainer: SxProps = {

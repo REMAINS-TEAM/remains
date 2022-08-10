@@ -1,6 +1,12 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import * as styles from './styles';
-import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import {
+  Box,
+  Switch,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import Container from 'components/Container';
 import CategoriesTree from 'components/CategoriesTree';
 import { Category } from 'store/slices/categories';
@@ -12,6 +18,7 @@ import { getMenuState } from 'store/selectors/menu';
 const WithMenuLayout = ({ children }: { children: ReactNode }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [onlyNotEmpty, setOnlyNotEmpty] = useState(false);
 
   const menu = useSelector(getMenuState);
 
@@ -36,9 +43,13 @@ const WithMenuLayout = ({ children }: { children: ReactNode }) => {
           <Box sx={styles.header}>
             {!isMobile && (
               <Typography variant="h3" color="secondary">
-                Категории
+                {'Только непустые категории  →'}
               </Typography>
             )}
+            <Switch
+              checked={onlyNotEmpty}
+              onChange={(e) => setOnlyNotEmpty(e.target.checked)}
+            />
           </Box>
           <Container sx={styles.menuContainer}>
             <CategoriesTree onSelect={onSelectCategoryHandler} />

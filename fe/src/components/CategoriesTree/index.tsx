@@ -63,7 +63,7 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
             </IconButton>
           )}
           <Typography variant="h3" color="secondary">
-            {categoryTitle || 'Все'}
+            {categoryTitle || 'Выберите категорию'}
           </Typography>
         </Box>
         {isMobile && (
