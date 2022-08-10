@@ -71,7 +71,7 @@ function AppHeader() {
   }, [isMobile]);
 
   return (
-    <AppBar position="fixed" sx={{ height: APP_HEADER_HEIGHT, zIndex: 9999 }}>
+    <AppBar position="fixed" sx={{ height: APP_HEADER_HEIGHT }}>
       <Toolbar sx={styles.toolbar}>
         <Box sx={styles.leftSide}>
           {isMobile && (
