@@ -7,9 +7,6 @@ export const carousel: SxProps = {
 export const imageContainer: SxProps = {
   display: 'flex',
   justifyContent: 'center',
-  alignItems: 'center',
-  width: '100%',
-  height: '100%',
-  borderRadius: '4px',
+  height: 'calc(100vh - 250px)',
   overflow: 'hidden',
 };

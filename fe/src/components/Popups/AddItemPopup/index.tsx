@@ -223,7 +223,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
       />
 
       <Typography variant="subtitle1" color="secondary" sx={{ p: 1.5 }}>
-        Фото:
+        Фото (от 1 до 10):
       </Typography>
       <Box sx={styles.imagesContainer}>
         {imageFiles.map((file, i) => (

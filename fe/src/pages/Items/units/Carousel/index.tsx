@@ -20,7 +20,7 @@ function ImagesCarousel({
       {images.map((fileName) => (
         <Box key={fileName} sx={styles.imageContainer}>
           <img
-            style={{ width: '100%' }}
+            style={{ height: '95%' }}
             src={`/api/storage/items/${itemId}/${fileName}`}
             alt={`${fileName}`}
           />
