@@ -9,8 +9,8 @@ export const page: SxProps = {
 
 export const container: SxProps = {
   width: '100%',
-  height: '100%',
-  // minHeight: `calc(100vh - ${APP_HEADER_HEIGHT}px)`,
+  height: `calc(100vh - ${APP_HEADER_HEIGHT}px - 100px)`,
+  overflowY: 'auto',
   display: 'flex',
   columnGap: 6,
   rowGap: 2,
@@ -19,8 +19,7 @@ export const container: SxProps = {
   },
   p: 4,
   '&>*': {
-    flex: '100%',
-    height: '100%',
+    flex: 1,
   },
 };
 

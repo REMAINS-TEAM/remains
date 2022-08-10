@@ -13,14 +13,14 @@ function ImagesCarousel({
   return (
     <Carousel
       navButtonsAlwaysVisible
-      fullHeightHover={false}
+      // fullHeightHover={false}
       animation="slide"
       sx={styles.carousel}
     >
       {images.map((fileName) => (
         <Box key={fileName} sx={styles.imageContainer}>
           <img
-            style={{ height: '95%' }}
+            style={{ height: '100%', width: '100%', objectFit: 'contain' }}
             src={`/api/storage/items/${itemId}/${fileName}`}
             alt={`${fileName}`}
           />
