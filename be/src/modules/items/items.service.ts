@@ -168,13 +168,7 @@ export class ItemsService {
       );
     }
 
-    // TODO
-    // delete all ITEM files from YANDEX
-    fs.rm(
-      join(...ITEM_FILES_PATH.split('/'), String(item.id)),
-      { recursive: true, force: true },
-      () => {},
-    );
+    await this.storage.deleteFolder(`items/${item.id}`);
 
     return this.prisma.item.delete({
       where: { id },

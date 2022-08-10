@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PopupMenu from '../';
 import MenuItem from '../units/MenuItem';
 import {
@@ -11,9 +11,12 @@ import { Box, Tooltip, useTheme } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import itemsApi from 'store/api/items';
 import useResponseNotifications from 'hooks/useResponseNotifications';
+import { generatePath, useNavigate } from 'react-router-dom';
+import routes from 'routes';
 
 const ItemEditPopupMenu = ({ item, sx }: ItemEditPopupMenuProps) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [dotsButtonRef, setDotsButtonRef] = useState<HTMLElement | null>(null);
 
@@ -24,6 +27,15 @@ const ItemEditPopupMenu = ({ item, sx }: ItemEditPopupMenuProps) => {
     onSuccessText: 'Товар удален!',
     onErrorText: 'Ошибка при удалении товара',
   });
+
+  // redirect after deleting
+  useEffect(() => {
+    if (!deleteResult.isSuccess) return;
+
+    navigate(
+      generatePath(routes.category, { categoryId: String(item.categoryId) }),
+    );
+  }, [deleteResult.isSuccess]);
 
   const dotsClickHandler = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();

@@ -71,7 +71,7 @@ export class ItemsController {
     @Param() params: { id: string },
     @Headers() headers: { authorization: string | undefined },
     @CurrentUserId() userId: number,
-  ): Promise<Item> {
+  ): Promise<Item | null> {
     return this.itemsService.delete(userId, +params.id);
   }
 }
