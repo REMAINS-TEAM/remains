@@ -56,7 +56,10 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
   } = useForm({
     resolver: joiResolver(editProfileSchema),
     defaultValues: {
-      company: { id: 0, name: user?.company?.name || '' },
+      company: {
+        id: user?.company?.id || null,
+        name: user?.company?.name || '',
+      },
       user: {
         name: user?.name || '',
         phone: user?.phone || '',
@@ -86,8 +89,8 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
     if (Object.keys(errors).length) return;
 
     updateUserRequest({
-      name: fieldsValues.user?.name,
-      email: fieldsValues.user?.email,
+      name: fieldsValues.user?.name || undefined,
+      email: fieldsValues.user?.email || undefined,
       companyId: fieldsValues.company?.id || undefined,
     });
 
