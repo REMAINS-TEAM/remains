@@ -10,6 +10,7 @@ import {
   Box,
   Divider,
   IconButton,
+  Switch,
   Typography,
   useMediaQuery,
   useTheme,
@@ -23,6 +24,8 @@ import { useDispatch } from 'react-redux';
 export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const [onlyNotEmpty, setOnlyNotEmpty] = useState(false);
 
   const { categoryId } = useParams();
 
@@ -54,18 +57,29 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
   return (
     <>
       <Box sx={styles.headerContainer}>
-        <Box sx={styles.headerLeftSide}>
-          {categoryTitle ? (
-            <BackButton onClick={backClickHandler} />
-          ) : (
-            <IconButton sx={{ width: '40px', height: '40px' }}>
-              <FolderIcon />
-            </IconButton>
+        <Box sx={styles.headerSide}>
+          <Box sx={styles.headerTitle}>
+            {categoryTitle ? (
+              <BackButton onClick={backClickHandler} />
+            ) : (
+              <IconButton sx={{ width: '40px', height: '40px' }}>
+                <FolderIcon />
+              </IconButton>
+            )}
+            <Typography variant="h3" color="secondary">
+              {categoryTitle || (onlyNotEmpty ? 'Непустые' : 'Все категории')}
+            </Typography>
+          </Box>
+
+          {!categoryTitle && (
+            <Switch
+              sx={{ ml: 1 }}
+              checked={onlyNotEmpty}
+              onChange={(e) => setOnlyNotEmpty(e.target.checked)}
+            />
           )}
-          <Typography variant="h3" color="secondary">
-            {categoryTitle || 'Выберите категорию'}
-          </Typography>
         </Box>
+
         {isMobile && (
           <IconButton onClick={hideMobileMenu}>
             <CloseIcon />

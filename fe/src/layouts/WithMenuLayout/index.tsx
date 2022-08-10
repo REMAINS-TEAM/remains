@@ -16,10 +16,6 @@ import { useSelector } from 'react-redux';
 import { getMenuState } from 'store/selectors/menu';
 
 const WithMenuLayout = ({ children }: { children: ReactNode }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [onlyNotEmpty, setOnlyNotEmpty] = useState(false);
-
   const menu = useSelector(getMenuState);
 
   const navigate = useNavigate();
@@ -40,17 +36,7 @@ const WithMenuLayout = ({ children }: { children: ReactNode }) => {
     <>
       {menu.open && (
         <Box sx={styles.menuWithHeaderContainer}>
-          <Box sx={styles.header}>
-            {!isMobile && (
-              <Typography variant="h3" color="secondary">
-                {'Только непустые категории  →'}
-              </Typography>
-            )}
-            <Switch
-              checked={onlyNotEmpty}
-              onChange={(e) => setOnlyNotEmpty(e.target.checked)}
-            />
-          </Box>
+          <Box sx={styles.header} />
           <Container sx={styles.menuContainer}>
             <CategoriesTree onSelect={onSelectCategoryHandler} />
           </Container>

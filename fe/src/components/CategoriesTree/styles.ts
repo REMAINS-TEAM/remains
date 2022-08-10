@@ -9,9 +9,16 @@ export const headerContainer = {
   mb: 1,
 };
 
-export const headerLeftSide = {
+export const headerSide = {
+  width: '100%',
   display: 'flex',
   columnGap: 1,
+  alignItems: 'center',
+  justifyContent: 'space-between',
+};
+
+export const headerTitle = {
+  display: 'flex',
   alignItems: 'center',
 };
 

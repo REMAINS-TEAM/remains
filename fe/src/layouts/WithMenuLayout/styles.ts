@@ -18,7 +18,7 @@ export const menuWithHeaderContainer = (theme: Theme) => ({
 export const header: SxProps = {
   display: 'flex',
   alignItems: 'center',
-  py: 0.8,
+  py: 3,
   pl: 1,
 };
 
