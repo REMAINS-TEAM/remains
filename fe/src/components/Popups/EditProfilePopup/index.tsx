@@ -211,6 +211,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
                 setConfirmPopupOpen(true);
               }}
               onSelect={(item: any) => {
+                if (!item) return;
                 setValue('company', {
                   id: item.id,
                   name: item.value,
