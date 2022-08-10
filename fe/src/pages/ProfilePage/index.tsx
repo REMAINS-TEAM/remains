@@ -61,7 +61,11 @@ function ProfilePage() {
           title="Мой профиль"
           withBackButton
           left={
-            <IconButton color="secondary" onClick={openEditProfileModal}>
+            <IconButton
+              color={!user?.name ? 'warning' : 'secondary'}
+              onClick={openEditProfileModal}
+              sx={!user?.name ? styles.accentedBtn : null}
+            >
               <EditIcon />
             </IconButton>
           }
