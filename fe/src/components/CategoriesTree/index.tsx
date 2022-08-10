@@ -11,6 +11,7 @@ import {
   Divider,
   IconButton,
   Switch,
+  Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
@@ -72,11 +73,13 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
           </Box>
 
           {!categoryTitle && (
-            <Switch
-              sx={{ ml: 1 }}
-              checked={onlyNotEmpty}
-              onChange={(e) => setOnlyNotEmpty(e.target.checked)}
-            />
+            <Tooltip title="Показывать только НЕПУСТЫЕ категории">
+              <Switch
+                sx={{ ml: 1 }}
+                checked={onlyNotEmpty}
+                onChange={(e) => setOnlyNotEmpty(e.target.checked)}
+              />
+            </Tooltip>
           )}
         </Box>
 

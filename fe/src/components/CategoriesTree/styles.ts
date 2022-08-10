@@ -20,6 +20,7 @@ export const headerSide = {
 export const headerTitle = {
   display: 'flex',
   alignItems: 'center',
+  columnGap: 1,
 };
 
 export const listContainer: SxProps = {
