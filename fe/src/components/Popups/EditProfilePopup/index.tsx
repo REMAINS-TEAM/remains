@@ -3,7 +3,7 @@ import Popup from 'components/Popups/index';
 import { Box, InputAdornment, TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import useLimitTextField from 'hooks/useLimitTextField';
-import { MAX_LENGTH_NAME } from './validation';
+import { editProfileSchema, MAX_LENGTH_NAME } from './validation';
 import { RegisterPopupProps } from 'components/Popups/EditProfilePopup/types';
 import * as styles from './styles';
 import {
@@ -18,10 +18,10 @@ import ConfirmPopup from 'components/Popups/ConfirmPopup';
 import companiesApi from 'store/api/companies';
 import useResponseNotifications from 'hooks/useResponseNotifications';
 import usersApi from 'store/api/user';
+import { joiResolver } from '@hookform/resolvers/joi';
 
 function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
-  const [confirmCreateCompanyPopupOpen, setConfirmCreateCompanyPopupOpen] =
-    useState(false);
+  const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [newCompanyName, setNewCompanyName] = useState('');
 
   const { data: companies, isFetching } =
@@ -54,7 +54,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
     setValue,
     formState: { errors },
   } = useForm({
-    // resolver: joiResolver(editProfileSchema), //TODO
+    resolver: joiResolver(editProfileSchema),
     defaultValues: {
       company: { id: 0, name: user?.company?.name || '' },
       user: {
@@ -66,10 +66,10 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
   });
 
   useEffect(() => {
-    if (!createNewCompanyResult) return;
+    if (!createNewCompanyResult?.data) return;
     setValue('company', {
-      id: createNewCompanyResult.data?.id || 0,
-      name: createNewCompanyResult.data?.name || '',
+      id: createNewCompanyResult.data.id,
+      name: createNewCompanyResult.data.name,
     });
   }, [createNewCompanyResult]);
 
@@ -95,6 +95,8 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
     createNewCompanyRequest({ name: newCompanyName, description: '' });
   };
 
+  console.log('err', errors);
+
   return (
     <>
       <Popup
@@ -118,7 +120,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
                   fullWidth
                   variant="outlined"
                   error={!!errors?.user?.name}
-                  helperText={errors?.user?.name}
+                  helperText={errors?.user?.name?.message}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment
@@ -152,7 +154,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
                   variant="outlined"
                   defaultCountry={'ru'}
                   error={!!errors?.user?.phone}
-                  helperText={errors?.user?.phone}
+                  helperText={errors?.user?.phone?.message}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -176,7 +178,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
                   fullWidth
                   variant="outlined"
                   error={!!errors?.user?.email}
-                  helperText={errors?.user?.email}
+                  helperText={errors?.user?.email?.message}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -205,12 +207,12 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
               }
               onCreate={(name) => {
                 setNewCompanyName(name);
-                setConfirmCreateCompanyPopupOpen(true);
+                setConfirmPopupOpen(true);
               }}
               onSelect={(item: any) => {
                 setValue('company', {
-                  id: item.id || 0,
-                  name: item.value || '',
+                  id: item.id,
+                  name: item.value,
                 });
               }}
               textFieldProps={{
@@ -219,15 +221,15 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
                 label: 'Название компании или ИП',
                 fullWidth: true,
                 error: !!errors?.company?.name,
-                helperText: errors?.company?.name,
+                helperText: errors?.company?.name?.message,
               }}
             />
           </Box>
         </form>
       </Popup>
       <ConfirmPopup
-        open={confirmCreateCompanyPopupOpen}
-        setOpen={setConfirmCreateCompanyPopupOpen}
+        open={confirmPopupOpen}
+        setOpen={setConfirmPopupOpen}
         onOkClick={createNewCompanyHandler}
         text={'Создать новую компанию?'}
       />
