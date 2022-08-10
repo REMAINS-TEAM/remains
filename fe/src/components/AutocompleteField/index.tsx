@@ -4,6 +4,8 @@ import Autocomplete, {
   AutocompleteProps,
   createFilterOptions,
 } from '@mui/material/Autocomplete';
+import { InputProps } from '@mui/material';
+import { InputHTMLAttributes } from 'react';
 
 interface OptionType {
   inputValue?: string;
@@ -16,6 +18,8 @@ const filter = createFilterOptions<OptionType>();
 export default function AutocompleteField({
   options,
   textFieldProps,
+  inputProps,
+  InputProps,
   onCreate,
   onSelect,
   defaultValue,
@@ -25,6 +29,8 @@ export default function AutocompleteField({
   onCreate: (value: string) => void;
   onSelect: ({ id, value }: { id: number; value: string }) => void;
   textFieldProps?: TextFieldProps;
+  inputProps?: InputHTMLAttributes<HTMLInputElement>;
+  InputProps?: InputProps;
   defaultValue?: OptionType | null;
 } & Partial<AutocompleteProps<any, any, any, any>>) {
   const [value, setValue] = React.useState<OptionType | null>(
@@ -83,7 +89,14 @@ export default function AutocompleteField({
       renderOption={(props, option) => <li {...props}>{option.value}</li>}
       freeSolo
       sx={{ width: '100%' }}
-      renderInput={(params) => <TextField {...textFieldProps} {...params} />}
+      renderInput={(params) => (
+        <TextField
+          {...textFieldProps}
+          {...params}
+          inputProps={{ ...params.inputProps, ...inputProps }}
+          InputProps={{ ...params.InputProps, ...InputProps }}
+        />
+      )}
     />
   );
 }

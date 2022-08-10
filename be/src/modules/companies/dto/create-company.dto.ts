@@ -1,16 +1,9 @@
-import {
-  IsString,
-  Length,
-  IsPositive,
-  IsOptional,
-  IsNotEmpty,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 
 export class CreateCompanyDto {
   @IsNotEmpty()
   @IsString()
-  @Length(3, 20, {
+  @Length(3, 50, {
     message: 'Длина названия должна быть $constraint1-$constraint2 символов',
   })
   name: string;
@@ -20,5 +13,5 @@ export class CreateCompanyDto {
   @Length(0, 200, {
     message: 'Длина описания должна быть $constraint1-$constraint2 символов',
   })
-  description: string;
+  description?: string;
 }

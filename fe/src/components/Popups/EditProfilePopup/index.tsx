@@ -79,13 +79,16 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
     maxLength: MAX_LENGTH_NAME,
   });
 
-  const onSubmit = (fieldsValues: any) => {
+  const onSubmit = (fieldsValues: {
+    user?: { name: string; email: string };
+    company?: { id: number };
+  }) => {
     if (Object.keys(errors).length) return;
 
     updateUserRequest({
-      name: fieldsValues.user.name,
-      email: fieldsValues.user.email,
-      companyId: fieldsValues.company.id || undefined,
+      name: fieldsValues.user?.name,
+      email: fieldsValues.user?.email,
+      companyId: fieldsValues.company?.id || undefined,
     });
 
     setOpen(false);
@@ -94,8 +97,6 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
   const createNewCompanyHandler = () => {
     createNewCompanyRequest({ name: newCompanyName, description: '' });
   };
-
-  console.log('err', errors);
 
   return (
     <>
@@ -223,6 +224,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
                 error: !!errors?.company?.name,
                 helperText: errors?.company?.name?.message,
               }}
+              inputProps={{ maxLength: MAX_LENGTH_NAME }}
             />
           </Box>
         </form>
