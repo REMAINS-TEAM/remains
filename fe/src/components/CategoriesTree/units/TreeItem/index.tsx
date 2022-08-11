@@ -1,6 +1,9 @@
 import { TreeItemProps } from './types';
 import React from 'react';
-import { FolderOutlined as FolderIcon } from '@mui/icons-material';
+import {
+  FolderOutlined as FolderIcon,
+  FolderCopyOutlined as FolderWithFoldersIcon,
+} from '@mui/icons-material';
 import * as styles from './styles';
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
 
@@ -10,7 +13,7 @@ export default function TreeItem({ title, count, onClick }: TreeItemProps) {
     <li onClick={onClick} style={{ listStyle: 'none' }}>
       <Box sx={styles.itemContainer}>
         <Box sx={styles.titleContainer}>
-          <FolderIcon />
+          {count.subCategories ? <FolderWithFoldersIcon /> : <FolderIcon />}
           <span>{title}</span>
         </Box>
 
