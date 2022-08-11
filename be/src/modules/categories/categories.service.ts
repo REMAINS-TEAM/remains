@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, Category } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
+import { FindAllDto } from './dto/find-all.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -11,7 +12,7 @@ export class CategoriesService {
     return this.prisma.category.create({ data });
   }
 
-  async findAll({ parentId }: { parentId?: number }) {
+  async findAll({ parentId, onlyNotEmpty }: FindAllDto) {
     let countSubCategories;
     let categoriesWithCountSub = [];
     let parentCategory: Category | null = null;
@@ -24,13 +25,24 @@ export class CategoriesService {
         });
       }
 
-      const categories = await this.prisma.category.findMany({
+      let categories;
+      let notEmptyIds: number[] = [];
+      if (onlyNotEmpty) {
+        const notEmpties = await this.prisma.item.findMany({
+          distinct: ['categoryId'],
+        });
+        notEmptyIds = notEmpties.map((item) => item.categoryId);
+      }
+
+      categories = await this.prisma.category.findMany({
         where: {
-          parentId: parentId ? +parentId : undefined,
+          parentId,
+          id: onlyNotEmpty ? { in: notEmptyIds } : undefined,
         },
         include: {
           _count: { select: { items: true } },
         },
+        orderBy: { title: 'asc' },
       });
 
       if (categories.length) {
