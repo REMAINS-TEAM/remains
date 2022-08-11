@@ -41,7 +41,9 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
   }, [categoryId]);
 
   const { data, isFetching } = categoriesApi.useGetAllQuery({
-    parentId: selectedCategoryId,
+    parentId:
+      onlyNotEmpty && selectedCategoryId === 0 ? undefined : selectedCategoryId,
+    onlyNotEmpty: String(onlyNotEmpty),
   });
 
   const categoryTitle = data?.parentCategory?.title;

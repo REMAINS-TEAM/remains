@@ -1,7 +1,6 @@
 import api, { apiTypes } from './';
 import { Category } from '../slices/categories';
 import { getQueryString } from 'utils';
-import { Item } from 'store/slices/items';
 import { Company } from 'store/slices/user';
 
 export const categoriesApi = api.injectEndpoints({
@@ -29,7 +28,7 @@ export const categoriesApi = api.injectEndpoints({
       //   test: 1,
       // }),
     }),
-    create: build.mutation<Company, { name: string, description?: string }>({
+    create: build.mutation<Company, { name: string; description?: string }>({
       query: (body) => ({
         url: apiTypes.COMPANIES,
         method: 'post',
