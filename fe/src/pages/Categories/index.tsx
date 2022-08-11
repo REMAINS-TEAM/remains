@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MainLayout from 'layouts/MainLayout';
 import WithMenuLayout from 'layouts/WithMenuLayout';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as styles from './styles';
 import { Box, Button, IconButton, SpeedDialIcon } from '@mui/material';
 import itemsApi from 'store/api/items';
@@ -15,6 +15,7 @@ import BreadCrumbs from 'components/BreadCrumbs';
 import categoriesApi from 'store/api/categories';
 import Container from 'components/Container';
 import NotificationPlate from 'components/NotificationPlate';
+import routes from 'routes';
 
 function CategoriesPage() {
   const { categoryId } = useParams();
@@ -22,6 +23,8 @@ function CategoriesPage() {
   const [addItemPopupOpen, setAddItemPopupOpen] = useState(false);
 
   const isPaid = useSelector(getPaidStatus);
+
+  const navigate = useNavigate();
 
   const { data: categories } = categoriesApi.useGetAllQuery({
     parentId: notEmptyCategoryId,
@@ -53,6 +56,8 @@ function CategoriesPage() {
     setAddItemPopupOpen(true);
   };
 
+  const showAllHandler = () => navigate(routes.items);
+
   return (
     <MainLayout>
       <WithMenuLayout>
@@ -63,8 +68,12 @@ function CategoriesPage() {
               <Container sx={{ width: '100%', height: '100%' }}>
                 <EmptyState
                   text={'Выберите категорию'}
-                  description={'Посмотрите, что тут есть, переключая категории'}
-                />
+                  description={'Или посмотрите все, что есть'}
+                >
+                  <Button variant="contained" onClick={showAllHandler}>
+                    Показать всё
+                  </Button>
+                </EmptyState>
               </Container>
             </>
           ) : (

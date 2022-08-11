@@ -67,7 +67,7 @@ function Search() {
           type: ItemType.CATEGORIES,
         },
         {
-          title: 'Продукты',
+          title: 'Товары',
           icon: <ProductsIcon fontSize="small" />,
           items: data?.items,
           type: ItemType.ITEMS,

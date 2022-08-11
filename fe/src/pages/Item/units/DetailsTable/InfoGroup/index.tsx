@@ -1,5 +1,5 @@
 import React from 'react';
-import { InfoField } from 'pages/Items/units/DetailsTable/config';
+import { InfoField } from 'pages/Item/units/DetailsTable/config';
 import { Item } from 'store/slices/items';
 import {
   Box,

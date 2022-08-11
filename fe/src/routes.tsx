@@ -3,6 +3,7 @@ const routes = {
   categories: `/categories`,
   category: `/categories/:categoryId`,
   item: `/items/:itemId`,
+  items: `/items`,
   profile: `/profile`,
 };
 

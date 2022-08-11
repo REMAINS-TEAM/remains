@@ -21,7 +21,7 @@ export default function TreeItem({ title, count, onClick }: TreeItemProps) {
               color={theme.palette.grey[300]}
               component="span"
             >
-              -/-
+              —
             </Typography>
           </Tooltip>
         )}

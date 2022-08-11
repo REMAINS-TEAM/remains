@@ -8,8 +8,9 @@ import CategoriesPage from 'pages/Categories';
 import { Box } from '@mui/material';
 import { APP_HEADER_HEIGHT } from 'global/constants';
 import MainNotification from 'components/MainNotification';
-import ItemPage from 'pages/Items';
+import ItemPage from 'pages/Item';
 import ProfilePage from 'pages/ProfilePage';
+import ItemsPage from 'pages/items';
 
 export const history = createBrowserHistory();
 
@@ -33,6 +34,7 @@ export default function MainNavigation() {
           <Route path={routes.main} element={<CategoriesPage />} />
           <Route path={routes.category} element={<CategoriesPage />} />
           <Route path={routes.item} element={<ItemPage />} />
+          <Route path={routes.items} element={<ItemsPage />} />
           <Route path={routes.profile} element={<ProfilePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

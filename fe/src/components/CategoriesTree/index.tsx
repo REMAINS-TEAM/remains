@@ -65,7 +65,10 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
             {categoryTitle ? (
               <BackButton onClick={backClickHandler} />
             ) : (
-              <IconButton sx={{ width: '40px', height: '40px' }}>
+              <IconButton
+                sx={{ width: '40px', height: '40px', cursor: 'auto' }}
+                disableRipple
+              >
                 <FolderIcon />
               </IconButton>
             )}
