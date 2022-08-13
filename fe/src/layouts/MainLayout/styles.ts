@@ -10,7 +10,9 @@ export const root: SxProps = {
 export const center: SxProps = {
   position: 'relative',
   display: 'flex',
-  padding: 2,
+  px: 2,
+  pt: 1,
+  pb: 2,
   maxWidth: '1180px',
   width: '1180px',
   height: '100%',

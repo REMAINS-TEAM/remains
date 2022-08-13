@@ -34,7 +34,6 @@ export class ItemsController {
   @Get()
   @UseGuards(GetIsPaidGuard)
   async findAll(
-    @IsPaid() isPaid: boolean,
     @Query() { categoryId, userId }: FindAllItemsDto,
     @Pagination() { limit, offset }: { limit: number; offset: number },
   ): Promise<Item[]> {
