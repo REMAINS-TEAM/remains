@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { getPaidStatus } from 'store/selectors/user';
 import { standardFormat } from 'utils';
 
-function ExpiredDate({ date }: { date: Date }) {
+function ExpiredDate({ date, onClick }: { date: Date; onClick?: () => void }) {
   const isPaid = useSelector(getPaidStatus);
 
   const daysLeft =
@@ -29,7 +29,7 @@ function ExpiredDate({ date }: { date: Date }) {
             }`
       }
     >
-      <div>
+      <div onClick={onClick}>
         <CircularProgressWithLabel
           value={daysLeft > 30 ? 100 : (daysLeft * 100) / 30}
           label={`${daysLeft < 0 ? 0 : daysLeft}д`}

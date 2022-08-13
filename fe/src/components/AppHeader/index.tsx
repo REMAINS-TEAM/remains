@@ -31,6 +31,7 @@ import { Link } from 'react-router-dom';
 import { setOpen } from 'store/slices/menu';
 import { getMenuState } from 'store/selectors/menu';
 import ExpiredDate from 'components/AppHeader/units/ExpiredDate';
+import PaymentPopup from 'components/Popups/PaymentPopup';
 
 function AppHeader() {
   const theme = useTheme();
@@ -45,14 +46,14 @@ function AppHeader() {
   const user = useSelector(getCurrentUser);
 
   const [authPopupOpen, setAuthPopupOpen] = useState(false);
+  const [paymentPopupOpen, setPaymentPopupOpen] = useState(false);
 
   const [profileButtonRef, setProfileButtonRef] = useState<HTMLElement | null>(
     null,
   );
 
-  const loginClickHandler = () => {
-    setAuthPopupOpen(true);
-  };
+  const loginClickHandler = () => setAuthPopupOpen(true);
+  const showPaymentPopup = () => setPaymentPopupOpen(true);
 
   const profileClickHandler = (event: React.MouseEvent<HTMLElement>) => {
     setProfileButtonRef(event.currentTarget);
@@ -100,7 +101,12 @@ function AppHeader() {
             <Loader color={'secondary'} size={20} />
           ) : (
             <>
-              {user && <ExpiredDate date={user.paymentExpiredDate} />}
+              {user && (
+                <ExpiredDate
+                  date={user.paymentExpiredDate}
+                  onClick={showPaymentPopup}
+                />
+              )}
               {!isMobile ? (
                 <Button
                   color="inherit"
@@ -129,6 +135,7 @@ function AppHeader() {
         </Box>
       </Toolbar>
       <AuthPopup open={authPopupOpen} setOpen={setAuthPopupOpen} />
+      <PaymentPopup open={paymentPopupOpen} setOpen={setPaymentPopupOpen} />
       <ProfileMenu
         anchorEl={profileButtonRef}
         setAnchorEl={setProfileButtonRef}
