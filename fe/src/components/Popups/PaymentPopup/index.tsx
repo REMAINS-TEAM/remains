@@ -81,7 +81,7 @@ function PaymentPopup({ open, setOpen }: PaymentPopupProps) {
                     variant="outlined"
                     helperText={
                       !!errors.amount &&
-                      `Введите корректную сумму не меньше ${MONTH_PRICE}`
+                      `Введите корректную сумму не меньше ${MONTH_PRICE}₽`
                     }
                     error={!!errors.amount}
                     {...field}
