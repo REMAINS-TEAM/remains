@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Headers,
   HttpCode,
   Param,
   Patch,
@@ -18,10 +17,14 @@ import { ConfirmCodeDto } from 'modules/users/dto/confirm-code.dto';
 import { OnlyForLoggedGuard } from 'guards/onlyForLogged.guard';
 import { CurrentUserId } from 'decorators/current-user.decorator';
 import { CreatePaymentDto } from 'modules/users/dto/create-payment.dto';
+import { PaymentService } from 'modules/payment/payment.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private paymentService: PaymentService,
+  ) {}
 
   @Get('me')
   @UseGuards(OnlyForLoggedGuard)
@@ -76,6 +79,6 @@ export class UsersController {
     @CurrentUserId() userId: number,
     @Body() { amount }: CreatePaymentDto,
   ) {
-    return this.usersService.createPayment(userId, amount);
+    return this.usersService.createPayment(this.paymentService, userId, amount);
   }
 }

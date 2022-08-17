@@ -13,6 +13,7 @@ import { addMonths } from 'date-fns';
 import jwt from 'jsonwebtoken';
 import { generateConfirmCallUrl } from 'modules/users/users.utils';
 import axios from 'axios';
+import { PaymentService } from 'modules/payment/payment.service';
 
 @Injectable()
 export class UsersService {
@@ -205,7 +206,11 @@ export class UsersService {
     return result;
   }
 
-  async createPayment(userId: number, amount: number) {
-    return true;
+  async createPayment(
+    paymentService: PaymentService,
+    userId: number,
+    amount: number,
+  ) {
+    return await paymentService.createPayment(amount);
   }
 }

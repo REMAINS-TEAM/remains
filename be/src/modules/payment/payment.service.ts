@@ -7,7 +7,8 @@ export class PaymentService {
     @Inject('PAYMENT_PROVIDER') private paymentProvider: PaymentProvider,
   ) {}
 
-  async createPayment(amount: number, returnUrl: string) {
-    return await this.paymentProvider.createPayment(amount, returnUrl);
+  async createPayment(amount: number) {
+    const payment = await this.paymentProvider.createPayment(amount);
+    return { token: payment.confirmation.confirmation_token };
   }
 }

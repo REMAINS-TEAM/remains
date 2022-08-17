@@ -1,3 +1,9 @@
+export interface CreatePaymentResponse {
+  id: string;
+  status: string;
+  confirmation: { confirmation_token: string };
+}
+
 export interface PaymentProvider {
-  createPayment: (amount: number, returnUrl: string) => any;
+  createPayment: (amount: number) => Promise<CreatePaymentResponse>;
 }

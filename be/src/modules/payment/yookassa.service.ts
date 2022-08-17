@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { ICreatePayment, YooCheckout } from '@a2seven/yoo-checkout';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
+import {
+  CreatePaymentResponse,
+  PaymentProvider,
+} from 'modules/payment/payment.types';
 
 @Injectable()
-export class YookassaService {
+export class YookassaService implements PaymentProvider {
   checkout: YooCheckout;
   constructor() {
     this.checkout = new YooCheckout({
@@ -12,25 +16,24 @@ export class YookassaService {
     });
   }
 
-  async createPayment(amount: number, returnUrl: string) {
-    const idempotenceKey = uuid.v4();
+  async createPayment(amount: number) {
+    const idempotenceKey = uuidv4();
 
     const createPayload: ICreatePayment = {
       amount: {
         value: String(amount),
         currency: 'RUB',
       },
-      payment_method_data: {
-        type: 'bank_card',
-      },
       confirmation: {
-        type: 'redirect',
-        return_url: returnUrl,
+        type: 'embedded',
       },
     };
 
     try {
-      return await this.checkout.createPayment(createPayload, idempotenceKey);
+      return (await this.checkout.createPayment(
+        createPayload,
+        idempotenceKey,
+      )) as CreatePaymentResponse;
     } catch (error) {
       console.error(error);
       throw error;

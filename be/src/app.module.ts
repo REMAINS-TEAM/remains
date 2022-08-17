@@ -14,6 +14,7 @@ import { CompaniesModule } from 'modules/companies/companies.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from 'configuration';
 import { StorageModule } from 'modules/storage/storage.module';
+import { PaymentModule } from 'modules/payment/payment.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { StorageModule } from 'modules/storage/storage.module';
       load: [configuration],
     }),
     PrismaModule,
+    PaymentModule,
     SearchModule,
     UsersModule,
     CompaniesModule,
