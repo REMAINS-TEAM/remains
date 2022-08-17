@@ -17,6 +17,8 @@ export class YookassaService implements PaymentProvider {
   }
 
   async createPayment(amount: number) {
+    //TODO: create order in DB and send metadata to YooKassa
+
     const idempotenceKey = uuidv4();
 
     const createPayload: ICreatePayment = {
@@ -27,6 +29,7 @@ export class YookassaService implements PaymentProvider {
       confirmation: {
         type: 'embedded',
       },
+      metadata: { orderId: 'Сюда шлем созданный orderId' },
     };
 
     try {
