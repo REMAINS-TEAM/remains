@@ -5,5 +5,8 @@ export interface CreatePaymentResponse {
 }
 
 export interface PaymentProvider {
-  createPayment: (amount: number) => Promise<CreatePaymentResponse>;
+  createPayment: (
+    amount: number,
+    orderId: string,
+  ) => Promise<CreatePaymentResponse>;
 }

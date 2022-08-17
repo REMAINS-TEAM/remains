@@ -211,6 +211,6 @@ export class UsersService {
     userId: number,
     amount: number,
   ) {
-    return await paymentService.createPayment(amount);
+    return await paymentService.createPayment(userId, amount);
   }
 }

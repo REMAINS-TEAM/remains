@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { PrismaService } from 'modules/prisma/prisma.service';
+import { OrderStatus } from '@prisma/client';
 import { NOT_ACTIVATED_LIMIT } from 'constants/main';
 
 @Injectable()
@@ -16,6 +17,19 @@ export class SchedulerService {
         createdAt: {
           lt: new Date(new Date().getTime() - NOT_ACTIVATED_LIMIT),
         },
+      },
+    });
+
+    // cancel not finished orders
+    await this.prisma.order.updateMany({
+      where: {
+        createdAt: {
+          lt: new Date(new Date().getTime() - NOT_ACTIVATED_LIMIT),
+        },
+      },
+      data: {
+        status: OrderStatus.CANCELED,
+        reason: `Canceled by timeout ${NOT_ACTIVATED_LIMIT / 3600}min`,
       },
     });
   }
