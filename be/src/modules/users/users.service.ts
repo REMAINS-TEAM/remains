@@ -9,7 +9,7 @@ import { Code, User } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { ConfirmCodeDto } from 'modules/users/dto/confirm-code.dto';
+import { addMonths } from 'date-fns';
 import jwt from 'jsonwebtoken';
 import { generateConfirmCallUrl } from 'modules/users/users.utils';
 import axios from 'axios';
@@ -56,8 +56,9 @@ export class UsersService {
       });
 
       if (!user) {
+        // create user with trial period
         user = await this.prisma.user.create({
-          data: { phone },
+          data: { phone, paymentExpiredDate: addMonths(new Date(), 1) },
         });
       }
     } catch (err) {
@@ -119,7 +120,15 @@ export class UsersService {
     return { status: 'ok' };
   }
 
-  async confirmCode({ code, phone, cheat }: ConfirmCodeDto) {
+  async confirmCode({
+    code,
+    phone,
+    loginWithoutCode = false,
+  }: {
+    code: number;
+    phone: string;
+    loginWithoutCode?: boolean;
+  }) {
     let user: User | null;
     try {
       user = await this.prisma.user.findUnique({
@@ -133,7 +142,7 @@ export class UsersService {
       throw new BadRequestException('User in not existed or code is invalid');
     }
 
-    if (!cheat) {
+    if (!loginWithoutCode) {
       let existedCode: Code | null;
       try {
         existedCode = await this.prisma.code.findFirst({

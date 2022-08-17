@@ -69,6 +69,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-helmet": "^6.1.5",
     "http-proxy-middleware": "^2.0.6",
     "prettier": "^2.4.1"
   }

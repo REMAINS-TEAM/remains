@@ -56,8 +56,12 @@ export class UsersController {
 
   @Post('code')
   @HttpCode(200)
-  async code(@Body() confirmCodeDto: ConfirmCodeDto) {
-    return this.usersService.confirmCode(confirmCodeDto);
+  async code(@Body() { code, phone, cheat }: ConfirmCodeDto) {
+    return this.usersService.confirmCode({
+      code,
+      phone,
+      loginWithoutCode: cheat,
+    });
   }
 
   @Post('logout')
