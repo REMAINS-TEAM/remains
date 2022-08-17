@@ -95,6 +95,17 @@ export const usersApi = api.injectEndpoints({
       }),
       invalidatesTags: [apiTypes.USERS],
     }),
+
+    createPayment: build.mutation<
+      { token: string; orderId: string },
+      { amount: number }
+    >({
+      query: (body) => ({
+        url: apiTypes.USERS + '/pay',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 

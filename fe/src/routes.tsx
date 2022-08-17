@@ -5,6 +5,9 @@ const routes = {
   item: `/items/:itemId`,
   items: `/items`,
   profile: `/profile`,
+  payment: {
+    success: '/payment/success',
+  },
 };
 
 export default routes;
