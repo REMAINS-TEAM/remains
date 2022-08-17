@@ -17,6 +17,7 @@ import { LoginUserDto } from 'modules/users/dto/login-user.dto';
 import { ConfirmCodeDto } from 'modules/users/dto/confirm-code.dto';
 import { OnlyForLoggedGuard } from 'guards/onlyForLogged.guard';
 import { CurrentUserId } from 'decorators/current-user.decorator';
+import { CreatePaymentDto } from 'modules/users/dto/create-payment.dto';
 
 @Controller('users')
 export class UsersController {
@@ -65,11 +66,16 @@ export class UsersController {
   }
 
   @Post('logout')
-  async logout(
-    @Headers() headers: { authorization: string | undefined },
-  ): Promise<{ status: string }> {
-    const authHeader = headers.authorization || '';
-    const token = authHeader.split(' ')[1];
-    return this.usersService.logout(token);
+  async logout(): Promise<{ status: string }> {
+    return this.usersService.logout();
+  }
+
+  @Post('pay')
+  @UseGuards(OnlyForLoggedGuard)
+  async createPayment(
+    @CurrentUserId() userId: number,
+    @Body() { amount }: CreatePaymentDto,
+  ) {
+    return this.usersService.createPayment(userId, amount);
   }
 }

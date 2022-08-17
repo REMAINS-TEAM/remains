@@ -180,7 +180,7 @@ export class UsersService {
     return { token };
   }
 
-  async logout(token: string) {
+  async logout() {
     // try {
     //   await this.prisma.token.delete({ where: { token } });
     // } catch (err) {
@@ -203,5 +203,9 @@ export class UsersService {
     }
 
     return result;
+  }
+
+  async createPayment(userId: number, amount: number) {
+    return true;
   }
 }
