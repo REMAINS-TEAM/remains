@@ -8,6 +8,8 @@ import { paymentSchema } from './validation';
 import YookassaCheckout from 'components/YookassaCheckout';
 import userApi from 'store/api/user';
 
+const MONTH_PRICE = 500;
+
 function PaymentPopup({ open, setOpen }: PaymentPopupProps) {
   const [createPaymentRequest, createPaymentResult] =
     userApi.useCreatePaymentMutation();
@@ -18,13 +20,21 @@ function PaymentPopup({ open, setOpen }: PaymentPopupProps) {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
     reset,
   } = useForm({
     resolver: joiResolver(paymentSchema),
     defaultValues: {
-      amount: 500,
+      amount: MONTH_PRICE,
     },
   });
+
+  const amountValue = watch('amount');
+  const floatMothsCount = +amountValue / MONTH_PRICE;
+  const monthsCount =
+    floatMothsCount === Math.floor(floatMothsCount)
+      ? floatMothsCount
+      : floatMothsCount.toFixed(1);
 
   const onSubmit = ({ amount }: { amount: number }) => {
     createPaymentRequest({ amount });
@@ -53,9 +63,10 @@ function PaymentPopup({ open, setOpen }: PaymentPopupProps) {
         <Box sx={{ width: '400px' }}>
           {!widgetShow ? (
             <form onSubmit={handleSubmit(onSubmit)}>
-              <Typography variant="subtitle2" sx={{ mb: 2 }}>
-                Введите сумму
+              <Typography variant="subtitle1" color="secondary" sx={{ mb: 2 }}>
+                Введите любую сумму, не меньше {MONTH_PRICE}₽
               </Typography>
+
               <Controller
                 name="amount"
                 control={control}
@@ -64,19 +75,22 @@ function PaymentPopup({ open, setOpen }: PaymentPopupProps) {
                     autoFocus
                     margin="dense"
                     id="amount"
-                    label="Сумма"
+                    label="Сумма, ₽"
                     type="number"
                     fullWidth
                     variant="outlined"
                     helperText={
                       !!errors.amount &&
-                      'Введите корректную сумму не меньше 500'
+                      `Введите корректную сумму не меньше ${MONTH_PRICE}`
                     }
                     error={!!errors.amount}
                     {...field}
                   />
                 )}
               />
+              <Typography variant="subtitle2" color="secondary">
+                1 месяц = {MONTH_PRICE}₽. Этого хватит на {monthsCount} мес.
+              </Typography>
             </form>
           ) : createPaymentResult?.data?.token ? (
             <YookassaCheckout token={createPaymentResult.data.token} />
