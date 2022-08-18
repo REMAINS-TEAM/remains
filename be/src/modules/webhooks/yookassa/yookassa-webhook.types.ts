@@ -51,12 +51,12 @@ export interface Object {
 }
 
 export interface YookassaWebhookDto {
-  type: EventType;
-  event: string;
+  type: string;
+  event: Event;
   object: Object;
 }
 
-export enum EventType {
+export enum Event {
   WAITING_FOR_CAPTURE = 'payment.waiting_for_capture',
   PAYMENT_SUCCEEDED = 'payment.succeeded',
   PAYMENT_CANCELED = 'payment.canceled',

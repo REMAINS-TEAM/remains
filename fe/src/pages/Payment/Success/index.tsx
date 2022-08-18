@@ -11,6 +11,9 @@ const PaymentSuccessPage = () => {
         <Typography variant="h1" color="secondary" textAlign="center">
           Платеж успешно проведен
         </Typography>
+        <Typography variant="h3" color="secondary" textAlign="center">
+          Баланс обновится в течение нескольких минут
+        </Typography>
         <Link to="/">Вернуться на главную</Link>
       </Box>
     </MainLayout>

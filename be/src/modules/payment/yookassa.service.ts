@@ -24,6 +24,7 @@ export class YookassaService implements PaymentProvider {
       confirmation: {
         type: 'embedded',
       },
+      capture: 'true',
       metadata: { orderId },
     };
 

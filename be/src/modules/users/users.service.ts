@@ -229,9 +229,13 @@ export class UsersService {
     }
 
     try {
+      const fromDate =
+        new Date(user.paymentExpiredDate) < new Date()
+          ? new Date()
+          : user.paymentExpiredDate;
       user = await this.prisma.user.update({
         where: { id: userId },
-        data: { paymentExpiredDate: addDays(user.paymentExpiredDate, days) },
+        data: { paymentExpiredDate: addDays(fromDate, days) },
       });
     } catch (err) {
       throw new PrismaException(err as Error);
