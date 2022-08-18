@@ -7,3 +7,4 @@ export const MIME_IMAGES_TYPE_MAP = {
 } as Record<string, string>;
 export const SMSC_URL = 'https://smsc.ru/sys/send.php';
 export const NOT_ACTIVATED_LIMIT = 24 * 60 * 60 * 1000;
+export const ONE_MONTH_PRICE = 500;

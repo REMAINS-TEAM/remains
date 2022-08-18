@@ -7,5 +7,6 @@ import { PaymentModule } from 'modules/payment/payment.module';
   controllers: [UsersController],
   providers: [UsersService],
   imports: [PaymentModule],
+  exports: [UsersService],
 })
 export class UsersModule {}

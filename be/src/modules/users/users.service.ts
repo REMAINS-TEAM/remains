@@ -9,7 +9,7 @@ import { Code, User } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { addMonths } from 'date-fns';
+import { addDays, addMonths } from 'date-fns';
 import jwt from 'jsonwebtoken';
 import { generateConfirmCallUrl } from 'modules/users/users.utils';
 import axios from 'axios';
@@ -212,5 +212,31 @@ export class UsersService {
     amount: number,
   ) {
     return await paymentService.createPayment(userId, amount);
+  }
+
+  async extendPaymentExpiredDate(userId: number, days: number) {
+    let user: User | null;
+    try {
+      user = await this.prisma.user.findUnique({
+        where: { id: userId },
+      });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    if (!user) {
+      throw new NotFoundException(`User with id ${userId} does not exist`);
+    }
+
+    try {
+      user = await this.prisma.user.update({
+        where: { id: userId },
+        data: { paymentExpiredDate: addDays(user.paymentExpiredDate, days) },
+      });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    return { paymentExpiredDate: user.paymentExpiredDate };
   }
 }

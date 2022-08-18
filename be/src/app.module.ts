@@ -16,6 +16,7 @@ import configuration from 'configuration';
 import { StorageModule } from 'modules/storage/storage.module';
 import { PaymentModule } from 'modules/payment/payment.module';
 import { WebhooksModule } from 'modules/webhooks/webhooks.module';
+import { OrdersModule } from 'modules/orders/orders.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { WebhooksModule } from 'modules/webhooks/webhooks.module';
     PaymentModule,
     SearchModule,
     UsersModule,
+    OrdersModule,
     CompaniesModule,
     CategoriesModule,
     ItemsModule,
