@@ -18,7 +18,7 @@ export const popupsSlice = createSlice({
     ) => {
       state = {
         ...state,
-        [action.payload.name]: action.payload.isShow || true,
+        [action.payload.name]: action.payload.isShow ?? true,
       };
       return state;
     },
