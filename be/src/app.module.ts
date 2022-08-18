@@ -15,6 +15,7 @@ import { ConfigModule } from '@nestjs/config';
 import configuration from 'configuration';
 import { StorageModule } from 'modules/storage/storage.module';
 import { PaymentModule } from 'modules/payment/payment.module';
+import { WebhooksModule } from 'modules/webhooks/webhooks.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { PaymentModule } from 'modules/payment/payment.module';
     StorageModule,
     ScheduleModule.forRoot(),
     SchedulerModule,
+    WebhooksModule,
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }),
   ],
   controllers: [AppController],

@@ -23,7 +23,8 @@ const YookassaCheckout = ({
     /*
      * confirmation_token получается после запроса на https://api.yookassa.ru/v3/payments
      * подробнее https://yookassa.ru/developers/payment-acceptance/integration-scenarios/widget/quick-start#process
-     * */
+     * Тест карта: 5555 5555 5555 4477 01/30
+     *  */
     script.onload = function () {
       //@ts-ignore
       const yooCheckout = new window.YooMoneyCheckoutWidget({
