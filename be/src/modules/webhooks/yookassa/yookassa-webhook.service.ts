@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'modules/prisma/prisma.service';
-import { EventType, YookassaWebhookRequest } from './yookassa-webhook.types';
+import { EventType, YookassaWebhookDto } from './yookassa-webhook.types';
 
 @Injectable()
 export class YookassaWebhookService {
   constructor(private prisma: PrismaService) {}
 
-  async eventHandler({ type }: YookassaWebhookRequest) {
+  async eventHandler({ type }: YookassaWebhookDto) {
     //TODO
     switch (type) {
       case EventType.PAYMENT_SUCCEEDED:

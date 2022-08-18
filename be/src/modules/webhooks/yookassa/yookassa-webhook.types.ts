@@ -50,7 +50,7 @@ export interface Object {
   test: boolean;
 }
 
-export interface YookassaWebhookRequest {
+export interface YookassaWebhookDto {
   type: EventType;
   event: string;
   object: Object;
