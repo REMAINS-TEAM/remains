@@ -14,9 +14,12 @@ export const popupsSlice = createSlice({
   reducers: {
     setShowPopup: (
       state,
-      action: PayloadAction<{ name: keyof Popups; isShow: boolean }>,
+      action: PayloadAction<{ name: keyof Popups; isShow?: boolean }>,
     ) => {
-      state = { ...state, [action.payload.name]: action.payload.isShow };
+      state = {
+        ...state,
+        [action.payload.name]: action.payload.isShow || true,
+      };
       return state;
     },
   },
