@@ -32,6 +32,8 @@ import { setOpen } from 'store/slices/menu';
 import { getMenuState } from 'store/selectors/menu';
 import ExpiredDate from 'components/AppHeader/units/ExpiredDate';
 import PaymentPopup from 'components/Popups/PaymentPopup';
+import { getPopupsState } from 'store/selectors/popups';
+import { setShowPopup } from 'store/slices/popups';
 
 function AppHeader() {
   const theme = useTheme();
@@ -43,17 +45,19 @@ function AppHeader() {
   const { isFetching } = userApi.useMeQuery(undefined, {
     skip: !localStorage.getItem(LS_KEY_TOKEN),
   });
+
   const user = useSelector(getCurrentUser);
+  const popups = useSelector(getPopupsState);
 
   const [authPopupOpen, setAuthPopupOpen] = useState(false);
-  const [paymentPopupOpen, setPaymentPopupOpen] = useState(false);
 
   const [profileButtonRef, setProfileButtonRef] = useState<HTMLElement | null>(
     null,
   );
 
   const loginClickHandler = () => setAuthPopupOpen(true);
-  const showPaymentPopup = () => setPaymentPopupOpen(true);
+  const showPaymentPopup = () =>
+    dispatch(setShowPopup({ name: 'payment', isShow: true }));
 
   const profileClickHandler = (event: React.MouseEvent<HTMLElement>) => {
     setProfileButtonRef(event.currentTarget);
@@ -135,7 +139,12 @@ function AppHeader() {
         </Box>
       </Toolbar>
       <AuthPopup open={authPopupOpen} setOpen={setAuthPopupOpen} />
-      <PaymentPopup open={paymentPopupOpen} setOpen={setPaymentPopupOpen} />
+      <PaymentPopup
+        open={popups.payment}
+        setOpen={(isShow) =>
+          dispatch(setShowPopup({ name: 'payment', isShow }))
+        }
+      />
       <ProfileMenu
         anchorEl={profileButtonRef}
         setAnchorEl={setProfileButtonRef}

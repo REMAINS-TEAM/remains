@@ -1,7 +1,7 @@
 import React from 'react';
 import { differenceInDays, differenceInHours } from 'date-fns';
 import CircularProgressWithLabel from 'components/CircularProgressWithLabel';
-import { Tooltip } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { getPaidStatus } from 'store/selectors/user';
 import { standardFormat } from 'utils';
@@ -20,21 +20,21 @@ function ExpiredDate({ date, onClick }: { date: Date; onClick?: () => void }) {
   return (
     <Tooltip
       title={
-        !isPaid
+        (!isPaid
           ? `Функционал ограничен! Дата окончания доступа: ${standardFormat(
               date,
             )}`
           : `Функционал сервиса будет ограничен через ${
               daysLeft !== 0 ? daysLeft + 'дн' : hoursLeft + 'ч'
-            }`
+            }`) + ' Нажмите для оплаты.'
       }
     >
-      <div onClick={onClick}>
+      <Box onClick={onClick} sx={{ cursor: 'pointer' }}>
         <CircularProgressWithLabel
           value={daysLeft > 30 ? 100 : (daysLeft * 100) / 30}
           label={`${daysLeft < 0 ? 0 : daysLeft}д`}
         />
-      </div>
+      </Box>
     </Tooltip>
   );
 }
