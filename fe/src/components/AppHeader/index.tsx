@@ -90,11 +90,13 @@ function AppHeader() {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography variant="h6" component="h1" sx={{ flexGrow: 1, mr: 2 }}>
-            <Link className="link" to={'/'}>
-              {!isMobile ? 'Sell Remains' : 'SR'}
-            </Link>
-          </Typography>
+          {!isMobile && (
+            <Typography variant="h6" component="h1" sx={{ flexGrow: 1, mr: 2 }}>
+              <Link className="link" to={'/'}>
+                Sell Remains
+              </Link>
+            </Typography>
+          )}
           <Search />
           <IconButton color="inherit" onClick={() => null}>
             <FiltersIcon />

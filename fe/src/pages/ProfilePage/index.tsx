@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Box,
-  Button,
   Paper,
   Table,
   TableBody,
@@ -9,9 +8,8 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as styles from './styles';
-import { standardFormat } from 'utils';
 import { getCurrentUser } from 'store/selectors/user';
 import AuthLayout from 'layouts/AuthLayout';
 import { Edit as EditIcon } from '@mui/icons-material';
@@ -20,10 +18,9 @@ import EditProfilePopup from 'components/Popups/EditProfilePopup';
 import itemsApi from 'store/api/items';
 import ItemCards from 'pages/Categories/units/ItemCards';
 import Header from 'components/Header';
-import { setShowPopup } from 'store/slices/popups';
+import PaymentDate from 'pages/ProfilePage/PaymentDate';
 
 function ProfilePage() {
-  const dispatch = useDispatch();
   const user = useSelector(getCurrentUser);
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
 
@@ -41,7 +38,6 @@ function ProfilePage() {
   );
 
   const openEditProfileModal = () => setEditProfileModalOpen(true);
-  const openPaymentModal = () => dispatch(setShowPopup({ name: 'payment' }));
 
   const rows = user
     ? [
@@ -53,18 +49,7 @@ function ProfilePage() {
         { title: 'Описание компании', value: user.company?.description },
         {
           title: 'Дата окончания доступа',
-          value: (
-            <>
-              <span>{standardFormat(user.paymentExpiredDate, true)}</span>
-              <Button
-                variant="contained"
-                sx={{ ml: 3, height: '24px' }}
-                onClick={openPaymentModal}
-              >
-                Продлить
-              </Button>
-            </>
-          ),
+          value: <PaymentDate date={user.paymentExpiredDate} />,
         },
       ]
     : [];
