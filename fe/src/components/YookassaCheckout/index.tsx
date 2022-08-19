@@ -11,7 +11,9 @@ const YookassaCheckout = ({
 }) => {
   const theme = useTheme();
 
-  const [checkout, setCheckout] = useState<any>(null);
+  const [checkout, setCheckout] = useState<{
+    render: (id: string) => void;
+  } | null>(null);
 
   useEffect(() => {
     if (!token || !theme) return;

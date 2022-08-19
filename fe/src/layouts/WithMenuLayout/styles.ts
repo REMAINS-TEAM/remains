@@ -5,7 +5,7 @@ export const menuWithHeaderContainer = (theme: Theme) => ({
   display: 'flex',
   flex: 'none',
   width: '320px',
-  height: 'calc(100% - 48px)',
+  height: 'calc(100% - 40px)',
   flexDirection: 'column',
   position: 'fixed',
   zIndex: 1000,
