@@ -16,7 +16,7 @@
     "lib": ["esnext"],
     "esModuleInterop": true,
     "strictPropertyInitialization": false,
-    "include": [ "src"],
+    "include": [ "src", "index.d.ts"],
     "exclude": [
       "public"
     ]
