@@ -43,6 +43,8 @@
     "imagemin": "^7.0.1",
     "imagemin-jpegtran": "^7.0.0",
     "imagemin-pngquant": "^9.0.2",
+    "imagemin-webp": "^7.0.0",
+    "jpegtran-bin": "^7.0.0",
     "jsonwebtoken": "^8.5.1",
     "path": "^0.12.7",
     "reflect-metadata": "^0.1.13",
