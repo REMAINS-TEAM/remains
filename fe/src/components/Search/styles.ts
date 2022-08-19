@@ -10,6 +10,10 @@ export const inputPaper: SxProps = {
   '@media screen and (max-width: 500px)': {
     width: 180,
   },
+
+  '@media screen and (max-width: 400px)': {
+    width: 140,
+  },
 };
 
 export const menuPaper: SxProps = {

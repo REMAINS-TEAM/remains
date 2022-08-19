@@ -94,7 +94,7 @@ function CategoriesPage() {
                   <ItemCards items={categoryItems} isLoading={isItemFetching} />
                   {!isPaid && (
                     <NotificationPlate
-                      title="Без оплаты Вы видите не все товары"
+                      title="Оплатите сервис, чтобы видеть все товары"
                       color="secondary"
                       sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}
                     />
