@@ -1,8 +1,5 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { StorageProvider } from './storage.types';
-import imagemin from 'imagemin';
-import imageminJpegtran from 'imagemin-jpegtran';
-import imageminPngquant from 'imagemin-pngquant';
 
 @Injectable()
 export class StorageService {
@@ -20,15 +17,7 @@ export class StorageService {
 
   async upload(path: string, buffer: Buffer) {
     try {
-      const compressedBuffer = await imagemin.buffer(buffer, {
-        plugins: [
-          imageminJpegtran(),
-          imageminPngquant({
-            quality: [0.6, 0.8],
-          }),
-        ],
-      });
-      return this.storageProvider.upload(path, compressedBuffer);
+      return this.storageProvider.upload(path, buffer);
     } catch (e) {
       throw new BadRequestException('Something went wrong when upload file');
     }

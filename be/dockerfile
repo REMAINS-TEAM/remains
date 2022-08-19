@@ -1,7 +1,5 @@
 FROM node:16.13.0-alpine
 COPY ["package.json", "package-lock.json*", "./"]
-RUN apk add --no-cache gcc
-RUN apk add --no-cache build-essential
 RUN npm ci
 COPY . .
 RUN npx prisma generate

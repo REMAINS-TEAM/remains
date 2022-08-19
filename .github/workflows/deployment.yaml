@@ -19,9 +19,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install gcc
-        run: sudo apt-get install gcc
-
       - name: Docker login
         run: |-
           docker login -u oauth -p $OAUTH_DOCKER cr.yandex
