@@ -3,7 +3,13 @@ import * as styles from './styles';
 import Container from 'components/Container';
 import { Item } from 'store/slices/items';
 import ItemImage from 'components/ItemCard/units/ItemImage';
-import { Box, Button, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { useSelector } from 'react-redux';
 import { getCurrentUser, getPaidStatus } from 'store/selectors/user';
 import { generatePath, useNavigate } from 'react-router-dom';
@@ -12,6 +18,9 @@ import ItemEditPopupMenu from 'components/PopupMenus/ItemEditPopupMenu';
 import { standardFormat } from 'utils';
 
 function ItemCard({ item }: { item: Item }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const navigate = useNavigate();
   const user = useSelector(getCurrentUser);
   const isPaid = useSelector(getPaidStatus);
@@ -46,14 +55,16 @@ function ItemCard({ item }: { item: Item }) {
           >
             {item.price.toLocaleString('ru')} ₽
           </Typography>
-          <Button
-            aria-controls="details"
-            variant="outlined"
-            size={'small'}
-            onClick={itemDetailsClickHandler}
-          >
-            Подробнее
-          </Button>
+          {!isMobile && (
+            <Button
+              aria-controls="details"
+              variant="outlined"
+              size={'small'}
+              onClick={itemDetailsClickHandler}
+            >
+              Подробнее
+            </Button>
+          )}
         </Box>
         <Box sx={styles.rightBottom}>
           <Typography variant="caption" color="secondary">

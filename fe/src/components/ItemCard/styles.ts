@@ -33,12 +33,11 @@ export const leftSide: SxProps = {
   display: 'flex',
   height: '100%',
   columnGap: 2,
-  paddingRight: 2,
+  paddingRight: 1,
   overflow: 'hidden',
 };
 
 export const rightSide: SxProps = {
-  minWidth: '150px',
   display: 'flex',
   alignItems: 'flex-end',
   justifyContent: 'space-between',
@@ -57,6 +56,8 @@ export const rightTop: SxProps = {
 export const rightBottom: SxProps = {
   display: 'flex',
   alignItems: 'flex-end',
+  justifyContent: 'flex-end',
+  textAlign: 'right',
   rowGap: 1,
 };
 
