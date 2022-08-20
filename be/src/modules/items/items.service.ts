@@ -33,7 +33,7 @@ export class ItemsService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, isPaid: boolean) {
     let result;
     try {
       result = await this.prisma.item.findUnique({
@@ -64,12 +64,14 @@ export class ItemsService {
     return {
       ...item,
       category,
-      user: {
-        name: user.name,
-        phone: user.phone,
-        email: user.email,
-        company,
-      },
+      user: isPaid
+        ? {
+            name: user.name,
+            phone: user.phone,
+            email: user.email,
+            company,
+          }
+        : null,
     };
   }
 

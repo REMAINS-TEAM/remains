@@ -15,7 +15,7 @@ export interface Item {
   itemsCount: number;
   createdAt: Date;
   updatedAt: Date;
-  user: Partial<User>;
+  user: Partial<User> | null;
   category: Partial<Category>;
 }
 

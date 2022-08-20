@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -14,11 +13,7 @@ import {
 } from '@nestjs/common';
 import { Item } from '@prisma/client';
 import { ItemsService } from './items.service';
-import { IsPaid } from 'decorators/isPaid.decorator';
-import {
-  MAX_FILE_SIZE,
-  MAX_ITEMS_FOR_NOT_REGISTERED_USER,
-} from 'constants/main';
+import { MAX_FILE_SIZE } from 'constants/main';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateItemDto } from 'modules/items/dto/create-item.dto';
 import { FindAllItemsDto } from 'modules/items/dto/find-all-items.dto';
@@ -26,6 +21,7 @@ import { OnlyForPaidGuard } from 'guards/onlyForPaid.guard';
 import { CurrentUserId } from 'decorators/current-user.decorator';
 import { GetIsPaidGuard } from 'guards/getIsPaid.guard';
 import { Pagination } from 'decorators/pagination.decorator';
+import { IsPaid } from 'decorators/isPaid.decorator';
 
 @Controller('items')
 export class ItemsController {
@@ -45,8 +41,9 @@ export class ItemsController {
   }
 
   @Get(':id')
-  async findOne(@Param() params: { id: string }) {
-    return this.itemsService.findOne(+params.id);
+  @UseGuards(GetIsPaidGuard)
+  async findOne(@Param() params: { id: string }, @IsPaid() isPaid: boolean) {
+    return this.itemsService.findOne(+params.id, isPaid);
   }
 
   @Post()

@@ -34,22 +34,29 @@ export const itemFields: InfoField[] = [
 export const userFields: InfoField[] = [
   {
     name: 'Имя',
-    accessor: (item) => item.user.name || 'Не указано',
+    accessor: (item) =>
+      item.user ? item.user.name || 'Не указано' : 'Не доступно',
   },
   {
     name: 'Телефон',
-    accessor: (item) => item.user.phone || 'Не указан',
+    accessor: (item) =>
+      item.user ? item.user?.phone || 'Не указан' : 'Не доступен',
   },
   {
     name: 'E-mail',
-    accessor: (item) => item.user.email || 'Не указан',
+    accessor: (item) =>
+      item.user ? item.user?.email || 'Не указан' : 'Не доступен',
   },
   {
     name: 'Компания',
-    accessor: (item) => item.user.company?.name || 'Не указано',
+    accessor: (item) =>
+      item.user ? item.user?.company?.name || 'Не указана' : 'Не доступна',
   },
   {
     name: 'Описание',
-    accessor: (item) => item.user.company?.description || 'Не указано',
+    accessor: (item) =>
+      item.user
+        ? item.user?.company?.description || 'Не указано'
+        : 'Не доступно',
   },
 ];
