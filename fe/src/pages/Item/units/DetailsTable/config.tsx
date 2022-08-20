@@ -1,11 +1,19 @@
 import { Item } from 'store/slices/items';
 import { ReactNode } from 'react';
-import { Typography } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 
 export interface InfoField {
   name: string;
   accessor: ((item: Item) => string | ReactNode) | keyof Item;
 }
+
+const BlurText = ({ text }: { text: string }) => (
+  <Tooltip title="Для просмотра необходимо оплатить сервис">
+    <Typography color="secondary" sx={{ filter: 'blur(5px)' }}>
+      {text}
+    </Typography>
+  </Tooltip>
+);
 
 export const itemFields: InfoField[] = [
   {
@@ -35,28 +43,46 @@ export const userFields: InfoField[] = [
   {
     name: 'Имя',
     accessor: (item) =>
-      item.user ? item.user.name || 'Не указано' : 'Не доступно',
+      item.user ? (
+        item.user.name || 'Не указано'
+      ) : (
+        <BlurText text="Не доступно" />
+      ),
   },
   {
     name: 'Телефон',
     accessor: (item) =>
-      item.user ? item.user?.phone || 'Не указан' : 'Не доступен',
+      item.user ? (
+        '+' + item.user?.phone || 'Не указан'
+      ) : (
+        <BlurText text="Не доступно" />
+      ),
   },
   {
     name: 'E-mail',
     accessor: (item) =>
-      item.user ? item.user?.email || 'Не указан' : 'Не доступен',
+      item.user ? (
+        item.user?.email || 'Не указан'
+      ) : (
+        <BlurText text="Не доступно" />
+      ),
   },
   {
     name: 'Компания',
     accessor: (item) =>
-      item.user ? item.user?.company?.name || 'Не указана' : 'Не доступна',
+      item.user ? (
+        item.user?.company?.name || 'Не указана'
+      ) : (
+        <BlurText text="Не доступно" />
+      ),
   },
   {
     name: 'Описание',
     accessor: (item) =>
-      item.user
-        ? item.user?.company?.description || 'Не указано'
-        : 'Не доступно',
+      item.user ? (
+        item.user?.company?.description || 'Не указано'
+      ) : (
+        <BlurText text="Не доступно" />
+      ),
   },
 ];
