@@ -16,6 +16,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import routes from 'routes';
 import ItemEditPopupMenu from 'components/PopupMenus/ItemEditPopupMenu';
 import { standardFormat } from 'utils';
+import Grid from '@mui/material/Unstable_Grid2';
 
 function ItemCard({ item }: { item: Item }) {
   const theme = useTheme();
@@ -31,47 +32,73 @@ function ItemCard({ item }: { item: Item }) {
 
   return (
     <Container sx={styles.itemContainer} onClick={itemDetailsClickHandler}>
-      <Box sx={styles.leftSide}>
-        <ItemImage src={`/api/storage/items/${item.id}/${item.images[0]}`} />
-        <Box>
-          <Typography variant="body1" component={'h3'} sx={{ mb: 1 }}>
-            {item.title}
-          </Typography>
-          <Typography variant="body2" color={'secondary'}>
-            {item.description}
-          </Typography>
-        </Box>
-      </Box>
-
-      <Box sx={styles.rightSide}>
-        <Box sx={styles.rightTop}>
-          {item.userId === user?.id && isPaid && (
-            <ItemEditPopupMenu item={item} sx={styles.dotsButton} />
-          )}
-
-          <Typography
-            variant="h5"
-            sx={{ fontFamily: 'inherit', lineHeight: 1 }}
-          >
-            {item.price.toLocaleString('ru')} ₽
-          </Typography>
-          {!isMobile && (
-            <Button
-              aria-controls="details"
-              variant="outlined"
-              size={'small'}
-              onClick={itemDetailsClickHandler}
+      {item.userId === user?.id && isPaid && (
+        <ItemEditPopupMenu item={item} sx={styles.dotsButton} />
+      )}
+      <Grid container columnSpacing={2} rowSpacing={6} sx={{ width: '100%' }}>
+        <Grid sm="auto" xs={12} sx={{ alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <ItemImage
+              src={`/api/storage/items/${item.id}/${item.images[0]}`}
+            />
+          </Box>
+        </Grid>
+        <Grid container sm xs={12}>
+          <Grid sm={9} xs={9}>
+            <Typography
+              variant="body1"
+              component={'h3'}
+              sx={{
+                mb: 1,
+                // whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
             >
-              Подробнее
-            </Button>
-          )}
-        </Box>
-        <Box sx={styles.rightBottom}>
-          <Typography variant="caption" color="secondary">
-            {standardFormat(item.updatedAt, true)}
-          </Typography>
-        </Box>
-      </Box>
+              {item.title}
+            </Typography>
+            <Typography variant="body2" color={'secondary'}>
+              {item.description}
+            </Typography>
+          </Grid>
+          <Grid sm={3} xs={3}>
+            <Box sx={styles.rightSide}>
+              <Box>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontFamily: 'inherit',
+                    lineHeight: 0.5,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {item.price.toLocaleString('ru')} ₽
+                </Typography>
+                <br />
+                {!isMobile && (
+                  <Button
+                    aria-controls="details"
+                    variant="outlined"
+                    size={'small'}
+                    onClick={itemDetailsClickHandler}
+                  >
+                    Подробнее
+                  </Button>
+                )}
+              </Box>
+              <Box>
+                <Typography
+                  variant="caption"
+                  color="secondary"
+                  sx={{ whiteSpace: 'nowrap' }}
+                >
+                  {standardFormat(item.updatedAt, true)}
+                </Typography>
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
+      </Grid>
     </Container>
   );
 }

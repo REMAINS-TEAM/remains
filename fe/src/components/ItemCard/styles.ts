@@ -5,10 +5,9 @@ export const itemContainer: SxProps<Theme> = {
   position: 'relative',
   width: '100%',
   display: 'flex',
+  flexGrow: 1,
   minHeight: '200px',
-  height: '200px',
-  columnGap: 1,
-  justifyContent: 'space-between',
+  height: 'fit-content',
   overflow: 'hidden',
   px: 2,
   py: 4,
@@ -44,6 +43,11 @@ export const rightSide: SxProps = {
   flexDirection: 'column',
   height: '100%',
   columnGap: 2,
+  textAlign: 'right',
+
+  '@media screen and (max-width: 600px)': {
+    justifyContent: 'flex-end',
+  },
 };
 
 export const rightTop: SxProps = {
@@ -51,14 +55,6 @@ export const rightTop: SxProps = {
   alignItems: 'flex-end',
   rowGap: 3.5,
   flexDirection: 'column',
-};
-
-export const rightBottom: SxProps = {
-  display: 'flex',
-  alignItems: 'flex-end',
-  justifyContent: 'flex-end',
-  textAlign: 'right',
-  rowGap: 1,
 };
 
 export const dotsButton: SxProps = {
