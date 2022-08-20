@@ -49,8 +49,8 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
   return (
     <>
       <Popup
-        title={'Регистрация / вход в аккаунт'}
-        okButtonText={'Зарегистрироваться / войти'}
+        title={'Регистрация/вход'}
+        okButtonText={'OK'}
         closeWhenSubmit={false}
         onOkClick={handleSubmit(onSubmit)}
         {...{ open, setOpen }}
