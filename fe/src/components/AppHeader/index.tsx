@@ -101,9 +101,9 @@ function AppHeader() {
           {(demo || token) && (
             <>
               <Search />
-              <IconButton color="inherit" onClick={() => null}>
-                <FiltersIcon />
-              </IconButton>
+              {/*<IconButton color="inherit" onClick={() => null}>*/}
+              {/*  <FiltersIcon />*/}
+              {/*</IconButton>*/}
             </>
           )}
         </Box>

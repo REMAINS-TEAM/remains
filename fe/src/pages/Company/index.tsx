@@ -40,7 +40,7 @@ const CompanyPage = () => {
       limit: 100, // TODO: lazy loading
       offset: 0,
     },
-    { skip: !companyId },
+    { skip: !companyId || !isPaid },
   );
 
   const rows = company
@@ -90,7 +90,7 @@ const CompanyPage = () => {
             <p>Следите за обновлениями.</p>
           </Typography>
         )}
-        {isSuccess && !isPaid && (
+        {!isPaid && (
           <Typography variant="inherit" color={'secondary'}>
             <p>Не доступно.</p>
             <p>Оплатите сервис, чтобы видеть товары компании.</p>
