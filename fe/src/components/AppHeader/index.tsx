@@ -49,13 +49,12 @@ function AppHeader() {
   const user = useSelector(getCurrentUser);
   const popups = useSelector(getPopupsState);
 
-  const [authPopupOpen, setAuthPopupOpen] = useState(false);
-
   const [profileButtonRef, setProfileButtonRef] = useState<HTMLElement | null>(
     null,
   );
 
-  const loginClickHandler = () => setAuthPopupOpen(true);
+  const loginClickHandler = () =>
+    dispatch(setShowPopup({ name: 'auth', isShow: true }));
   const showPaymentPopup = () =>
     dispatch(setShowPopup({ name: 'payment', isShow: true }));
 
@@ -140,7 +139,10 @@ function AppHeader() {
           )}
         </Box>
       </Toolbar>
-      <AuthPopup open={authPopupOpen} setOpen={setAuthPopupOpen} />
+      <AuthPopup
+        open={popups.auth}
+        setOpen={(isShow) => dispatch(setShowPopup({ name: 'auth', isShow }))}
+      />
       <PaymentPopup
         open={popups.payment}
         setOpen={(isShow) =>

@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Popups {
+  auth: boolean;
   payment: boolean;
 }
 
 const initialState: Popups = {
+  auth: false,
   payment: false,
 };
 

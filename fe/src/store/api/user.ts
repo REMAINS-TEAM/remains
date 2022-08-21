@@ -31,6 +31,7 @@ export const usersApi = api.injectEndpoints({
 
         if (data.token) {
           localStorage.setItem(LS_KEY_TOKEN, data.token);
+          localStorage.removeItem(LS_KEY_DEMO);
           const meResponse = await fetchWithBQ({
             url: `${apiTypes.USERS}/me`,
             method: 'GET',
