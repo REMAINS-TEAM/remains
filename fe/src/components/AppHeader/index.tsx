@@ -81,7 +81,7 @@ function AppHeader() {
     <AppBar position="fixed" sx={{ height: APP_HEADER_HEIGHT }}>
       <Toolbar sx={styles.toolbar}>
         <Box sx={styles.leftSide}>
-          {isMobile && (
+          {isMobile && (demo || token) && (
             <IconButton
               size="large"
               edge="start"
