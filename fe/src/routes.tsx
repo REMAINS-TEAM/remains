@@ -9,6 +9,7 @@ const routes = {
     success: '/payment/success',
   },
   offer: '/offer',
+  welcome: '/welcome',
 };
 
 export default routes;

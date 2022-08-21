@@ -14,7 +14,7 @@ const defaultTheme: ThemeOptions = {
     h1: { fontSize: '1.5rem' },
     h2: { fontSize: '1.3rem' },
     h3: { fontSize: '1rem' },
-    h4: { fontSize: '0.5rem' },
+    h4: { fontSize: '0.8rem' },
   },
 };
 

@@ -9,6 +9,7 @@ import ProfilePage from 'pages/ProfilePage';
 import ItemsPage from 'pages/items';
 import PaymentSuccessPage from 'pages/Payment/Success';
 import OfferPage from 'pages/Offer';
+import WelcomePage from 'pages/Welcome';
 
 export const history = createBrowserHistory();
 
@@ -22,6 +23,7 @@ export default function MainNavigation() {
       <Route path={routes.profile} element={<ProfilePage />} />
       <Route path={routes.payment.success} element={<PaymentSuccessPage />} />
       <Route path={routes.offer} element={<OfferPage />} />
+      <Route path={routes.welcome} element={<WelcomePage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
