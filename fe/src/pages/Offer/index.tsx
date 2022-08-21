@@ -1,14 +1,13 @@
 import React from 'react';
 import MainLayout from 'layouts/MainLayout';
 import { Box, Typography } from '@mui/material';
+import Header from 'components/Header';
 
 const OfferPage = () => {
   return (
     <MainLayout>
       <Box sx={{ flex: 1, flexDirection: 'column' }}>
-        <Typography variant="h2" color="secondary" sx={{ mb: 4 }}>
-          Договор-оферта
-        </Typography>
+        <Header title="Договор-оферта" withBackButton />
 
         <Typography variant="h3">
           <strong>1. Общие положения</strong>

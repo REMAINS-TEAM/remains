@@ -4,7 +4,7 @@ export const headerContainer: SxProps = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  my: 3,
+  mb: 3,
 };
 
 export const column: SxProps = {

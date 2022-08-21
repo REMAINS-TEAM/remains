@@ -71,7 +71,7 @@ function ProfilePage() {
           }
         />
 
-        <Paper sx={{ p: 2 }}>
+        <Paper sx={{ p: 2, mb: 6 }}>
           <Table sx={{ maxWidth: 500 }}>
             <TableBody>
               {rows.map((row) => (
@@ -94,7 +94,6 @@ function ProfilePage() {
           </Table>
         </Paper>
 
-        <br />
         <Header title="Мои предложения" />
 
         <ItemCards items={myItems} isLoading={isFetching} />

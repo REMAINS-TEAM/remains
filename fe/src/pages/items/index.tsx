@@ -7,6 +7,7 @@ import NotificationPlate from 'components/NotificationPlate';
 import itemsApi from 'store/api/items';
 import { useSelector } from 'react-redux';
 import { getPaidStatus } from 'store/selectors/user';
+import Header from 'components/Header';
 
 const ItemsPage = () => {
   const isPaid = useSelector(getPaidStatus);
@@ -23,6 +24,7 @@ const ItemsPage = () => {
   return (
     <MainLayout>
       <Box sx={styles.contentContainer}>
+        <Header title="Все товары" withBackButton />
         <ItemCards items={categoryItems} isLoading={isItemFetching} />
         {!isPaid && (
           <NotificationPlate

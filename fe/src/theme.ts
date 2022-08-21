@@ -11,8 +11,8 @@ const defaultTheme: ThemeOptions = {
     },
   },
   typography: {
-    h1: { fontSize: '2rem' },
-    h2: { fontSize: '1.5rem' },
+    h1: { fontSize: '1.5rem' },
+    h2: { fontSize: '1.3rem' },
     h3: { fontSize: '1rem' },
     h4: { fontSize: '0.5rem' },
   },
