@@ -6,6 +6,7 @@ export const container: SxProps<Theme> = {
   py: 2,
   fontSize: 12,
   color: (theme: Theme) => theme.palette.secondary.main,
+  overflow: 'hidden',
 
   '@media screen and (max-width: 600px)': {
     justifyContent: 'flex-end',

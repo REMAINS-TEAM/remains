@@ -9,9 +9,8 @@ const AppFooter = () => {
     <footer>
       <Box sx={styles.container}>
         <Grid container xs={12} spacing={1}>
-          <Grid xs={3}>
+          <Grid xs={3} sx={{ '&>*': { mr: 1 } }}>
             <Link to="/">Оферта</Link>
-            <Link to="/">Помощь</Link>
           </Grid>
           <Grid xs={9} sx={{ textAlign: 'right' }}>
             ИП Рязанов А.В. ОГРНИП: 322527500091022 Тел.: +7 (920) 025-92-22

@@ -36,10 +36,7 @@ const WithMenuLayout = ({ children }: { children: ReactNode }) => {
     <>
       {menu.open && (
         <Box sx={styles.menuWithHeaderContainer}>
-          <Box sx={styles.header} />
-          <Container sx={styles.menuContainer}>
-            <CategoriesTree onSelect={onSelectCategoryHandler} />
-          </Container>
+          <CategoriesTree onSelect={onSelectCategoryHandler} />
         </Box>
       )}
       <Box sx={styles.contentContainer}>{children}</Box>

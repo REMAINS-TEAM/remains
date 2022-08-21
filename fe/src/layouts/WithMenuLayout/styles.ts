@@ -1,11 +1,12 @@
 import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material';
+import { APP_FOOTER_HEIGHT, APP_HEADER_HEIGHT } from 'global/constants';
 
 export const menuWithHeaderContainer = (theme: Theme) => ({
   display: 'flex',
   flex: 'none',
-  width: '320px',
-  height: 'calc(100% - 40px)',
+  width: '280px',
+  height: `calc(100vh - ${APP_HEADER_HEIGHT}px - ${APP_FOOTER_HEIGHT}px - 48px)`,
   flexDirection: 'column',
   position: 'fixed',
   zIndex: 1000,
@@ -20,16 +21,6 @@ export const header: SxProps = {
   alignItems: 'center',
   py: 3,
   pl: 1,
-};
-
-export const menuContainer: SxProps = {
-  width: '100%',
-  top: '6px',
-  height: 'calc(100% - 118px)',
-  display: 'flex',
-  flexDirection: 'column',
-  overflowY: 'auto',
-  position: 'relative',
 };
 
 export const contentContainer = (theme: Theme) => ({

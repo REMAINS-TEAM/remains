@@ -6,7 +6,8 @@ export const itemContainer: any = {
   justifyContent: 'space-between',
   pt: 1,
   cursor: 'pointer',
-  color: (theme: Theme) => theme.palette.grey[800],
+  fontSize: 14,
+  color: (theme: Theme) => theme.palette.grey[600],
   '&:hover': {
     opacity: 0.8,
   },

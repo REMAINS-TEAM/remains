@@ -3,7 +3,7 @@ import { SxProps } from '@mui/system';
 export const root: SxProps = {
   display: 'flex',
   width: '100%',
-  height: 'calc(100vh - 64px - 16px)',
+  height: '100%',
   justifyContent: 'center',
 };
 
@@ -11,7 +11,7 @@ export const center: SxProps = {
   position: 'relative',
   display: 'flex',
   px: 2,
-  pt: 1,
+  pt: 4,
   pb: 2,
   maxWidth: '1180px',
   width: '1180px',
