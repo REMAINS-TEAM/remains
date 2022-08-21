@@ -1,13 +1,6 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import * as styles from './styles';
-import {
-  Box,
-  Switch,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
-import Container from 'components/Container';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
 import CategoriesTree from 'components/CategoriesTree';
 import { Category } from 'store/slices/categories';
 import { generatePath, useNavigate } from 'react-router-dom';
@@ -17,6 +10,8 @@ import { getMenuState } from 'store/selectors/menu';
 
 const WithMenuLayout = ({ children }: { children: ReactNode }) => {
   const menu = useSelector(getMenuState);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const navigate = useNavigate();
 
@@ -39,7 +34,9 @@ const WithMenuLayout = ({ children }: { children: ReactNode }) => {
           <CategoriesTree onSelect={onSelectCategoryHandler} />
         </Box>
       )}
-      <Box sx={styles.contentContainer}>{children}</Box>
+      {!(menu.open && isMobile) && (
+        <Box sx={styles.contentContainer}>{children}</Box>
+      )}
     </>
   );
 };
