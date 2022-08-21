@@ -31,7 +31,6 @@ export const usersApi = api.injectEndpoints({
 
         if (data.token) {
           localStorage.setItem(LS_KEY_TOKEN, data.token);
-          localStorage.removeItem(LS_KEY_DEMO);
           const meResponse = await fetchWithBQ({
             url: `${apiTypes.USERS}/me`,
             method: 'GET',
@@ -80,7 +79,6 @@ export const usersApi = api.injectEndpoints({
         if (logoutResponse.error) throw logoutResponse.error;
         _queryApi.dispatch(setCurrent(null));
         localStorage.removeItem(LS_KEY_TOKEN);
-        localStorage.removeItem(LS_KEY_DEMO);
         return { data: null };
       },
     }),

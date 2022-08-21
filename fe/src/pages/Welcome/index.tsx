@@ -12,10 +12,11 @@ const WelcomePage = () => {
   const dispatch = useDispatch();
 
   const user = useSelector(getCurrentUser);
+  const demo = localStorage.getItem(LS_KEY_DEMO);
 
   useEffect(() => {
-    if (user) navigate('/');
-  }, [user]);
+    if (user || demo) navigate('/');
+  }, [user, demo]);
 
   const tryDemo = () => {
     localStorage.setItem(LS_KEY_DEMO, 'true');
@@ -59,7 +60,7 @@ const WelcomePage = () => {
             Попробовать без регистрации
           </Typography>
           <Typography component="div" sx={{ fontSize: 10 }}>
-            (функционал ограничен)
+            (с ограниченным функционалом)
           </Typography>
         </Button>
       </Box>

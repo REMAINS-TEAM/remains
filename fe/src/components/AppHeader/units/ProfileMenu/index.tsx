@@ -37,7 +37,6 @@ function ProfileMenu({
 
   const handleClickLogout = () => {
     logoutRequest();
-    navigate(routes.welcome, { replace: true });
   };
 
   return (
