@@ -3,9 +3,9 @@ import { CSSProperties } from 'react';
 
 export const imageContainer: SxProps = {
   position: 'relative',
-  height: 135,
-  width: 135,
-  minWidth: '135px',
+  height: 165,
+  width: 165,
+  minWidth: 165,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

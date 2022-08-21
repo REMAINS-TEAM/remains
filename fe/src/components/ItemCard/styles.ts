@@ -9,8 +9,7 @@ export const itemContainer: SxProps<Theme> = {
   minHeight: '200px',
   height: 'fit-content',
   overflow: 'hidden',
-  px: 2,
-  py: 4,
+  py: 3,
   cursor: 'pointer',
   transition: 'box-shadow .3s',
   '&:hover': {
@@ -44,9 +43,11 @@ export const rightSide: SxProps = {
   height: '100%',
   columnGap: 2,
   textAlign: 'right',
+  pt: 1,
 
   '@media screen and (max-width: 600px)': {
     justifyContent: 'flex-end',
+    pt: 0,
   },
 };
 
@@ -59,7 +60,7 @@ export const rightTop: SxProps = {
 
 export const dotsButton: SxProps = {
   position: 'absolute',
-  right: '-2px',
-  top: '-10px',
+  right: '-4px',
+  top: '-12px',
   p: 1,
 };
