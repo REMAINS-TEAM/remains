@@ -98,17 +98,23 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
       {!isFetching && (
         <Box component={'ul'} sx={styles.listContainer}>
           {data?.list.length ? (
-            data.list.map((category) => (
-              <TreeItem
-                key={category.id}
-                title={category.title}
-                onClick={() => setSelectedCategoryId(category.id)}
-                count={{
-                  subCategories: category._count.subCategories,
-                  items: category._count.items,
-                }}
-              />
-            ))
+            data.list
+              .filter((category) =>
+                onlyNotEmpty
+                  ? category._count.subCategories || category._count.items
+                  : category,
+              )
+              .map((category) => (
+                <TreeItem
+                  key={category.id}
+                  title={category.title}
+                  onClick={() => setSelectedCategoryId(category.id)}
+                  count={{
+                    subCategories: category._count.subCategories,
+                    items: category._count.items,
+                  }}
+                />
+              ))
           ) : (
             <Typography variant="h3" color="secondary" sx={{ mt: 2 }}>
               Нет вложенных категорий

@@ -233,7 +233,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
         Фото (от 1 до 10):
       </Typography>
       <Box sx={styles.imagesContainer}>
-        {imageFiles.map((file, i) => (
+        {imageFiles.map((file) => (
           <UploadedImage
             key={file.name}
             file={file}
