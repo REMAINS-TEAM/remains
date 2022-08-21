@@ -1,7 +1,6 @@
 import api, { apiTypes } from './';
-import { LS_KEY_TOKEN } from 'global/constants';
+import { LS_KEY_DEMO, LS_KEY_TOKEN } from 'global/constants';
 import { setCurrent, User } from 'store/slices/user';
-import { Item } from 'store/slices/items';
 
 export const usersApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -80,6 +79,7 @@ export const usersApi = api.injectEndpoints({
         if (logoutResponse.error) throw logoutResponse.error;
         _queryApi.dispatch(setCurrent(null));
         localStorage.removeItem(LS_KEY_TOKEN);
+        localStorage.removeItem(LS_KEY_DEMO);
         return { data: null };
       },
     }),

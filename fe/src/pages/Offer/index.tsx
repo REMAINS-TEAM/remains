@@ -5,7 +5,7 @@ import Header from 'components/Header';
 
 const OfferPage = () => {
   return (
-    <MainLayout>
+    <MainLayout forAll>
       <Box sx={{ flex: 1, flexDirection: 'column' }}>
         <Header title="Договор-оферта" withBackButton />
 
