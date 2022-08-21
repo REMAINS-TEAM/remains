@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
-import { LS_KEY_DEMO, LS_KEY_TOKEN } from 'global/constants';
+import { LS_KEY_DEMO } from 'global/constants';
 import { useNavigate } from 'react-router-dom';
 import { setShowPopup } from 'store/slices/popups';
 import { useDispatch } from 'react-redux';
+import * as styles from './styles';
 
 const WelcomePage = () => {
   const navigate = useNavigate();
@@ -17,20 +18,9 @@ const WelcomePage = () => {
   const auth = () => dispatch(setShowPopup({ name: 'auth', isShow: true }));
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        columnGap: 4,
-        rowGap: 0,
-      }}
-    >
+    <Box sx={styles.contentContainer}>
       <Box>
-        <Box sx={{ textAlign: 'center', mb: 4 }}>
+        <Box sx={styles.header}>
           <Typography variant="h1">
             <strong>SELL REMAINS</strong>
           </Typography>
@@ -40,7 +30,7 @@ const WelcomePage = () => {
           </Typography>
           <Typography variant="h4">Находится в стадии beta-testing</Typography>
         </Box>
-        <Box component="ul" sx={{ color: '#666666', '&>*': { mb: 1 } }}>
+        <Box component="ul" sx={styles.featuresList}>
           <li>Делитесь своими остатками товаров</li>
           <li>Добавляйте фото, описание и желаемую цену</li>
           <li>Просматривайте, чем делились другие</li>
@@ -49,17 +39,7 @@ const WelcomePage = () => {
         </Box>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Button
-          variant="contained"
-          sx={{
-            width: 250,
-            height: 100,
-            mb: 1,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-          onClick={auth}
-        >
+        <Button variant="contained" sx={styles.actionButton} onClick={auth}>
           <Typography sx={{ fontSize: 14, mb: 1 }}>
             Зарегистрироваться (пробный период 30дн)
           </Typography>
@@ -67,12 +47,13 @@ const WelcomePage = () => {
             или войти
           </Typography>
         </Button>
-        <Button
-          variant="outlined"
-          sx={{ width: 250, height: 100 }}
-          onClick={tryDemo}
-        >
-          Попробовать без регистрации
+        <Button variant="outlined" sx={styles.actionButton} onClick={tryDemo}>
+          <Typography sx={{ fontSize: 14, mb: 1 }}>
+            Попробовать без регистрации
+          </Typography>
+          <Typography component="div" sx={{ fontSize: 10 }}>
+            (функционал ограничен)
+          </Typography>
         </Button>
       </Box>
     </Box>

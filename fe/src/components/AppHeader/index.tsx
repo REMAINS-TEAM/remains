@@ -21,7 +21,7 @@ import Loader from '@mui/material/CircularProgress';
 import Search from 'components/Search';
 
 import * as styles from './styles';
-import { APP_HEADER_HEIGHT, LS_KEY_TOKEN } from 'global/constants';
+import { APP_HEADER_HEIGHT, LS_KEY_DEMO, LS_KEY_TOKEN } from 'global/constants';
 import AuthPopup from 'components/Popups/AuthPopup';
 import { useDispatch, useSelector } from 'react-redux';
 import userApi from 'store/api/user';
@@ -39,11 +39,14 @@ function AppHeader() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
+  const demo = localStorage.getItem(LS_KEY_DEMO);
+  const token = localStorage.getItem(LS_KEY_TOKEN);
+
   const dispatch = useDispatch();
   const mobileMenu = useSelector(getMenuState);
 
   const { isFetching } = userApi.useMeQuery(undefined, {
-    skip: !localStorage.getItem(LS_KEY_TOKEN),
+    skip: !token,
   });
 
   const user = useSelector(getCurrentUser);
@@ -95,11 +98,14 @@ function AppHeader() {
               {!isMobile ? 'Sell Remains' : 'SR'}
             </Link>
           </Typography>
-
-          <Search />
-          <IconButton color="inherit" onClick={() => null}>
-            <FiltersIcon />
-          </IconButton>
+          {(demo || token) && (
+            <>
+              <Search />
+              <IconButton color="inherit" onClick={() => null}>
+                <FiltersIcon />
+              </IconButton>
+            </>
+          )}
         </Box>
         <Box sx={styles.rightSide}>
           {isFetching ? (
