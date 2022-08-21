@@ -14,4 +14,7 @@ export class FindAllItemsDto {
   @IsOptional()
   @Type(() => Number)
   userId?: number;
+  @IsOptional()
+  @Type(() => Number)
+  companyId?: number;
 }

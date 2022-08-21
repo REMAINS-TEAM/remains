@@ -20,13 +20,25 @@ export class ItemsService {
     limit = 10,
     offset = 0,
     filter,
+    isPaid,
   }: {
     limit?: number;
     offset?: number;
-    filter?: { userId?: number; categoryId?: number };
+    filter?: { userId?: number; categoryId?: number; companyId?: number };
+    isPaid: boolean;
   }): Promise<Item[]> {
+    if (!isPaid && filter?.companyId) {
+      throw new ForbiddenException(
+        'Could not get company items without payment',
+      );
+    }
+
     return await this.prisma.item.findMany({
-      where: filter,
+      where: {
+        userId: filter?.userId,
+        categoryId: filter?.categoryId,
+        user: { companyId: filter?.companyId },
+      },
       take: limit,
       skip: offset,
       orderBy: [{ updatedAt: 'desc' }, { createdAt: 'desc' }],

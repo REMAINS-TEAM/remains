@@ -13,6 +13,9 @@ export const companiesApi = api.injectEndpoints({
             ]
           : [apiTypes.COMPANIES],
     }),
+    getCompanyById: build.query<Company, number>({
+      query: (id) => `companies/${id}`,
+    }),
     createCompany: build.mutation<
       Company,
       { name: string; description?: string }

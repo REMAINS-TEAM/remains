@@ -1,7 +1,17 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { CompaniesService } from 'modules/companies/companies.service';
 import { FindAllDto } from './dto/find-all.dto';
 import { CreateCompanyDto } from 'modules/companies/dto/create-company.dto';
+import { GetIsPaidGuard } from 'guards/getIsPaid.guard';
+import { IsPaid } from 'decorators/isPaid.decorator';
 
 @Controller('companies')
 export class CompaniesController {
@@ -13,6 +23,12 @@ export class CompaniesController {
   @Get('types')
   async findAllTypes() {
     return this.companiesService.findAllTypes();
+  }
+
+  @Get(':id')
+  @UseGuards(GetIsPaidGuard)
+  async findOne(@Param() params: { id: string }) {
+    return this.companiesService.findOne(+params.id);
   }
 
   @Post()

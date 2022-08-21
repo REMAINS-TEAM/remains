@@ -4,6 +4,7 @@ const routes = {
   category: `/categories/:categoryId`,
   item: `/items/:itemId`,
   items: `/items`,
+  company: `/companies/:companyId`,
   profile: `/profile`,
   payment: {
     success: '/payment/success',

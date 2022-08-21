@@ -90,6 +90,7 @@ function ProfilePage() {
                   </TableCell>
                 </TableRow>
               ))}
+              <br />
             </TableBody>
           </Table>
         </Paper>

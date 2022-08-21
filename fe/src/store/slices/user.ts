@@ -4,6 +4,7 @@ export interface Company {
   id: number;
   name: string;
   description: string;
+  createdAt?: string;
 }
 
 export interface User {
