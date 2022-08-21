@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { LS_KEY_DEMO } from 'global/constants';
 import { useNavigate } from 'react-router-dom';
 import { setShowPopup } from 'store/slices/popups';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as styles from './styles';
+import { getCurrentUser } from 'store/selectors/user';
 
 const WelcomePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const user = useSelector(getCurrentUser);
+
+  useEffect(() => {
+    if (user) navigate('/');
+  }, [user]);
 
   const tryDemo = () => {
     localStorage.setItem(LS_KEY_DEMO, 'true');

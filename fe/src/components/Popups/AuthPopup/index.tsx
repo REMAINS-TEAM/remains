@@ -38,7 +38,7 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
       setConfirmCodePopupOpen(true);
       setOpen(false);
     }
-  }, [result, setError, setOpen]);
+  }, [result]);
 
   const onSubmit = ({ phone }: { phone: string }) => {
     loginRequest({
