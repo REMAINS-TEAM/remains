@@ -5,5 +5,4 @@ export const contentContainer: SxProps = {
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
-  mt: 2,
 };

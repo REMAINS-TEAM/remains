@@ -2,12 +2,12 @@ import { SxProps } from '@mui/system';
 
 export const headerContainer: SxProps = {
   fontSize: '1rem',
-  py: 2,
+  pt: 1,
+  pb: 2,
   px: 1,
   width: '100%',
   display: 'flex',
   justifyContent: 'space-between',
-  minHeight: '56px',
 };
 
 export const contentContainer: SxProps = {

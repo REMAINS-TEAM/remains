@@ -11,7 +11,7 @@ export const center: SxProps = {
   position: 'relative',
   display: 'flex',
   px: 2,
-  pt: 4,
+  pt: 6,
   pb: 2,
   maxWidth: '1180px',
   width: '1180px',
