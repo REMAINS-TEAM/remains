@@ -136,6 +136,13 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
           sx={{ mb: 2 }}
         />
       )}
+      {isPaid && (
+        <NotificationPlate
+          title="Не указывайте контакты в заголовке и описании, а также на фото; иначе аккаунт будет заблокирован."
+          color="secondary"
+          sx={{ mb: 2 }}
+        />
+      )}
       <Controller
         name="title"
         control={control}

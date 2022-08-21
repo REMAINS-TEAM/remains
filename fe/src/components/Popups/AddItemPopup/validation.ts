@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 export const MAX_LENGTH_TITLE = 80;
-export const MAX_LENGTH_DESCRIPTION = 200;
+export const MAX_LENGTH_DESCRIPTION = 100;
 
 export const AddItemSchema = Joi.object({
   title: Joi.string()
@@ -20,16 +20,10 @@ export const AddItemSchema = Joi.object({
     .required()
     .min(10)
     .max(MAX_LENGTH_DESCRIPTION)
-    .message('Длина поля должна быть 10-200 символов')
-    .custom((value, helper) => {
-      if (value.replace(/\D+/g, '').length > 7) {
-        return helper.message({ custom: 'Описание содержит много цифр' });
-      }
-      return value;
-    }),
+    .message('Длина поля должна быть 10-100 символов'),
   price: Joi.number()
     .required()
     .positive()
-    .less(1_000_000)
+    .less(9_999_999)
     .message('Введите корректную цену'),
 });
