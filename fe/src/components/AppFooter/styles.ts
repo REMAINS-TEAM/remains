@@ -14,3 +14,11 @@ export const container: SxProps<Theme> = {
     py: 1,
   },
 };
+
+export const links: SxProps<Theme> = {
+  '&>*': {
+    mr: 1,
+    textDecoration: 'none',
+    color: (theme: Theme) => theme.palette.secondary.main,
+  },
+};
