@@ -9,6 +9,10 @@ import usersApi from 'store/api/user';
 import useResponseNotifications from 'hooks/useResponseNotifications';
 import { useNavigate } from 'react-router-dom';
 import routes from 'routes';
+import { useDispatch, useSelector } from 'react-redux';
+import { setGeneralVariables } from 'store/slices/general';
+import { LS_KEY_DEMO, LS_KEY_TOKEN } from 'global/constants';
+import { getGeneralVariables } from 'store/selectors/general';
 
 function ProfileMenu({
   anchorEl,
@@ -17,12 +21,22 @@ function ProfileMenu({
   anchorEl: HTMLElement | null;
   setAnchorEl: (anchorEl: HTMLElement | null) => void;
 }) {
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const [logoutRequest, result] = usersApi.useLogoutMutation();
+
+  const general = useSelector(getGeneralVariables);
 
   useResponseNotifications({
     result,
     onSuccessText: 'Вы успешно вышли из аккаунта',
+    onSuccess: () => {
+      dispatch(setGeneralVariables({ [LS_KEY_TOKEN]: '' }));
+      if (!general[LS_KEY_DEMO]) {
+        navigate(routes.welcome, { replace: true });
+      }
+    },
   });
 
   const open = Boolean(anchorEl);

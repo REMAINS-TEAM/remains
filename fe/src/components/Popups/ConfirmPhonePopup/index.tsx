@@ -7,12 +7,21 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import { confirmCodeSchema } from 'components/Popups/ConfirmPhonePopup/validation';
 import usersApi from 'store/api/user';
 import useResponseNotifications from 'hooks/useResponseNotifications';
+import { useDispatch } from 'react-redux';
+import { setGeneralVariables } from 'store/slices/general';
+import { LS_KEY_TOKEN } from 'global/constants';
 
 function ConfirmPhonePopup({ open, setOpen, phone }: ConfirmPhonePopupProps) {
+  const dispatch = useDispatch();
+
   const [confirmCodeRequest, result] = usersApi.useConfirmCodeMutation();
   useResponseNotifications({
     result,
-    onSuccess: () => setOpen(false),
+    onSuccess: ({ token }) => {
+      console.log('token', token);
+      dispatch(setGeneralVariables({ [LS_KEY_TOKEN]: token }));
+      setOpen(false);
+    },
     onSuccessText: 'Успешно!',
     onErrorText: 'Неверный код или телефон',
   });
