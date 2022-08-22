@@ -6,6 +6,7 @@ import { setShowPopup } from 'store/slices/popups';
 import { useDispatch, useSelector } from 'react-redux';
 import * as styles from './styles';
 import { getCurrentUser } from 'store/selectors/user';
+import { setGeneralVariables } from 'store/slices/general';
 
 const WelcomePage = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const WelcomePage = () => {
   }, [user, demo]);
 
   const tryDemo = () => {
-    localStorage.setItem(LS_KEY_DEMO, 'true');
+    dispatch(setGeneralVariables({ [LS_KEY_DEMO]: 'true' }));
     navigate('/', { replace: true });
   };
 

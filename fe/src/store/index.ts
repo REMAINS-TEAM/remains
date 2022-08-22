@@ -5,6 +5,7 @@ import userReducer from './slices/user';
 import notificationReducer from './slices/notification';
 import menuReducer from './slices/menu';
 import popupsReducer from './slices/popups';
+import generalReducer from './slices/general';
 
 import api from './api';
 
@@ -16,6 +17,7 @@ export const store = configureStore({
     notification: notificationReducer,
     menu: menuReducer,
     popups: popupsReducer,
+    general: generalReducer,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) => [

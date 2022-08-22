@@ -23,13 +23,14 @@ export class SchedulerService {
     // cancel not finished orders
     await this.prisma.order.updateMany({
       where: {
+        status: OrderStatus.CREATED,
         createdAt: {
           lt: new Date(new Date().getTime() - NOT_ACTIVATED_LIMIT),
         },
       },
       data: {
         status: OrderStatus.CANCELED,
-        reason: `Canceled by timeout ${NOT_ACTIVATED_LIMIT / 3600}min`,
+        reason: `Canceled by timeout ${NOT_ACTIVATED_LIMIT / 3600 / 1000}h`,
       },
     });
   }

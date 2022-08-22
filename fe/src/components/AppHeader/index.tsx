@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import {
-  TuneOutlined as FiltersIcon,
   InfoOutlined as InfoIcon,
   Menu as MenuIcon,
   PersonRounded as UserIcon,
@@ -34,23 +33,22 @@ import ExpiredDate from 'components/AppHeader/units/ExpiredDate';
 import PaymentPopup from 'components/Popups/PaymentPopup';
 import { getPopupsState } from 'store/selectors/popups';
 import { setShowPopup } from 'store/slices/popups';
+import { getGeneralVariables } from 'store/selectors/general';
 
 function AppHeader() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const demo = localStorage.getItem(LS_KEY_DEMO);
-  const token = localStorage.getItem(LS_KEY_TOKEN);
-
   const dispatch = useDispatch();
+
   const mobileMenu = useSelector(getMenuState);
-
-  const { isFetching } = userApi.useMeQuery(undefined, {
-    skip: !token,
-  });
-
+  const general = useSelector(getGeneralVariables);
   const user = useSelector(getCurrentUser);
   const popups = useSelector(getPopupsState);
+
+  const { isFetching } = userApi.useMeQuery(undefined, {
+    skip: !general[LS_KEY_TOKEN],
+  });
 
   const [profileButtonRef, setProfileButtonRef] = useState<HTMLElement | null>(
     null,
@@ -81,7 +79,7 @@ function AppHeader() {
     <AppBar position="fixed" sx={{ height: APP_HEADER_HEIGHT }}>
       <Toolbar sx={styles.toolbar}>
         <Box sx={styles.leftSide}>
-          {isMobile && (demo || token) && (
+          {isMobile && (general[LS_KEY_DEMO] || general[LS_KEY_TOKEN]) && (
             <IconButton
               size="large"
               edge="start"
@@ -98,7 +96,7 @@ function AppHeader() {
               {!isMobile ? 'Sell Remains' : 'SR'}
             </Link>
           </Typography>
-          {(demo || token) && (
+          {(general[LS_KEY_DEMO] || general[LS_KEY_TOKEN]) && (
             <>
               <Search />
               {/*<IconButton color="inherit" onClick={() => null}>*/}
