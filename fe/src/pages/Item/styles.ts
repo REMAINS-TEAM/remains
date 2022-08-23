@@ -1,5 +1,4 @@
 import { SxProps } from '@mui/system';
-import { APP_HEADER_HEIGHT } from 'global/constants';
 
 export const page: SxProps = {
   width: '100%',
@@ -7,24 +6,9 @@ export const page: SxProps = {
   flexDirection: 'column',
 };
 
-export const container: SxProps = {
+export const container = {
   width: '100%',
-  height: `calc(100vh - ${APP_HEADER_HEIGHT}px - 100px)`,
+  height: `100%`,
   overflowY: 'auto',
-  display: 'flex',
-  columnGap: 6,
-  rowGap: 2,
-  '@media screen and (max-width: 800px)': {
-    flexWrap: 'wrap',
-  },
   p: 4,
-  '&>*': {
-    flex: 1,
-  },
-};
-
-export const title: SxProps = {
-  display: 'flex',
-  alignItems: 'center',
-  columnGap: 2,
 };

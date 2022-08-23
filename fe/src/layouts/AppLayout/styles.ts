@@ -11,7 +11,7 @@ export const contentContainer = (theme: Theme) => ({
   height: `calc(100vh  - ${APP_HEADER_HEIGHT}px - ${APP_FOOTER_HEIGHT}px)`,
   overflowY: 'auto',
 
-  [theme.breakpoints.down('md')]: {
+  [theme.breakpoints.down('sm')]: {
     height: `calc(100vh  - ${APP_HEADER_HEIGHT}px - ${APP_FOOTER_MOBILE_HEIGHT}px)`,
   },
 });
