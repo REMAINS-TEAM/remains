@@ -27,14 +27,6 @@ export const itemContainer: SxProps<Theme> = {
   },
 };
 
-export const leftSide: SxProps = {
-  display: 'flex',
-  height: '100%',
-  columnGap: 2,
-  paddingRight: 1,
-  overflow: 'hidden',
-};
-
 export const rightSide: SxProps = {
   display: 'flex',
   alignItems: 'flex-end',
@@ -49,13 +41,6 @@ export const rightSide: SxProps = {
     justifyContent: 'flex-end',
     pt: 0,
   },
-};
-
-export const rightTop: SxProps = {
-  display: 'flex',
-  alignItems: 'flex-end',
-  rowGap: 3.5,
-  flexDirection: 'column',
 };
 
 export const dotsButton: SxProps = {

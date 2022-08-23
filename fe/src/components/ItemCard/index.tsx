@@ -35,7 +35,7 @@ function ItemCard({ item }: { item: Item }) {
       {item.userId === user?.id && isPaid && (
         <ItemEditPopupMenu item={item} sx={styles.dotsButton} />
       )}
-      <Grid container columnSpacing={2} rowSpacing={6} sx={{ width: '100%' }}>
+      <Grid container columnSpacing={2} rowSpacing={6} xs={13}>
         <Grid sm="auto" xs={12} sx={{ alignItems: 'center' }}>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <ItemImage
@@ -44,7 +44,7 @@ function ItemCard({ item }: { item: Item }) {
           </Box>
         </Grid>
         <Grid container sm xs={12}>
-          <Grid sm={9} xs={9}>
+          <Grid sm={9} xs={8}>
             <Typography
               variant="body1"
               component={'h3'}
@@ -61,7 +61,7 @@ function ItemCard({ item }: { item: Item }) {
               {item.description}
             </Typography>
           </Grid>
-          <Grid sm={3} xs={3}>
+          <Grid sm={3} xs={4}>
             <Box sx={styles.rightSide}>
               <Box>
                 <Typography

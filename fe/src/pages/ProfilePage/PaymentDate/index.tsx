@@ -12,15 +12,16 @@ const PaymentDate = ({ date }: { date: Date }) => {
     <Box
       sx={{
         display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
         columnGap: 2,
+        rowGap: 1,
+        flexWrap: 'wrap',
       }}
     >
       <span>{standardFormat(date, true)}</span>
       <Button
         variant="contained"
-        sx={{ height: '24px' }}
+        sx={{ height: 24 }}
         onClick={openPaymentModal}
       >
         Продлить
