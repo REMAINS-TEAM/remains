@@ -124,7 +124,7 @@ function AppHeader() {
                 >
                   {user?.phone && !user?.name && (
                     <Tooltip title="Заполните информацию о себе">
-                      <InfoIcon color="warning" />
+                      <InfoIcon color="warning" sx={styles.infoIcon} />
                     </Tooltip>
                   )}
 

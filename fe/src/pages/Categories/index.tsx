@@ -67,7 +67,7 @@ function CategoriesPage() {
               <Container sx={{ width: '100%', height: '100%' }}>
                 <EmptyState
                   text={'Выберите категорию'}
-                  description={'Или посмотрите все, что есть'}
+                  description={'Или посмотрите всё, что есть'}
                 >
                   <Button variant="contained" onClick={showAllHandler}>
                     Показать всё

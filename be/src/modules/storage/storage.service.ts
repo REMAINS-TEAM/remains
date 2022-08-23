@@ -3,7 +3,6 @@ import { StorageProvider } from './storage.types';
 import imagemin from 'imagemin';
 import sharp from 'sharp';
 import imageminMozJpeg from 'imagemin-mozjpeg';
-import isJpg from 'is-jpg';
 
 @Injectable()
 export class StorageService {
@@ -12,8 +11,7 @@ export class StorageService {
   ) {}
 
   async convertToJpeg(buffer: Buffer) {
-    if (isJpg(buffer)) return buffer;
-    return sharp(buffer).jpeg().toBuffer();
+    return await sharp(buffer).jpeg().toBuffer();
   }
 
   async download(path: string) {
@@ -25,14 +23,18 @@ export class StorageService {
   }
 
   async upload(path: string, buffer: Buffer) {
+    let compressedBuffer;
     try {
-      const compressedBuffer = await imagemin.buffer(buffer, {
+      compressedBuffer = await imagemin.buffer(buffer, {
         plugins: [this.convertToJpeg, imageminMozJpeg({ quality: 75 })],
       });
-
-      return this.storageProvider.upload(path, compressedBuffer);
     } catch (e) {
-      console.log('e', e);
+      console.log('compress error', path, e);
+    }
+
+    try {
+      return this.storageProvider.upload(path, compressedBuffer || buffer);
+    } catch (e) {
       throw new BadRequestException('Something went wrong when upload file');
     }
   }

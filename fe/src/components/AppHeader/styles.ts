@@ -22,3 +22,14 @@ export const rightSide: SxProps = {
     columnGap: 0,
   },
 };
+
+export const infoIcon: SxProps = {
+  '@keyframes blinker': {
+    '0%': { opacity: 0 },
+    '50%': { opacity: 1 },
+    '100%': { opacity: 0 },
+  },
+  animationName: 'blinker',
+  animationDuration: '1s',
+  animationIterationCount: 'infinite',
+};
