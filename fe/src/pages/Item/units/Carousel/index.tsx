@@ -16,6 +16,7 @@ function ImagesCarousel({
       navButtonsAlwaysVisible
       // fullHeightHover={false}
       animation="slide"
+      navButtonsAlwaysInvisible={images.length < 2}
       sx={styles.carousel}
     >
       {images.map((fileName) => (
