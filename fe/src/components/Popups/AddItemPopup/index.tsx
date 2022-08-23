@@ -243,8 +243,15 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
         )}
       />
 
-      <Typography variant="subtitle1" color="secondary" sx={{ p: 1.5 }}>
+      <Typography variant="subtitle1" color="secondary" sx={{ mt: 1 }}>
         Фото (от 1 до 10):
+      </Typography>
+      <Typography
+        variant="inherit"
+        color="secondary"
+        sx={{ fontSize: 12, mb: 1 }}
+      >
+        Могут быть проблемы с браузером Safari, используйте Google Chrome
       </Typography>
       <Box sx={styles.imagesContainer}>
         {imageFiles.map((file) => (
