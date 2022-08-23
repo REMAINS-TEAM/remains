@@ -16,7 +16,7 @@ function NotificationPlate({ title, color, sx = {} }: NotificationPlateProps) {
       }}
     >
       <ErrorOutline color={'inherit'} fontSize={'small'} />
-      <Typography>{title}</Typography>
+      <Typography variant={'inherit'}>{title}</Typography>
     </Box>
   );
 }
