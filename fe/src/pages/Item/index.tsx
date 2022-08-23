@@ -40,7 +40,7 @@ function ItemPage() {
           }
         />
 
-        <Paper sx={{ p: 4, height: '90%', overflowY: 'auto' }}>
+        <Paper sx={styles.paper}>
           <Grid container xs={12} spacing={2} sx={{ height: '100%' }}>
             <Grid xs={12} sm={6} sx={{ height: '100%' }}>
               <ImagesCarousel itemId={item.id} images={item.images} />

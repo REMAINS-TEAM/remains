@@ -1,4 +1,5 @@
 import { SxProps } from '@mui/system';
+import { Theme } from '@mui/material';
 
 export const page: SxProps = {
   width: '100%',
@@ -6,9 +7,13 @@ export const page: SxProps = {
   flexDirection: 'column',
 };
 
-export const container = {
-  width: '100%',
-  height: `100%`,
-  overflowY: 'auto',
+export const paper = (theme: Theme) => ({
   p: 4,
-};
+  height: '90%',
+  overflowY: 'auto',
+
+  [theme.breakpoints.down('sm')]: {
+    px: 0,
+    py: 3,
+  },
+});
