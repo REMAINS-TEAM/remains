@@ -169,7 +169,7 @@ export class ItemsService {
     userId: number,
     id: number,
     dto: UpdateItemDto,
-    images: Express.Multer.File[],
+    images?: Express.Multer.File[],
   ) {
     let item;
     try {
@@ -185,8 +185,10 @@ export class ItemsService {
       throw new ForbiddenException(`It is not your item`);
     }
 
-    if (dto.deletedImageNames?.length) {
-      for (const imageName of dto.deletedImageNames) {
+    const { deletedImageNames, ...data } = dto;
+
+    if (deletedImageNames?.length) {
+      for (const imageName of deletedImageNames) {
         try {
           await this.storage.deleteFile(`items/${item.id}/${imageName}`);
         } catch (e) {
@@ -194,21 +196,37 @@ export class ItemsService {
         }
       }
     }
+    let uploadedImageNames: string[] = [];
+    if (images?.length) {
+      uploadedImageNames = await this.uploadImages(item.id, images);
+    }
 
-    const uploadedImageNames = await this.uploadImages(item.id, images);
+    let updatedItem;
+    try {
+      updatedItem = await this.prisma.item.update({
+        where: { id: item.id },
+        data: {
+          ...data,
+          images:
+            deletedImageNames?.length || uploadedImageNames?.length
+              ? [
+                  ...item.images.filter(
+                    (imageName) => !deletedImageNames?.includes(imageName),
+                  ),
+                  ...uploadedImageNames,
+                ]
+              : undefined,
+        },
+      });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
 
-    await this.prisma.item.update({
-      where: { id: item.id },
-      data: {
-        ...dto,
-        images: [
-          ...item.images.filter(
-            (imageName) => !dto.deletedImageNames?.includes(imageName),
-          ),
-          ...uploadedImageNames,
-        ],
-      },
-    });
+    if (!updatedItem) {
+      throw new BadRequestException('Something went wrong when update item');
+    }
+
+    return updatedItem;
   }
 
   async delete(userId: number, id: number) {

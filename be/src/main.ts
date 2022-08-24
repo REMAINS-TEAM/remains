@@ -3,8 +3,8 @@ import { AppModule } from './app.module';
 import { PrismaService } from './modules/prisma/prisma.service';
 import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
-import authMiddleware from './middlewares/auth.middleware';
-import { RolesGuard } from './guards/roles.guard';
+import authMiddleware from 'middlewares/auth.middleware';
+import { RolesGuard } from 'guards/roles.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,6 +20,9 @@ async function bootstrap() {
     new ValidationPipe({
       disableErrorMessages: process.env.NODE_ENV === 'prod',
       transform: true,
+      forbidUnknownValues: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
       // skipMissingProperties: true,
       // skipUndefinedProperties: true,
     }),

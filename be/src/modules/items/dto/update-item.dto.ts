@@ -1,4 +1,11 @@
-import { IsOptional, IsPositive, IsString, Length } from 'class-validator';
+import {
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  Length,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class UpdateItemDto {
@@ -16,16 +23,18 @@ export class UpdateItemDto {
   })
   description?: string;
 
+  @IsNumber()
   @IsOptional()
   @Type(() => Number)
   @IsPositive()
   price?: number;
 
+  @IsNumber()
   @IsOptional()
   @Type(() => Number)
   categoryId?: number;
 
+  @IsArray()
   @IsOptional()
-  @Type(() => Array)
   deletedImageNames?: string[];
 }
