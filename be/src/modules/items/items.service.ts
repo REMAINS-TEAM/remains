@@ -11,6 +11,7 @@ import { PrismaException } from 'exceptions/prismaException';
 
 import { MIME_IMAGES_TYPE_MAP } from 'constants/main';
 import { StorageService } from 'modules/storage/storage.service';
+import { UpdateItemDto } from 'modules/items/dto/update-item.dto';
 
 @Injectable()
 export class ItemsService {
@@ -87,6 +88,33 @@ export class ItemsService {
     };
   }
 
+  async uploadImages(itemId: number, images: Express.Multer.File[]) {
+    const uploadedImageNames: string[] = [];
+    try {
+      for (const image of images) {
+        const isValid = !!MIME_IMAGES_TYPE_MAP[image.mimetype];
+        if (isValid) {
+          const uploadedFileLocation = await this.storage.upload(
+            `/items/${itemId}`,
+            image.buffer,
+          );
+
+          const splitLocation = uploadedFileLocation.split('/');
+          const filename = splitLocation[splitLocation.length - 1];
+
+          uploadedImageNames.push(filename);
+        }
+      }
+    } catch (err) {
+      throw new HttpException(
+        'Something went wrong when upload file ' + err,
+        500,
+      );
+    }
+
+    return uploadedImageNames;
+  }
+
   async create(
     userId: number,
     data: {
@@ -121,29 +149,7 @@ export class ItemsService {
       throw new HttpException('Something went wrong when create new item', 500);
     }
 
-    // upload files
-    const uploadedImageNames: string[] = [];
-    try {
-      for (const image of images) {
-        const isValid = !!MIME_IMAGES_TYPE_MAP[image.mimetype];
-        if (isValid) {
-          const uploadedFileLocation = await this.storage.upload(
-            `/items/${newItem.id}`,
-            image.buffer,
-          );
-
-          const splitLocation = uploadedFileLocation.split('/');
-          const filename = splitLocation[splitLocation.length - 1];
-
-          uploadedImageNames.push(filename);
-        }
-      }
-    } catch (err) {
-      throw new HttpException(
-        'Something went wrong when upload file ' + err,
-        500,
-      );
-    }
+    const uploadedImageNames = await this.uploadImages(newItem.id, images);
 
     if (uploadedImageNames.length) {
       try {
@@ -157,6 +163,52 @@ export class ItemsService {
     }
 
     return newItem;
+  }
+
+  async update(
+    userId: number,
+    id: number,
+    dto: UpdateItemDto,
+    images: Express.Multer.File[],
+  ) {
+    let item;
+    try {
+      item = await this.prisma.item.findUnique({ where: { id } });
+    } catch (err) {
+      throw new PrismaException(err as Error);
+    }
+
+    if (!item) {
+      throw new NotFoundException(`Item with id ${id} does not exist`);
+    }
+    if (item.userId !== userId) {
+      throw new ForbiddenException(`It is not your item`);
+    }
+
+    if (dto.deletedImageNames?.length) {
+      for (const imageName of dto.deletedImageNames) {
+        try {
+          await this.storage.deleteFile(`items/${item.id}/${imageName}`);
+        } catch (e) {
+          // skip
+        }
+      }
+    }
+
+    const uploadedImageNames = await this.uploadImages(item.id, images);
+
+    await this.prisma.item.update({
+      where: { id: item.id },
+      data: {
+        ...dto,
+        images: [
+          ...item.images.filter(
+            (imageName) => !dto.deletedImageNames?.includes(imageName),
+          ),
+          ...uploadedImageNames,
+        ],
+      },
+    });
   }
 
   async delete(userId: number, id: number) {

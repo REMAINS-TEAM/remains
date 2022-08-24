@@ -5,6 +5,7 @@ import {
   Get,
   Headers,
   Param,
+  Patch,
   Post,
   Query,
   UploadedFiles,
@@ -22,6 +23,7 @@ import { CurrentUserId } from 'decorators/current-user.decorator';
 import { GetIsPaidGuard } from 'guards/getIsPaid.guard';
 import { Pagination } from 'decorators/pagination.decorator';
 import { IsPaid } from 'decorators/isPaid.decorator';
+import { UpdateItemDto } from 'modules/items/dto/update-item.dto';
 
 @Controller('items')
 export class ItemsController {
@@ -61,6 +63,22 @@ export class ItemsController {
     @CurrentUserId() userId: number,
   ): Promise<Item> {
     return this.itemsService.create(userId, createItemDto, images);
+  }
+
+  @Patch(':id')
+  @UseGuards(OnlyForPaidGuard)
+  @UseInterceptors(
+    FilesInterceptor('images', 10, {
+      limits: { fileSize: MAX_FILE_SIZE },
+    }),
+  )
+  async update(
+    @Param() params: { id: string },
+    @UploadedFiles() images: Express.Multer.File[],
+    @Body() updateItemDto: UpdateItemDto,
+    @CurrentUserId() userId: number,
+  ) {
+    return this.itemsService.update(userId, +params.id, updateItemDto, images);
   }
 
   @Delete(':id')
