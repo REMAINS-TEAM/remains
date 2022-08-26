@@ -14,16 +14,15 @@ import {
 } from '@nestjs/common';
 import { Item } from '@prisma/client';
 import { ItemsService } from './items.service';
-import { MAX_FILE_SIZE } from 'constants/main';
-import { FilesInterceptor } from '@nestjs/platform-express';
-import { CreateItemDto } from 'modules/items/dto/create-item.dto';
-import { FindAllItemsDto } from 'modules/items/dto/find-all-items.dto';
+import { CreateItemDto } from './dto/create-item.dto';
+import { FindAllItemsDto } from './dto/find-all-items.dto';
 import { OnlyForPaidGuard } from 'guards/onlyForPaid.guard';
 import { CurrentUserId } from 'decorators/current-user.decorator';
 import { GetIsPaidGuard } from 'guards/getIsPaid.guard';
 import { Pagination } from 'decorators/pagination.decorator';
 import { IsPaid } from 'decorators/isPaid.decorator';
-import { UpdateItemDto } from 'modules/items/dto/update-item.dto';
+import { UpdateItemDto } from './dto/update-item.dto';
+import { GetImages } from './items.interceptors';
 
 @Controller('items')
 export class ItemsController {
@@ -52,11 +51,7 @@ export class ItemsController {
 
   @Post()
   @UseGuards(OnlyForPaidGuard)
-  @UseInterceptors(
-    FilesInterceptor('images', 10, {
-      limits: { fileSize: MAX_FILE_SIZE },
-    }),
-  )
+  @UseInterceptors(GetImages)
   async create(
     @UploadedFiles() images: Express.Multer.File[],
     @Body() createItemDto: CreateItemDto,
@@ -67,11 +62,7 @@ export class ItemsController {
 
   @Patch(':id')
   @UseGuards(OnlyForPaidGuard)
-  @UseInterceptors(
-    FilesInterceptor('images', 10, {
-      limits: { fileSize: MAX_FILE_SIZE },
-    }),
-  )
+  @UseInterceptors(GetImages)
   async update(
     @Param() params: { id: string },
     @UploadedFiles() images: Express.Multer.File[],
