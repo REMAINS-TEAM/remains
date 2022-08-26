@@ -236,6 +236,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
             error={!!errors[fields.PRICE]}
             helperText={errors[fields.PRICE]?.message}
             InputProps={{
+              inputProps: { pattern: '[0-9]*' },
               endAdornment: <InputAdornment position="end">₽</InputAdornment>,
             }}
             {...field}

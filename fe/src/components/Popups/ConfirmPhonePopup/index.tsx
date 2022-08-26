@@ -66,6 +66,7 @@ function ConfirmPhonePopup({ open, setOpen, phone }: ConfirmPhonePopupProps) {
                 type="number"
                 fullWidth
                 variant="outlined"
+                inputProps={{ pattern: '[0-9]*' }}
                 helperText={!!errors.code && 'Код должен состоять из 4 цифр'}
                 error={!!errors.code}
                 {...field}
