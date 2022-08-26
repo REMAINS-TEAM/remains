@@ -7,7 +7,7 @@ import { Box, Button, IconButton, SpeedDialIcon } from '@mui/material';
 import itemsApi from 'store/api/items';
 import ItemCards from 'pages/Categories/units/ItemCards';
 import EmptyState from 'components/EmptyState';
-import AddItemPopup from 'components/Popups/AddItemPopup';
+import AddEditItemPopup from 'components/Popups/AddEditItemPopup';
 import NotFoundPage from 'pages/NotFoundPage';
 import { useSelector } from 'react-redux';
 import { getPaidStatus } from 'store/selectors/user';
@@ -20,7 +20,7 @@ import routes from 'routes';
 function CategoriesPage() {
   const { categoryId } = useParams();
   const notEmptyCategoryId = categoryId ? +categoryId : 0;
-  const [addItemPopupOpen, setAddItemPopupOpen] = useState(false);
+  const [addItemPopupOpen, setAddEditItemPopupOpen] = useState(false);
 
   const isPaid = useSelector(getPaidStatus);
 
@@ -53,7 +53,7 @@ function CategoriesPage() {
   }
 
   const addItemHandler = () => {
-    setAddItemPopupOpen(true);
+    setAddEditItemPopupOpen(true);
   };
 
   const showAllHandler = () => navigate(routes.items);
@@ -122,9 +122,9 @@ function CategoriesPage() {
       {/*    }}*/}
       {/*  />*/}
       {/*)}*/}
-      <AddItemPopup
+      <AddEditItemPopup
         open={addItemPopupOpen}
-        setOpen={setAddItemPopupOpen}
+        setOpen={setAddEditItemPopupOpen}
         category={categories?.tree[categories.tree.length - 1] || null}
       />
     </MainLayout>

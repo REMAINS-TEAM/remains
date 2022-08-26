@@ -1,7 +1,8 @@
 import { PopupProps } from 'components/Popups/types';
 import { Category } from 'store/slices/categories';
 
-export interface AddItemPopupProps
+export interface AddEditItemPopupProps
   extends Pick<PopupProps, 'open' | 'setOpen'> {
-  category: Category | null;
+  category?: Category | null;
+  itemId?: number;
 }

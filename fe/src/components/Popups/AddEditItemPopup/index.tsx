@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Popup from 'components/Popups/index';
-import { AddItemPopupProps } from 'components/Popups/AddItemPopup/types';
+import { AddEditItemPopupProps } from 'components/Popups/AddEditItemPopup/types';
 import { Box, InputAdornment, TextField, Typography } from '@mui/material';
 import UploadedImage from './units/UploadedImage';
 import * as styles from './styles';
@@ -27,12 +27,22 @@ const fields = {
 
 type FieldsType = typeof fields[keyof typeof fields];
 
-function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
+function AddEditItemPopup({
+  open,
+  setOpen,
+  category,
+  itemId,
+}: AddEditItemPopupProps) {
   const isPaid = useSelector(getPaidStatus);
+
+  const { data: item } = itemsApi.useGetItemByIdQuery(itemId || 0, {
+    skip: !itemId,
+  });
 
   const [createItemRequest, result] = itemsApi.useCreateItemMutation();
 
   const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagesSrc, setImagesSrc] = useState<string[]>([]);
 
   const notification = useNotification();
 
@@ -51,14 +61,27 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
     reset,
   } = useForm({
     resolver: joiResolver(AddItemSchema),
-    defaultValues: Object.values(fields).reduce(
-      (acc, value) => ({
-        ...acc,
-        [value]: '',
-      }),
-      {} as Record<FieldsType, string>,
-    ),
+    defaultValues: !item
+      ? Object.values(fields).reduce(
+          (acc, value) => ({
+            ...acc,
+            [value]: '',
+          }),
+          {} as Record<FieldsType, string>,
+        )
+      : ({
+          [fields.TITLE]: item.title,
+          [fields.DESCRIPTION]: item.description,
+          [fields.PRICE]: item.price,
+        } as Record<FieldsType, string>),
   });
+
+  useEffect(() => {
+    if (!item) return;
+    setImagesSrc(
+      item.images.map((fileName) => `/api/storage/items/${itemId}/${fileName}`),
+    );
+  }, [item]);
 
   const resetForm = () => {
     reset();
@@ -77,7 +100,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
     maxLength: MAX_LENGTH_DESCRIPTION,
   });
 
-  if (!category) return null;
+  if (!category && !itemId) return null;
 
   const onSubmit = (fieldsValues: Record<FieldsType, string>) => {
     if (Object.keys(errors).length) return;
@@ -91,7 +114,7 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
 
     const formData = new FormData();
 
-    formData.append('categoryId', String(category.id));
+    formData.append('categoryId', String(category?.id || ''));
     Object.entries(fieldsValues).forEach(([key, value]) =>
       formData.append(key, value),
     );
@@ -113,16 +136,28 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
     setImageFiles((prev) => [...prev, file]);
   };
 
-  const deleteImageHandler = (file: File) => {
-    setImageFiles((prev) =>
-      prev.filter((f) => f.name !== file.name && f.size !== file.size),
-    );
+  const deleteImageHandler = (file: File | string) => {
+    if (typeof file === 'string') {
+      setImagesSrc((prev) => prev.filter((src) => src !== file));
+      // TODO: складывать в массив УДАЛЕННЫЕ
+    } else {
+      setImageFiles((prev) =>
+        prev.filter(
+          (f) =>
+            f.name !== (file as File).name && f.size !== (file as File).size,
+        ),
+      );
+    }
   };
 
   return (
     <Popup
-      title={`Разместить товар в категории "${category.title}"`}
-      okButtonText={'Разместить'}
+      title={
+        !itemId
+          ? `Разместить товар в категории "${category?.title || ''}"`
+          : `Редактировать ${item?.title || ''}`
+      }
+      okButtonText={!itemId ? 'Разместить' : 'Применить'}
       onOkClick={handleSubmit(onSubmit)}
       okButtonProps={{ disabled: !isPaid }}
       onClose={resetForm}
@@ -131,7 +166,9 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
     >
       {!isPaid && (
         <NotificationPlate
-          title="Оплатите сервис для размещения товаров"
+          title={`Оплатите сервис для ${
+            !itemId ? 'добавления' : 'изменения'
+          } товара`}
           color="error"
           sx={{ mb: 2 }}
         />
@@ -255,6 +292,10 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
         Могут быть проблемы с браузером Safari, используйте Google Chrome
       </Typography>
       <Box sx={styles.imagesContainer}>
+        {itemId &&
+          imagesSrc.map((src) => (
+            <UploadedImage key={src} src={src} onDelete={deleteImageHandler} />
+          ))}
         {imageFiles.map((file) => (
           <UploadedImage
             key={file.name}
@@ -268,4 +309,4 @@ function AddItemPopup({ open, setOpen, category }: AddItemPopupProps) {
   );
 }
 
-export default React.memo(AddItemPopup);
+export default React.memo(AddEditItemPopup);

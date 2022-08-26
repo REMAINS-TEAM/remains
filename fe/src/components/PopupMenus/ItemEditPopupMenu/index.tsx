@@ -13,6 +13,7 @@ import itemsApi from 'store/api/items';
 import useResponseNotifications from 'hooks/useResponseNotifications';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import routes from 'routes';
+import AddEditItemPopup from 'components/Popups/AddEditItemPopup';
 
 const ItemEditPopupMenu = ({ item, sx }: ItemEditPopupMenuProps) => {
   const theme = useTheme();
@@ -20,6 +21,7 @@ const ItemEditPopupMenu = ({ item, sx }: ItemEditPopupMenuProps) => {
   const location = useLocation();
 
   const [dotsButtonRef, setDotsButtonRef] = useState<HTMLElement | null>(null);
+  const [addEditItemPopupOpen, setAddEditItemPopupOpen] = useState(false);
 
   const [deleteItemRequest, deleteResult] = itemsApi.useDeleteItemMutation();
 
@@ -46,7 +48,7 @@ const ItemEditPopupMenu = ({ item, sx }: ItemEditPopupMenuProps) => {
 
   const itemEditClickHandler = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    //TODO:
+    setAddEditItemPopupOpen(true);
   };
 
   const itemDeleteClickHandler = (event: React.MouseEvent<HTMLElement>) => {
@@ -79,6 +81,11 @@ const ItemEditPopupMenu = ({ item, sx }: ItemEditPopupMenuProps) => {
           confirm
         />
       </PopupMenu>
+      <AddEditItemPopup
+        open={addEditItemPopupOpen}
+        setOpen={setAddEditItemPopupOpen}
+        itemId={item.id}
+      />
     </Box>
   );
 };

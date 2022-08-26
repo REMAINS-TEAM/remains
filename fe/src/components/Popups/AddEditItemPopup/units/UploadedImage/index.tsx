@@ -9,13 +9,15 @@ import IconButton from '@mui/material/IconButton';
 import { fileToDataUri } from 'utils';
 
 function UploadedImage({
+  src,
   file,
   onAdd,
   onDelete,
 }: {
+  src?: string;
   file?: File;
   onAdd?: (file: File) => void;
-  onDelete?: (file: File) => void;
+  onDelete?: (file: File | string) => void;
 }) {
   const [hover, setHover] = useState(false);
   const [dataUri, setDataUri] = useState('');
@@ -44,7 +46,7 @@ function UploadedImage({
     input.click();
   };
 
-  if (!file)
+  if (!file && !src)
     return (
       <Box sx={styles.imageContainer}>
         <IconButton color="secondary" onClick={selectImageHandler}>
@@ -62,10 +64,19 @@ function UploadedImage({
       onMouseEnter={mouseEnterHandler}
       onMouseLeave={mouseLeaveHandler}
     >
-      <img src={dataUri} alt={'Изображение товара'} style={styles.image} />
+      <img
+        src={dataUri || src}
+        alt={'Изображение товара'}
+        style={styles.image}
+      />
 
       {hover && (
-        <Box sx={styles.overlay} onClick={() => onDelete && onDelete(file)}>
+        <Box
+          sx={styles.overlay}
+          onClick={() =>
+            onDelete && onDelete((file as File) || (src as string))
+          }
+        >
           <IconButton color="error">
             <DeleteIcon />
           </IconButton>
