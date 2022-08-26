@@ -61,6 +61,7 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
             control={control}
             render={({ field }) => (
               <MuiPhoneNumber
+                inputProps={{ pattern: '[0-9]*' }}
                 sx={{ minWidth: '250px' }}
                 autoFocus
                 margin="dense"

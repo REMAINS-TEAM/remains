@@ -78,6 +78,7 @@ function PaymentPopup({ open, setOpen }: PaymentPopupProps) {
                     type="number"
                     fullWidth
                     variant="outlined"
+                    inputProps={{ pattern: '[0-9]*' }}
                     helperText={
                       !!errors.amount &&
                       `Введите корректную сумму от ${MIN_PRICE}₽ до ${MAX_PRICE}₽`
