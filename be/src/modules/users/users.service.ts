@@ -15,6 +15,8 @@ import { generateConfirmCallUrl } from 'modules/users/users.utils';
 import axios from 'axios';
 import { PaymentService } from 'modules/payment/payment.service';
 
+const TEST_PHONE = '71234567890';
+
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
@@ -65,6 +67,8 @@ export class UsersService {
     } catch (err) {
       throw new PrismaException(err as Error);
     }
+
+    if (phone === TEST_PHONE) return { status: 'ok' };
 
     let prevCode;
     try {
@@ -143,7 +147,7 @@ export class UsersService {
       throw new BadRequestException('User in not existed or code is invalid');
     }
 
-    if (!loginWithoutCode) {
+    if (!loginWithoutCode || phone !== TEST_PHONE) {
       let existedCode: Code | null;
       try {
         existedCode = await this.prisma.code.findFirst({

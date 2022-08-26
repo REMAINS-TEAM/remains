@@ -35,7 +35,7 @@ const WelcomePage = () => {
           </Typography>
           <br />
           <Typography variant="h3">
-            Сервис для продажи остатков Вашего бизнеса
+            Сервис продажи остатков для Вашего бизнеса
           </Typography>
           <Typography variant="h4">Находится в стадии beta-testing</Typography>
         </Box>
