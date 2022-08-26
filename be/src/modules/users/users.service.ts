@@ -147,7 +147,7 @@ export class UsersService {
       throw new BadRequestException('User in not existed or code is invalid');
     }
 
-    if (!loginWithoutCode || phone !== TEST_PHONE) {
+    if (!loginWithoutCode && phone !== TEST_PHONE) {
       let existedCode: Code | null;
       try {
         existedCode = await this.prisma.code.findFirst({
