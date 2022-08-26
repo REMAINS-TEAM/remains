@@ -7,8 +7,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import { paymentSchema } from './validation';
 import YookassaCheckout from 'components/YookassaCheckout';
 import userApi from 'store/api/user';
-
-const MONTH_PRICE = 500;
+import { MAX_PRICE, MIN_PRICE, MONTH_PRICE } from './constants';
 
 function PaymentPopup({ open, setOpen }: PaymentPopupProps) {
   const [createPaymentRequest, createPaymentResult] =
@@ -60,11 +59,11 @@ function PaymentPopup({ open, setOpen }: PaymentPopupProps) {
         hideActionButtons={widgetShow}
         {...{ open, setOpen }}
       >
-        <Box sx={{ width: '400px' }}>
+        <Box maxWidth={500}>
           {!widgetShow ? (
             <form onSubmit={handleSubmit(onSubmit)}>
               <Typography variant="subtitle1" color="secondary" sx={{ mb: 2 }}>
-                Введите любую сумму, не меньше {MONTH_PRICE}₽
+                Введите сумму от {MIN_PRICE}₽ до {MAX_PRICE}₽
               </Typography>
 
               <Controller
@@ -81,7 +80,7 @@ function PaymentPopup({ open, setOpen }: PaymentPopupProps) {
                     variant="outlined"
                     helperText={
                       !!errors.amount &&
-                      `Введите корректную сумму не меньше ${MONTH_PRICE}₽`
+                      `Введите корректную сумму от ${MIN_PRICE}₽ до ${MAX_PRICE}₽`
                     }
                     error={!!errors.amount}
                     {...field}
@@ -89,7 +88,10 @@ function PaymentPopup({ open, setOpen }: PaymentPopupProps) {
                 )}
               />
               <Typography variant="subtitle2" color="secondary">
-                1 месяц = {MONTH_PRICE}₽. Этого хватит на {monthsCount} мес.
+                1 месяц = {MONTH_PRICE}₽.{' '}
+                {!errors.amount
+                  ? `Введенной суммы хватит на ${monthsCount} мес.`
+                  : ''}
               </Typography>
             </form>
           ) : createPaymentResult?.data?.token ? (
