@@ -21,6 +21,7 @@ export default function Popup({
   ...rest
 }: PopupProps) {
   const handleOkClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     if (closeWhenSubmit) {
       setOpen(false);
       if (onClose) onClose();
@@ -28,7 +29,8 @@ export default function Popup({
     onOkClick && onOkClick(event);
   };
 
-  const handleCancelClick = () => {
+  const handleCancelClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setOpen(false);
     if (onClose) onClose();
   };

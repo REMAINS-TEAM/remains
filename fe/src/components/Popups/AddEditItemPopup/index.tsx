@@ -36,7 +36,7 @@ function AddEditItemPopup({
   const isPaid = useSelector(getPaidStatus);
 
   const { data: item } = itemsApi.useGetItemByIdQuery(itemId || 0, {
-    skip: !itemId,
+    skip: !itemId || !open,
   });
 
   const [createItemRequest, result] = itemsApi.useCreateItemMutation();
@@ -61,23 +61,22 @@ function AddEditItemPopup({
     reset,
   } = useForm({
     resolver: joiResolver(AddItemSchema),
-    defaultValues: !item
-      ? Object.values(fields).reduce(
-          (acc, value) => ({
-            ...acc,
-            [value]: '',
-          }),
-          {} as Record<FieldsType, string>,
-        )
-      : ({
-          [fields.TITLE]: item.title,
-          [fields.DESCRIPTION]: item.description,
-          [fields.PRICE]: item.price,
-        } as Record<FieldsType, string>),
+    defaultValues: Object.values(fields).reduce(
+      (acc, value) => ({
+        ...acc,
+        [value]: '',
+      }),
+      {} as Record<FieldsType, string>,
+    ),
   });
 
   useEffect(() => {
     if (!item) return;
+    reset({
+      [fields.TITLE]: item.title,
+      [fields.DESCRIPTION]: item.description,
+      [fields.PRICE]: item.price,
+    } as Record<FieldsType, string>);
     setImagesSrc(
       item.images.map((fileName) => `/api/storage/items/${itemId}/${fileName}`),
     );
@@ -142,10 +141,7 @@ function AddEditItemPopup({
       // TODO: складывать в массив УДАЛЕННЫЕ
     } else {
       setImageFiles((prev) =>
-        prev.filter(
-          (f) =>
-            f.name !== (file as File).name && f.size !== (file as File).size,
-        ),
+        prev.filter((f) => f.name !== file.name && f.size !== file.size),
       );
     }
   };

@@ -47,7 +47,6 @@ const ItemEditPopupMenu = ({ item, sx }: ItemEditPopupMenuProps) => {
   };
 
   const itemEditClickHandler = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
     setAddEditItemPopupOpen(true);
   };
 
