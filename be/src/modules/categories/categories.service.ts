@@ -42,7 +42,7 @@ export class CategoriesService {
         include: {
           _count: { select: { items: true } },
         },
-        orderBy: { title: 'asc' },
+        orderBy: [{ sort: 'asc' }, { title: 'asc' }],
       });
 
       if (categories.length) {
