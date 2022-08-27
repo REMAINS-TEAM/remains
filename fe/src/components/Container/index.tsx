@@ -1,19 +1,13 @@
-import React, { ReactNode } from 'react';
-import { Box, SxProps, Theme } from '@mui/material';
+import React, { forwardRef } from 'react';
+import { Box } from '@mui/material';
 
 import * as styles from './styles';
+import { ContainerProps } from './types';
 
-function Container({
-  children,
-  onClick,
-  sx,
-}: {
-  children: ReactNode;
-  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
-  sx?: SxProps<Theme>;
-}) {
-  return (
+const Container = forwardRef<HTMLElement, ContainerProps>(
+  ({ children, onClick, sx }, ref) => (
     <Box
+      ref={ref}
       onClick={onClick}
       sx={{
         ...styles.container,
@@ -22,7 +16,7 @@ function Container({
     >
       {children}
     </Box>
-  );
-}
+  ),
+);
 
 export default React.memo(Container);

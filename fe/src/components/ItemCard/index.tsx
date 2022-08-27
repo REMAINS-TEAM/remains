@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import * as styles from './styles';
 import Container from 'components/Container';
 import { Item } from 'store/slices/items';
@@ -19,6 +19,8 @@ import { standardFormat } from 'utils';
 import Grid from '@mui/material/Unstable_Grid2';
 
 function ItemCard({ item }: { item: Item }) {
+  const cardRef = useRef<HTMLElement | null>(null);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -26,12 +28,18 @@ function ItemCard({ item }: { item: Item }) {
   const user = useSelector(getCurrentUser);
   const isPaid = useSelector(getPaidStatus);
 
-  const itemDetailsClickHandler = () => {
-    navigate(generatePath(routes.item, { itemId: String(item.id) }));
+  const itemClickHandler = (event: React.MouseEvent<HTMLElement>) => {
+    if (cardRef.current?.contains(event.target as Node)) {
+      navigate(generatePath(routes.item, { itemId: String(item.id) }));
+    }
   };
 
   return (
-    <Container sx={styles.itemContainer} onClick={itemDetailsClickHandler}>
+    <Container
+      ref={cardRef}
+      sx={styles.itemContainer}
+      onClick={itemClickHandler}
+    >
       {item.userId === user?.id && isPaid && (
         <ItemEditPopupMenu item={item} sx={styles.dotsButton} />
       )}
@@ -80,7 +88,7 @@ function ItemCard({ item }: { item: Item }) {
                     aria-controls="details"
                     variant="outlined"
                     size={'small'}
-                    onClick={itemDetailsClickHandler}
+                    onClick={itemClickHandler}
                   >
                     Подробнее
                   </Button>
