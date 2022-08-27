@@ -18,9 +18,12 @@ export const itemsApi = api.injectEndpoints({
             ]
           : [apiTypes.ITEMS],
     }),
+
     getItemById: build.query<Item, number>({
-      query: (id) => `items/${id}`,
+      query: (id) => `${apiTypes.ITEMS}/${id}`,
+      providesTags: (result, error, arg) => [`${apiTypes.ITEMS}/${arg}`],
     }),
+
     createItem: build.mutation<Item, FormData>({
       query: (body) => ({
         url: apiTypes.ITEMS,
@@ -29,6 +32,17 @@ export const itemsApi = api.injectEndpoints({
       }),
       invalidatesTags: [apiTypes.ITEMS],
     }),
+
+    updateItem: build.mutation<Item, { id: number; formData: FormData }>({
+      query: ({ id, formData }) => ({
+        url: `${apiTypes.ITEMS}/${id}`,
+        method: 'PATCH',
+        body: formData,
+      }),
+      invalidatesTags: (result) =>
+        result ? [`${apiTypes.ITEMS}/${result.id}`, apiTypes.ITEMS] : [],
+    }),
+
     deleteItem: build.mutation<Item, number>({
       async queryFn(id, _queryApi, _extraOptions, fetchWithBQ) {
         const deleteResponse = await fetchWithBQ({

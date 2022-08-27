@@ -39,7 +39,10 @@ function AddEditItemPopup({
     skip: !itemId || !open,
   });
 
-  const [createItemRequest, result] = itemsApi.useCreateItemMutation();
+  const [createItemRequest, createItemResult] =
+    itemsApi.useCreateItemMutation();
+  const [updateItemRequest, updateItemResult] =
+    itemsApi.useUpdateItemMutation();
 
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagesSrc, setImagesSrc] = useState<string[]>([]);
@@ -47,9 +50,13 @@ function AddEditItemPopup({
   const notification = useNotification();
 
   useResponseNotifications({
-    result,
-    onSuccessText: 'Товар добавлен в выбранную категорию',
-    onErrorText: 'Ошибка при добавлении товара',
+    result: !itemId ? createItemResult : updateItemResult,
+    onSuccessText: !itemId
+      ? 'Товар добавлен в выбранную категорию'
+      : 'Товар изменен',
+    onErrorText: `Ошибка при ${
+      !itemId ? 'добавлении' : 'редактировании'
+    } товара`,
   });
 
   const {
@@ -103,7 +110,7 @@ function AddEditItemPopup({
 
   const onSubmit = (fieldsValues: Record<FieldsType, string>) => {
     if (Object.keys(errors).length) return;
-    if (!imageFiles.length) {
+    if (!imageFiles.length && !imagesSrc.length) {
       notification.show(
         notificationType.ERROR,
         'Добавьте хотя бы одно изображение',
@@ -113,13 +120,28 @@ function AddEditItemPopup({
 
     const formData = new FormData();
 
-    formData.append('categoryId', String(category?.id || ''));
     Object.entries(fieldsValues).forEach(([key, value]) =>
       formData.append(key, value),
     );
     imageFiles.forEach((file) => formData.append('images', file, file.name));
 
-    createItemRequest(formData);
+    if (!itemId) {
+      formData.append('categoryId', String(category?.id || ''));
+      createItemRequest(formData);
+    } else {
+      const restImageNames = imagesSrc.map((src) => src.split('/').pop());
+      const deletedImageNames =
+        item?.images.filter(
+          (oldImageName) => !restImageNames.includes(oldImageName),
+        ) || [];
+      deletedImageNames.forEach((fileName) =>
+        formData.append('deletedImageNames', fileName),
+      );
+      if (deletedImageNames.length === 1)
+        formData.append('deletedImageNames', ''); // because it should be an array
+      updateItemRequest({ id: itemId, formData });
+    }
+
     setOpen(false);
     resetForm();
   };
@@ -138,7 +160,6 @@ function AddEditItemPopup({
   const deleteImageHandler = (file: File | string) => {
     if (typeof file === 'string') {
       setImagesSrc((prev) => prev.filter((src) => src !== file));
-      // TODO: складывать в массив УДАЛЕННЫЕ
     } else {
       setImageFiles((prev) =>
         prev.filter((f) => f.name !== file.name && f.size !== file.size),

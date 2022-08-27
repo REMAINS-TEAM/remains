@@ -61,7 +61,7 @@ function UploadedImage({
   return (
     <Box
       sx={styles.imageContainer}
-      onMouseEnter={mouseEnterHandler}
+      onMouseMove={mouseEnterHandler}
       onMouseLeave={mouseLeaveHandler}
     >
       <img
@@ -73,9 +73,10 @@ function UploadedImage({
       {hover && (
         <Box
           sx={styles.overlay}
-          onClick={() =>
-            onDelete && onDelete((file as File) || (src as string))
-          }
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete && onDelete((file as File) || (src as string));
+          }}
         >
           <IconButton color="error">
             <DeleteIcon />
