@@ -24,7 +24,7 @@ export const header: SxProps = {
 };
 
 export const contentContainer = (theme: Theme) => ({
-  width: 'calc(100% - 280px)',
+  width: 'calc(100% - 320px)',
   left: '320px',
   position: 'relative',
   [theme.breakpoints.down('md')]: {
