@@ -21,6 +21,7 @@ import { CategoriesTreeProps } from './types';
 import { useParams } from 'react-router-dom';
 import { setOpen } from 'store/slices/menu';
 import { useDispatch } from 'react-redux';
+import NotificationPlate from 'components/NotificationPlate';
 
 export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
   const theme = useTheme();
@@ -117,10 +118,15 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
               ))
           ) : (
             <Typography variant="h3" color="secondary" sx={{ mt: 2 }}>
-              {`Нет вложенных категорий${
-                isMobile ? '. Закройте меню, чтобы увидеть товары.' : ''
-              }`}
+              Нет вложенных категорий
             </Typography>
+          )}
+          {isMobile && categoryId && +categoryId !== 0 && (
+            <NotificationPlate
+              title="Закройте меню, чтобы увидеть товары"
+              color="secondary"
+              sx={{ mt: 3, pl: 0.3 }}
+            />
           )}
         </Box>
       )}
