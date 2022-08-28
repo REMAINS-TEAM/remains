@@ -125,7 +125,7 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
             <NotificationPlate
               title="Закройте меню, чтобы увидеть товары"
               color="secondary"
-              sx={{ mt: 3, pl: 0.3 }}
+              sx={{ mt: 3, pl: 0.3, fontSize: 14 }}
             />
           )}
         </Box>

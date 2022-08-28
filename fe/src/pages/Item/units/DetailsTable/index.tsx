@@ -6,7 +6,7 @@ import InfoGroup from './InfoGroup';
 
 function DetailsTable({ item }: { item: Item }) {
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', pb: 1 }}>
       <InfoGroup title="Товар" fields={itemFields} item={item} />
       <InfoGroup title="Владелец" fields={userFields} item={item} />
     </Box>
