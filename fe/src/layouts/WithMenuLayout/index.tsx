@@ -1,14 +1,17 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import * as styles from './styles';
 import { Box, useMediaQuery, useTheme } from '@mui/material';
 import CategoriesTree from 'components/CategoriesTree';
 import { Category } from 'store/slices/categories';
 import { generatePath, useNavigate } from 'react-router-dom';
 import routes from 'routes';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getMenuState } from 'store/selectors/menu';
+import { setShowBurger } from 'store/slices/menu';
 
 const WithMenuLayout = ({ children }: { children: ReactNode }) => {
+  const dispatch = useDispatch();
+
   const menu = useSelector(getMenuState);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -26,6 +29,13 @@ const WithMenuLayout = ({ children }: { children: ReactNode }) => {
       }),
     );
   };
+
+  useEffect(() => {
+    dispatch(setShowBurger(true));
+    return () => {
+      dispatch(setShowBurger(false));
+    };
+  }, []);
 
   return (
     <>

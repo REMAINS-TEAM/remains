@@ -79,17 +79,19 @@ function AppHeader() {
     <AppBar position="fixed" sx={{ height: APP_HEADER_HEIGHT }}>
       <Toolbar sx={styles.toolbar}>
         <Box sx={styles.leftSide}>
-          {isMobile && (general[LS_KEY_DEMO] || general[LS_KEY_TOKEN]) && (
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              onClick={toggleMobileMenu}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
+          {isMobile &&
+            mobileMenu.showBurger &&
+            (general[LS_KEY_DEMO] || general[LS_KEY_TOKEN]) && (
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                onClick={toggleMobileMenu}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
 
           <Typography variant="h6" component="h1" sx={{ flexGrow: 1, mr: 2 }}>
             <Link className="link" to={'/'}>

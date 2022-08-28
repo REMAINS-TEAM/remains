@@ -117,7 +117,9 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
               ))
           ) : (
             <Typography variant="h3" color="secondary" sx={{ mt: 2 }}>
-              Нет вложенных категорий
+              {`Нет вложенных категорий${
+                isMobile ? '. Закройте меню, чтобы увидеть товары.' : ''
+              }`}
             </Typography>
           )}
         </Box>
