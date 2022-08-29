@@ -3,7 +3,7 @@ import { IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 export class CreateCompanyDto {
   @IsNotEmpty()
   @IsString()
-  @Length(3, 50, {
+  @Length(3, 60, {
     message: 'Длина названия должна быть $constraint1-$constraint2 символов',
   })
   name: string;

@@ -11,7 +11,7 @@ import {
 export class UpdateUserDto {
   @IsOptional()
   @MinLength(3)
-  @MaxLength(40)
+  @MaxLength(30)
   name?: string;
   @IsOptional()
   @ValidateIf((e) => e.email !== '')
