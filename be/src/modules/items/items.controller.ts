@@ -62,7 +62,7 @@ export class ItemsController {
   }
 
   @Patch(':id')
-  @UseGuards(GetIsPaidOrAdminGuard, OnlyForPaidGuard)
+  @UseGuards(OnlyForPaidGuard, GetIsPaidOrAdminGuard)
   @UseInterceptors(GetImages)
   async update(
     @Param() params: { id: string },
@@ -81,7 +81,7 @@ export class ItemsController {
   }
 
   @Delete(':id')
-  @UseGuards(GetIsPaidOrAdminGuard, OnlyForPaidGuard)
+  @UseGuards(OnlyForPaidGuard, GetIsPaidOrAdminGuard)
   async delete(
     @Param() params: { id: string },
     @Headers() headers: { authorization: string | undefined },

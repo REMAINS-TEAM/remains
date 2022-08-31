@@ -14,7 +14,8 @@ export class OnlyForPaidGuard implements CanActivate {
     try {
       const user = await this.prisma.user.findUnique({ where: { id: userId } });
       if (!user) return false;
-      if (new Date() < new Date(user.paymentExpiredDate)) return true;
+      if (user.isAdmin || new Date() < new Date(user.paymentExpiredDate))
+        return true;
     } catch (err) {
       // skip
     }

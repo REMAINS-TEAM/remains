@@ -14,8 +14,12 @@ import useResponseNotifications from 'hooks/useResponseNotifications';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import routes from 'routes';
 import AddEditItemPopup from 'components/Popups/AddEditItemPopup';
+import { useSelector } from 'react-redux';
+import { getIsAdmin } from 'store/selectors/user';
 
 const ItemEditPopupMenu = ({ item, sx }: ItemEditPopupMenuProps) => {
+  const isAdmin = useSelector(getIsAdmin);
+
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -57,7 +61,13 @@ const ItemEditPopupMenu = ({ item, sx }: ItemEditPopupMenuProps) => {
 
   return (
     <Box sx={sx}>
-      <Tooltip title={'Этот товар добавили Вы. Нажмите, чтобы ред.'}>
+      <Tooltip
+        title={
+          isAdmin
+            ? 'Вы администратор и можете изменять любые товары'
+            : 'Этот товар добавили Вы. Нажмите, чтобы ред.'
+        }
+      >
         <IconButton color="secondary" onClick={dotsClickHandler}>
           <DotsIcon />
         </IconButton>

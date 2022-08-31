@@ -182,7 +182,7 @@ function AddEditItemPopup({
       closeWhenSubmit={false}
       {...{ open, setOpen }}
     >
-      {(!isPaid || isAdmin) && (
+      {!isPaid && !isAdmin && (
         <NotificationPlate
           title={`Оплатите сервис для ${
             !itemId ? 'добавления' : 'изменения'

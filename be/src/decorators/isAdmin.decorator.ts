@@ -4,6 +4,6 @@ export const IsAdmin = createParamDecorator(
   async (data: string, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
 
-    return request?.user?.admin || false;
+    return request?.user?.isAdmin || false;
   },
 );
