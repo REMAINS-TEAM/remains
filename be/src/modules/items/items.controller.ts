@@ -23,6 +23,7 @@ import { Pagination } from 'decorators/pagination.decorator';
 import { IsPaid } from 'decorators/isPaid.decorator';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { GetImages } from './items.interceptors';
+import { IsAdmin } from 'decorators/isAdmin.decorator';
 
 @Controller('items')
 export class ItemsController {
@@ -61,24 +62,32 @@ export class ItemsController {
   }
 
   @Patch(':id')
-  @UseGuards(OnlyForPaidGuard)
+  @UseGuards(GetIsPaidOrAdminGuard, OnlyForPaidGuard)
   @UseInterceptors(GetImages)
   async update(
     @Param() params: { id: string },
     @UploadedFiles() images: Express.Multer.File[],
     @Body() updateItemDto: UpdateItemDto,
+    @IsAdmin() isAdmin: boolean,
     @CurrentUserId() userId: number,
   ) {
-    return this.itemsService.update(userId, +params.id, updateItemDto, images);
+    return this.itemsService.update(
+      userId,
+      +params.id,
+      updateItemDto,
+      images,
+      isAdmin,
+    );
   }
 
   @Delete(':id')
-  @UseGuards(OnlyForPaidGuard)
+  @UseGuards(GetIsPaidOrAdminGuard, OnlyForPaidGuard)
   async delete(
     @Param() params: { id: string },
     @Headers() headers: { authorization: string | undefined },
+    @IsAdmin() isAdmin: boolean,
     @CurrentUserId() userId: number,
   ): Promise<Item | null> {
-    return this.itemsService.delete(userId, +params.id);
+    return this.itemsService.delete(userId, +params.id, isAdmin);
   }
 }

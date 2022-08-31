@@ -170,6 +170,7 @@ export class ItemsService {
     id: number,
     dto: UpdateItemDto,
     images?: Express.Multer.File[],
+    isAdmin?: boolean,
   ) {
     let item;
     try {
@@ -181,7 +182,7 @@ export class ItemsService {
     if (!item) {
       throw new NotFoundException(`Item with id ${id} does not exist`);
     }
-    if (item.userId !== userId) {
+    if (item.userId !== userId && !isAdmin) {
       throw new ForbiddenException(`It is not your item`);
     }
 
@@ -229,7 +230,7 @@ export class ItemsService {
     return updatedItem;
   }
 
-  async delete(userId: number, id: number) {
+  async delete(userId: number, id: number, isAdmin?: boolean) {
     let item: Item | null;
     try {
       item = await this.prisma.item.findUnique({
@@ -243,7 +244,7 @@ export class ItemsService {
       throw new BadRequestException(`Item with id ${id} not found`);
     }
 
-    if (item.userId !== userId) {
+    if (item.userId !== userId && !isAdmin) {
       throw new ForbiddenException(
         `Cannot delete item with id ${id}. It is not your item`,
       );
