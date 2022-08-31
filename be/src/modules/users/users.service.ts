@@ -94,7 +94,10 @@ export class UsersService {
     let smscResponse: { error?: string };
     try {
       smscResponse = await axios.get(
-        generateMessageCallUrl(phone, `Это Sell Remains. Ваш код: ${code}`),
+        generateMessageCallUrl(
+          phone,
+          `Звонок от Sell Remains. Ваш код: ${code}`,
+        ),
       );
     } catch (e) {
       throw new HttpException(
