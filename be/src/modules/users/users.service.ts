@@ -11,7 +11,10 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { addDays, addMonths } from 'date-fns';
 import jwt from 'jsonwebtoken';
-import { generateConfirmCallUrl } from 'modules/users/users.utils';
+import {
+  generateMessageCallUrl,
+  getRandomInteger,
+} from 'modules/users/users.utils';
 import axios from 'axios';
 import { PaymentService } from 'modules/payment/payment.service';
 
@@ -87,10 +90,12 @@ export class UsersService {
       throw new BadRequestException('Code is already sent. Try in 1 min.');
     }
 
-    let smscResponse: { error?: string; code?: string };
+    const code = getRandomInteger(1000, 9999);
+    let smscResponse: { error?: string };
     try {
-      const response = await axios.get(generateConfirmCallUrl(phone));
-      smscResponse = response.data as { code: string };
+      smscResponse = await axios.get(
+        generateMessageCallUrl(phone, `Это Sell Remains. Ваш код: ${code}`),
+      );
     } catch (e) {
       throw new HttpException(
         'Something went wrong when try to call ' + JSON.stringify(e),
@@ -98,15 +103,13 @@ export class UsersService {
       );
     }
 
-    if (!smscResponse.code) {
+    if (smscResponse.error) {
       const errorMessage = smscResponse.error || 'Unknown error';
       throw new HttpException(
         'Something went wrong when try to call. ' + errorMessage,
         500,
       );
     }
-
-    const code = +smscResponse.code.substring(2);
 
     try {
       await this.prisma.code.deleteMany({

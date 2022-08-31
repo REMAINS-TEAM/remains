@@ -50,7 +50,8 @@ function ConfirmPhonePopup({ open, setOpen, phone }: ConfirmPhonePopupProps) {
         {...{ open, setOpen }}
       >
         <Typography variant="subtitle2" sx={{ mb: 2 }}>
-          Сейчас Вам поступит звонок. Введите последние 4 цифры номера.
+          Сейчас Вам поступит звонок. Прослушайте сообщение и введите
+          произнесенный код для входа.
         </Typography>
 
         <form onSubmit={handleSubmit(onSubmit)}>
