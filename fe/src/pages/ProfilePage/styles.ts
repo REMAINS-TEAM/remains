@@ -24,3 +24,11 @@ export const accentedBtn: SxProps<Theme> = {
   animationDuration: '.8s',
   animationIterationCount: 'infinite',
 };
+
+export const tableValue = (theme: Theme) => ({
+  [theme.breakpoints.down('sm')]: {
+    maxWidth: 150,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+});

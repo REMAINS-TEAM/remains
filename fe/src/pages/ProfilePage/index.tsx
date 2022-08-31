@@ -84,7 +84,11 @@ function ProfilePage() {
                     {row.title}:
                   </TableCell>
                   <TableCell align="left">
-                    <Typography variant="inherit" color={'secondary'}>
+                    <Typography
+                      variant="inherit"
+                      color={'secondary'}
+                      sx={styles.tableValue}
+                    >
                       {row.value || 'Не указано'}
                     </Typography>
                   </TableCell>

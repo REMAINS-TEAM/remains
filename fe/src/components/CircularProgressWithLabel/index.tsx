@@ -4,12 +4,12 @@ import CircularProgress, {
 } from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 export default function CircularProgressWithLabel({
   label,
   ...props
-}: CircularProgressProps & { label: string }) {
+}: CircularProgressProps & { label: ReactNode }) {
   const color = useMemo(() => {
     if (!props.value) return 'primary';
     if (props.value > 50) return 'success';
@@ -20,7 +20,9 @@ export default function CircularProgressWithLabel({
   if (props.value === undefined) return null;
 
   return (
-    <Box sx={{ position: 'relative', userSelect: 'none' }}>
+    <Box
+      sx={{ position: 'relative', userSelect: 'none', width: 40, height: 40 }}
+    >
       <CircularProgress
         variant="determinate"
         sx={{

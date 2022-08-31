@@ -6,6 +6,7 @@ import {
   InfoOutlined as InfoIcon,
   Menu as MenuIcon,
   PersonRounded as UserIcon,
+  VerifiedUser as AdminUserIcon,
 } from '@mui/icons-material';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -25,7 +26,7 @@ import AuthPopup from 'components/Popups/AuthPopup';
 import { useDispatch, useSelector } from 'react-redux';
 import userApi from 'store/api/user';
 import ProfileMenu from 'components/AppHeader/units/ProfileMenu';
-import { getCurrentUser } from 'store/selectors/user';
+import { getCurrentUser, getIsAdmin } from 'store/selectors/user';
 import { Link } from 'react-router-dom';
 import { setOpen } from 'store/slices/menu';
 import { getMenuState } from 'store/selectors/menu';
@@ -41,6 +42,7 @@ function AppHeader() {
 
   const dispatch = useDispatch();
 
+  const isAdmin = useSelector(getIsAdmin);
   const mobileMenu = useSelector(getMenuState);
   const general = useSelector(getGeneralVariables);
   const user = useSelector(getCurrentUser);
@@ -131,14 +133,20 @@ function AppHeader() {
                   )}
 
                   {user?.name || user?.phone || 'Вход / регистрация'}
-                  <UserIcon />
+                  {!isAdmin ? (
+                    <UserIcon />
+                  ) : (
+                    <Tooltip title="Вы администратор">
+                      <AdminUserIcon />
+                    </Tooltip>
+                  )}
                 </Button>
               ) : (
                 <IconButton
                   color={'inherit'}
                   onClick={user ? profileClickHandler : loginClickHandler}
                 >
-                  <UserIcon />
+                  {!isAdmin ? <UserIcon /> : <AdminUserIcon />}
                 </IconButton>
               )}
             </>
