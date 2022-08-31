@@ -8,9 +8,10 @@ import routes from 'routes';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMenuState } from 'store/selectors/menu';
 import { setShowBurger } from 'store/slices/menu';
+import { AppDispatch } from 'store';
 
 const WithMenuLayout = ({ children }: { children: ReactNode }) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const menu = useSelector(getMenuState);
   const theme = useTheme();

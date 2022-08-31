@@ -178,7 +178,7 @@ export class UsersService {
     }
 
     const token = jwt.sign(
-      { sub: user.id, pay: user.paymentExpiredDate },
+      { sub: user.id, pay: user.paymentExpiredDate, admin: user.isAdmin },
       process.env.JWT_SECRET_KEY || 'remains-secret-key',
     );
 

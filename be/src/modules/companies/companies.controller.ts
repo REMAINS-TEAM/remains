@@ -10,8 +10,7 @@ import {
 import { CompaniesService } from 'modules/companies/companies.service';
 import { FindAllDto } from './dto/find-all.dto';
 import { CreateCompanyDto } from 'modules/companies/dto/create-company.dto';
-import { GetIsPaidGuard } from 'guards/getIsPaid.guard';
-import { IsPaid } from 'decorators/isPaid.decorator';
+import { GetIsPaidOrAdminGuard } from 'guards/getIsPaidOrAdmin.guard';
 
 @Controller('companies')
 export class CompaniesController {
@@ -26,7 +25,7 @@ export class CompaniesController {
   }
 
   @Get(':id')
-  @UseGuards(GetIsPaidGuard)
+  @UseGuards(GetIsPaidOrAdminGuard)
   async findOne(@Param() params: { id: string }) {
     return this.companiesService.findOne(+params.id);
   }

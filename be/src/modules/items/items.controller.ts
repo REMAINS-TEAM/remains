@@ -18,7 +18,7 @@ import { CreateItemDto } from './dto/create-item.dto';
 import { FindAllItemsDto } from './dto/find-all-items.dto';
 import { OnlyForPaidGuard } from 'guards/onlyForPaid.guard';
 import { CurrentUserId } from 'decorators/current-user.decorator';
-import { GetIsPaidGuard } from 'guards/getIsPaid.guard';
+import { GetIsPaidOrAdminGuard } from 'guards/getIsPaidOrAdmin.guard';
 import { Pagination } from 'decorators/pagination.decorator';
 import { IsPaid } from 'decorators/isPaid.decorator';
 import { UpdateItemDto } from './dto/update-item.dto';
@@ -29,7 +29,7 @@ export class ItemsController {
   constructor(private itemsService: ItemsService) {}
 
   @Get()
-  @UseGuards(GetIsPaidGuard)
+  @UseGuards(GetIsPaidOrAdminGuard)
   async findAll(
     @Query() { categoryId, userId, companyId }: FindAllItemsDto,
     @IsPaid() isPaid: boolean,
@@ -44,7 +44,7 @@ export class ItemsController {
   }
 
   @Get(':id')
-  @UseGuards(GetIsPaidGuard)
+  @UseGuards(GetIsPaidOrAdminGuard)
   async findOne(@Param() params: { id: string }, @IsPaid() isPaid: boolean) {
     return this.itemsService.findOne(+params.id, isPaid);
   }

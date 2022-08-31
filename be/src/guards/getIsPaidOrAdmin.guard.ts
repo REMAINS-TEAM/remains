@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { PrismaService } from 'modules/prisma/prisma.service';
 
 @Injectable()
-export class GetIsPaidGuard implements CanActivate {
+export class GetIsPaidOrAdminGuard implements CanActivate {
   constructor(private prisma: PrismaService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -20,17 +20,15 @@ export class GetIsPaidGuard implements CanActivate {
         request.user = null;
         return true;
       }
-      if (new Date() < new Date(user.paymentExpiredDate)) {
-        request.user = {
-          id: userId,
-          isPaid: true,
-        };
-      } else {
-        request.user = {
-          id: userId,
-          isPaid: false,
-        };
-      }
+
+      request.user = {
+        ...request.user,
+        id: userId,
+        isPaid: user.isAdmin
+          ? true
+          : new Date() < new Date(user.paymentExpiredDate),
+        isAdmin: user.isAdmin,
+      };
     } catch (err) {
       request.user = null;
     }
