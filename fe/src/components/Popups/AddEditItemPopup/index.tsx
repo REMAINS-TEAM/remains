@@ -16,7 +16,7 @@ import {
   MAX_LENGTH_TITLE,
 } from './validation';
 import { useSelector } from 'react-redux';
-import { getPaidStatus } from 'store/selectors/user';
+import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 import NotificationPlate from 'components/NotificationPlate';
 
 const fields = {
@@ -34,6 +34,7 @@ function AddEditItemPopup({
   itemId,
 }: AddEditItemPopupProps) {
   const isPaid = useSelector(getPaidStatus);
+  const isAdmin = useSelector(getIsAdmin);
 
   const { data: item } = itemsApi.useGetItemByIdQuery(itemId || 0, {
     skip: !itemId || !open,
@@ -176,12 +177,12 @@ function AddEditItemPopup({
       }
       okButtonText={!itemId ? 'Разместить' : 'Применить'}
       onOkClick={handleSubmit(onSubmit)}
-      okButtonProps={{ disabled: !isPaid }}
+      okButtonProps={{ disabled: !isPaid && !isAdmin }}
       onClose={resetForm}
       closeWhenSubmit={false}
       {...{ open, setOpen }}
     >
-      {!isPaid && (
+      {(!isPaid || isAdmin) && (
         <NotificationPlate
           title={`Оплатите сервис для ${
             !itemId ? 'добавления' : 'изменения'
@@ -190,7 +191,7 @@ function AddEditItemPopup({
           sx={{ mb: 2 }}
         />
       )}
-      {isPaid && (
+      {(isPaid || isAdmin) && (
         <>
           <Box component="ul" sx={styles.rules}>
             <li>

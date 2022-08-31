@@ -11,7 +11,11 @@ import {
   useTheme,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { getCurrentUser, getPaidStatus } from 'store/selectors/user';
+import {
+  getCurrentUser,
+  getIsAdmin,
+  getPaidStatus,
+} from 'store/selectors/user';
 import { generatePath, useNavigate } from 'react-router-dom';
 import routes from 'routes';
 import ItemEditPopupMenu from 'components/PopupMenus/ItemEditPopupMenu';
@@ -27,6 +31,7 @@ function ItemCard({ item }: { item: Item }) {
   const navigate = useNavigate();
   const user = useSelector(getCurrentUser);
   const isPaid = useSelector(getPaidStatus);
+  const isAdmin = useSelector(getIsAdmin);
 
   const itemClickHandler = (event: React.MouseEvent<HTMLElement>) => {
     if (cardRef.current?.contains(event.target as Node)) {
@@ -40,7 +45,7 @@ function ItemCard({ item }: { item: Item }) {
       sx={styles.itemContainer}
       onClick={itemClickHandler}
     >
-      {item.userId === user?.id && isPaid && (
+      {((item.userId === user?.id && isPaid) || isAdmin) && (
         <ItemEditPopupMenu item={item} sx={styles.dotsButton} />
       )}
       <Grid container columnSpacing={2} rowSpacing={6} xs={13}>

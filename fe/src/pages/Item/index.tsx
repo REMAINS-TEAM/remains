@@ -8,7 +8,11 @@ import DetailsTable from 'pages/Item/units/DetailsTable';
 import ImagesCarousel from 'pages/Item/units/Carousel';
 import ItemEditPopupMenu from 'components/PopupMenus/ItemEditPopupMenu';
 import { useSelector } from 'react-redux';
-import { getCurrentUser, getPaidStatus } from 'store/selectors/user';
+import {
+  getCurrentUser,
+  getIsAdmin,
+  getPaidStatus,
+} from 'store/selectors/user';
 import Header from 'components/Header';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Paper } from '@mui/material';
@@ -18,6 +22,7 @@ function ItemPage() {
 
   const user = useSelector(getCurrentUser);
   const isPaid = useSelector(getPaidStatus);
+  const isAdmin = useSelector(getIsAdmin);
 
   const { data: item, isLoading } = itemsApi.useGetItemByIdQuery(
     +(itemId || ''),
@@ -35,8 +40,9 @@ function ItemPage() {
           withBackButton
           title={item.title}
           right={
-            item.userId === user?.id &&
-            isPaid && <ItemEditPopupMenu item={item} />
+            ((item.userId === user?.id && isPaid) || isAdmin) && (
+              <ItemEditPopupMenu item={item} />
+            )
           }
         />
 

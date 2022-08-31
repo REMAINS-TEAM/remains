@@ -10,7 +10,7 @@ import EmptyState from 'components/EmptyState';
 import AddEditItemPopup from 'components/Popups/AddEditItemPopup';
 import NotFoundPage from 'pages/NotFoundPage';
 import { useSelector } from 'react-redux';
-import { getPaidStatus } from 'store/selectors/user';
+import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 import BreadCrumbs from 'components/BreadCrumbs';
 import categoriesApi from 'store/api/categories';
 import Container from 'components/Container';
@@ -23,6 +23,7 @@ function CategoriesPage() {
   const [addItemPopupOpen, setAddEditItemPopupOpen] = useState(false);
 
   const isPaid = useSelector(getPaidStatus);
+  const isAdmin = useSelector(getIsAdmin);
 
   const navigate = useNavigate();
 
@@ -91,7 +92,7 @@ function CategoriesPage() {
               {categoryItems?.length ? (
                 <>
                   <ItemCards items={categoryItems} isLoading={isItemFetching} />
-                  {!isPaid && (
+                  {!isPaid && !isAdmin && (
                     <NotificationPlate
                       title="Оплатите сервис, чтобы видеть все товары"
                       color="secondary"

@@ -15,13 +15,14 @@ import {
 } from '@mui/material';
 import ItemCards from 'pages/Categories/units/ItemCards';
 import { useSelector } from 'react-redux';
-import { getPaidStatus } from 'store/selectors/user';
+import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 import itemsApi from 'store/api/items';
 
 const CompanyPage = () => {
   const { companyId } = useParams();
 
   const isPaid = useSelector(getPaidStatus);
+  const isAdmin = useSelector(getIsAdmin);
 
   const { data: company } = companiesApi.useGetCompanyByIdQuery(
     +(companyId || 0),
@@ -40,7 +41,7 @@ const CompanyPage = () => {
       limit: 100, // TODO: lazy loading
       offset: 0,
     },
-    { skip: !companyId || !isPaid },
+    { skip: !companyId || (!isPaid && !isAdmin) },
   );
 
   const rows = company
@@ -84,13 +85,13 @@ const CompanyPage = () => {
 
         <Header title="Предложения компании" />
         <ItemCards items={companyItems} isLoading={isFetching} />
-        {isSuccess && isPaid && !companyItems?.length && (
+        {isSuccess && (isPaid || isAdmin) && !companyItems?.length && (
           <Typography variant="inherit" color={'secondary'}>
             <p>Пока компания ничего не выкладывала.</p>
             <p>Следите за обновлениями.</p>
           </Typography>
         )}
-        {!isPaid && (
+        {!isPaid && !isAdmin && (
           <Typography variant="inherit" color={'secondary'}>
             <p>Не доступно.</p>
             <p>Оплатите сервис, чтобы видеть товары компании.</p>

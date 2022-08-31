@@ -14,6 +14,7 @@ export interface User {
   email: string | null;
   paymentExpiredDate: Date;
   company: Company | null;
+  isAdmin: boolean;
 }
 
 const initialState: { current: User | null } = {
