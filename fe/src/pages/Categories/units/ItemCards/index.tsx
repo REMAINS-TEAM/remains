@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { Item } from 'store/slices/items';
 import ItemCard from 'components/ItemCard';
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import * as styles from './styles';
 
 interface Props {
@@ -18,7 +18,11 @@ const ItemCards = forwardRef<HTMLDivElement, Props>(
         {items.map((item) => (
           <ItemCard key={item.id} item={item} />
         ))}
-        {isLoading && 'Загрузка...'}
+        {isLoading && (
+          <Box sx={{ width: '100%', textAlign: 'center' }}>
+            <CircularProgress size={22} />
+          </Box>
+        )}
       </Box>
     );
   },

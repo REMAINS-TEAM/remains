@@ -24,8 +24,9 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [newCompanyName, setNewCompanyName] = useState('');
 
-  const { data: companies, isFetching } =
-    companiesApi.useGetAllCompaniesQuery();
+  const { data: companies } = companiesApi.useGetAllCompaniesQuery(undefined, {
+    skip: !open,
+  });
 
   const [createNewCompanyRequest, createNewCompanyResult] =
     companiesApi.useCreateCompanyMutation();

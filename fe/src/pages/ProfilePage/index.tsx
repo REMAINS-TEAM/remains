@@ -19,21 +19,21 @@ import itemsApi from 'store/api/items';
 import ItemCards from 'pages/Categories/units/ItemCards';
 import Header from 'components/Header';
 import PaymentDate from 'pages/ProfilePage/PaymentDate';
+import useLazyLoading from 'hooks/useLazyLoading';
+import { Item } from 'store/slices/items';
 
 function ProfilePage() {
   const user = useSelector(getCurrentUser);
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
 
   const {
-    data: myItems,
+    handleScroll,
+    items: myItems,
     isFetching,
     isSuccess,
-  } = itemsApi.useGetItemsQuery(
-    {
-      userId: user?.id,
-      limit: 100, // TODO: lazy loading
-      offset: 0,
-    },
+  } = useLazyLoading<Item>(
+    itemsApi.useGetItemsQuery,
+    { userId: user?.id },
     { skip: !user?.id },
   );
 
@@ -55,7 +55,7 @@ function ProfilePage() {
     : [];
 
   return (
-    <AuthLayout>
+    <AuthLayout onScroll={handleScroll}>
       <Box sx={styles.contentContainer}>
         <Header
           title="Мой профиль"

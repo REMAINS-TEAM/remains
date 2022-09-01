@@ -16,6 +16,8 @@ import categoriesApi from 'store/api/categories';
 import Container from 'components/Container';
 import NotificationPlate from 'components/NotificationPlate';
 import routes from 'routes';
+import useLazyLoading from 'hooks/useLazyLoading';
+import { Item } from 'store/slices/items';
 
 function CategoriesPage() {
   const { categoryId } = useParams();
@@ -32,13 +34,13 @@ function CategoriesPage() {
   });
 
   const {
-    data: categoryItems,
+    handleScroll,
+    items: categoryItems,
     isFetching: isItemFetching,
     error: getCategoryItemsError,
-  } = itemsApi.useGetItemsQuery({
+    isSuccess: isItemsSuccess,
+  } = useLazyLoading<Item>(itemsApi.useGetItemsQuery, {
     categoryId: notEmptyCategoryId,
-    limit: 100, // TODO: lazy loading
-    offset: 0,
   });
 
   const error = getCategoryItemsError as {
@@ -60,7 +62,7 @@ function CategoriesPage() {
   const showAllHandler = () => navigate(routes.items);
 
   return (
-    <MainLayout>
+    <MainLayout onScroll={handleScroll}>
       <WithMenuLayout>
         <Box sx={styles.contentContainer}>
           {!categoryId ? (
@@ -89,18 +91,15 @@ function CategoriesPage() {
                 </IconButton>
               </Box>
 
-              {categoryItems?.length ? (
-                <>
-                  <ItemCards items={categoryItems} isLoading={isItemFetching} />
-                  {!isPaid && !isAdmin && (
-                    <NotificationPlate
-                      title="Оплатите сервис, чтобы видеть все товары"
-                      color="secondary"
-                      sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}
-                    />
-                  )}
-                </>
-              ) : (
+              <ItemCards items={categoryItems} isLoading={isItemFetching} />
+              {!isPaid && !isAdmin && !!categoryItems.length && (
+                <NotificationPlate
+                  title="Оплатите сервис, чтобы видеть все товары"
+                  color="secondary"
+                  sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}
+                />
+              )}
+              {isItemsSuccess && !categoryItems?.length && (
                 <Container sx={{ width: '100%', height: '100%' }}>
                   <EmptyState
                     text={'Здесь пока нет товаров'}
