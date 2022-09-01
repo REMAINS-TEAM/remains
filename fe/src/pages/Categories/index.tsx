@@ -39,9 +39,13 @@ function CategoriesPage() {
     isFetching: isItemFetching,
     error: getCategoryItemsError,
     isSuccess: isItemsSuccess,
-  } = useLazyLoading<Item>(itemsApi.useGetItemsQuery, {
-    categoryId: notEmptyCategoryId,
-  });
+  } = useLazyLoading<Item>(
+    itemsApi.useGetItemsQuery,
+    {
+      categoryId: notEmptyCategoryId,
+    },
+    { skip: notEmptyCategoryId === 0 },
+  );
 
   const error = getCategoryItemsError as {
     status: number;

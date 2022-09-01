@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   UseQuery,
   UseQueryStateOptions,
 } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import { QueryDefinition } from '@reduxjs/toolkit/query';
-import usePrevious from 'hooks/usePrevious';
 
 const PX_TO_END = 400;
 const LIMIT = 10;
@@ -16,16 +15,19 @@ export default function useLazyLoading<ResultType, ArgsType = any>(
   args?: ArgsType,
   loadHookOption?: UseQueryStateOptions<any, any>,
 ) {
-  const prevArgs = usePrevious(args);
-  const isSameArgs = JSON.stringify(prevArgs) === JSON.stringify(args);
+  const isArgsChanged = useRef<boolean>(false);
 
   const [items, setItems] = useState<ResultType[]>([]);
   const [offset, setOffset] = useState(0);
 
+  useEffect(() => {
+    isArgsChanged.current = true;
+  }, [args]);
+
   const { data, isFetching, error, isSuccess } = loadHook(
     {
       limit: LIMIT,
-      offset: !isSameArgs ? 0 : offset,
+      offset: isArgsChanged.current ? 0 : offset,
       ...args,
     },
     loadHookOption,
@@ -33,21 +35,25 @@ export default function useLazyLoading<ResultType, ArgsType = any>(
 
   useEffect(() => {
     if (!data) return;
-    if (!isSameArgs) return setItems(data);
 
-    setItems((prev) => [...prev, ...data]);
-  }, [data, isSameArgs]);
+    setItems((prev) => (isArgsChanged.current ? data : [...prev, ...data]));
 
-  const handleScroll = (e: React.SyntheticEvent) => {
-    const { scrollTop, scrollHeight, offsetHeight } =
-      e.target as HTMLDivElement;
+    isArgsChanged.current = false;
+  }, [data]);
 
-    if (scrollTop >= scrollHeight - offsetHeight - PX_TO_END) {
-      if (!isFetching && data?.length && data?.length === LIMIT) {
-        setOffset(offset + LIMIT);
+  const handleScroll = useCallback(
+    (e: React.SyntheticEvent) => {
+      const { scrollTop, scrollHeight, offsetHeight } =
+        e.target as HTMLDivElement;
+
+      if (scrollTop >= scrollHeight - offsetHeight - PX_TO_END) {
+        if (!isFetching && data?.length && data?.length === LIMIT) {
+          setOffset(offset + LIMIT);
+        }
       }
-    }
-  };
+    },
+    [offset, data, isFetching],
+  );
 
   return { handleScroll, items, isFetching, error, isSuccess };
 }
