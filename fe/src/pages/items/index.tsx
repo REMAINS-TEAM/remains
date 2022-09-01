@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MainLayout from 'layouts/MainLayout';
 import * as styles from './styles';
 import { Box } from '@mui/material';
@@ -10,24 +10,24 @@ import { getPaidStatus } from 'store/selectors/user';
 import Header from 'components/Header';
 import EmptyState from 'components/EmptyState';
 import Container from 'components/Container';
+import useLazyLoading from 'hooks/useLazyLoading';
+import { Item } from 'store/slices/items';
 
 const ItemsPage = () => {
   const isPaid = useSelector(getPaidStatus);
 
-  const { data: allItems, isFetching: isItemsFetching } =
-    itemsApi.useGetItemsQuery({
-      limit: 100, // TODO: lazy loading
-      offset: 0,
-    });
+  const { handleScroll, items, isFetching } = useLazyLoading<Item>(
+    itemsApi.useGetItemsQuery,
+  );
 
   return (
-    <MainLayout>
+    <MainLayout onScroll={handleScroll}>
       <Box sx={styles.contentContainer}>
         <Header title="Все товары" withBackButton />
-        {allItems?.length || isItemsFetching ? (
+        {items?.length || isFetching ? (
           <>
-            <ItemCards items={allItems} isLoading={isItemsFetching} />
-            {!isPaid && !isItemsFetching && (
+            <ItemCards items={items} isLoading={isFetching} />
+            {!isPaid && !isFetching && (
               <NotificationPlate
                 title="Оплатите сервис, чтобы видеть все товары"
                 color="secondary"

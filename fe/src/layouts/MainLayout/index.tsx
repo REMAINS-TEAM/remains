@@ -7,9 +7,11 @@ import { useNavigate } from 'react-router-dom';
 function MainLayout({
   children,
   forAll,
+  onScroll,
 }: {
   children: ReactNode;
   forAll?: boolean;
+  onScroll?: (e: React.SyntheticEvent) => void;
 }) {
   const navigate = useNavigate();
 
@@ -23,7 +25,7 @@ function MainLayout({
   }, [forAll]);
 
   return (
-    <Box sx={styles.root}>
+    <Box sx={styles.root} onScroll={onScroll}>
       <Box sx={styles.center}>{children}</Box>
     </Box>
   );
