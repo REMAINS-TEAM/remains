@@ -84,8 +84,8 @@ const CompanyPage = () => {
         </Paper>
 
         <Header title="Предложения компании" />
-        <ItemCards items={companyItems} isLoading={isFetching} />
-        {isSuccess && (isPaid || isAdmin) && !companyItems?.length && (
+        <ItemCards items={companyItems?.list || []} isLoading={isFetching} />
+        {isSuccess && (isPaid || isAdmin) && !companyItems?.list.length && (
           <Typography variant="inherit" color={'secondary'}>
             <p>Пока компания ничего не выкладывала.</p>
             <p>Следите за обновлениями.</p>

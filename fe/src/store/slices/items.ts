@@ -43,7 +43,7 @@ export const itemsSlice = createSlice({
     builder.addMatcher(
       itemsApi.endpoints.getItems.matchFulfilled,
       (state, { payload }) => {
-        state.list = payload;
+        state.list = payload.list;
       },
     );
   },

@@ -35,7 +35,7 @@ export class ItemsController {
     @Query() { categoryId, userId, companyId }: FindAllItemsDto,
     @IsPaid() isPaid: boolean,
     @Pagination() { limit, offset }: { limit: number; offset: number },
-  ): Promise<Item[]> {
+  ) {
     return this.itemsService.findAll({
       limit,
       offset,

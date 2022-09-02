@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import MainLayout from 'layouts/MainLayout';
 import * as styles from './styles';
 import { Box } from '@mui/material';
@@ -10,14 +10,64 @@ import { getPaidStatus } from 'store/selectors/user';
 import Header from 'components/Header';
 import EmptyState from 'components/EmptyState';
 import Container from 'components/Container';
-import useLazyLoading from 'hooks/useLazyLoading';
-import { Item } from 'store/slices/items';
 
 const ItemsPage = () => {
   const isPaid = useSelector(getPaidStatus);
+  const [offset, setOffset] = useState(0);
 
-  const { handleScroll, items, isFetching } = useLazyLoading<Item>(
-    itemsApi.useGetItemsQuery,
+  const LIMIT = 5;
+  const PX_TO_END = 400;
+
+  const { data: prevItems, isFetching: isFetchingPrev } =
+    itemsApi.useGetItemsQuery(
+      {
+        limit: LIMIT,
+        offset: offset - LIMIT,
+      },
+      { skip: offset < LIMIT },
+    );
+  const { data: curItems, isFetching: isFetchingCur } =
+    itemsApi.useGetItemsQuery({
+      limit: LIMIT,
+      offset,
+    });
+  const { data: nextItems, isFetching: isFetchingNext } =
+    itemsApi.useGetItemsQuery({
+      limit: LIMIT,
+      offset: offset + LIMIT,
+    });
+
+  const isFetching = isFetchingPrev || isFetchingCur || isFetchingNext;
+
+  const items = useMemo(() => {
+    const arr = new Array(LIMIT * (offset + 1));
+    for (const data of [prevItems, curItems, nextItems]) {
+      if (data) {
+        arr.splice(data.offset, data.list.length, ...data.list);
+      }
+    }
+    return arr;
+  }, [offset, prevItems, curItems, nextItems]);
+
+  const handleScroll = useCallback(
+    (e: React.SyntheticEvent) => {
+      const { scrollTop, scrollHeight, offsetHeight } =
+        e.target as HTMLDivElement;
+
+      if (!isFetching && items?.length) {
+        if (scrollTop <= PX_TO_END && offset !== 0) {
+          setOffset(offset - LIMIT);
+        }
+
+        if (
+          scrollTop >= scrollHeight - offsetHeight - PX_TO_END &&
+          nextItems?.list.length !== 0
+        ) {
+          setOffset(offset + LIMIT);
+        }
+      }
+    },
+    [offset, items, nextItems, isFetching],
   );
 
   return (
@@ -26,7 +76,15 @@ const ItemsPage = () => {
         <Header title="Все товары" withBackButton />
         {items?.length || isFetching ? (
           <>
+            {/*<button*/}
+            {/*  onClick={() => {*/}
+            {/*    if (offset !== 0) setOffset((prev) => prev - 5);*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  UP*/}
+            {/*</button>*/}
             <ItemCards items={items} isLoading={isFetching} />
+            {/*<button onClick={() => setOffset((prev) => prev + 5)}>DOWN</button>*/}
             {!isPaid && !isFetching && (
               <NotificationPlate
                 title="Оплатите сервис, чтобы видеть все товары"

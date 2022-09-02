@@ -6,14 +6,14 @@ import { deleteById } from 'store/slices/items';
 export const itemsApi = api.injectEndpoints({
   endpoints: (build) => ({
     getItems: build.query<
-      Item[],
+      { list: Item[]; offset: number },
       Record<string, string | number | undefined> | void
     >({
       query: (params) => `items` + getQueryString(params),
       providesTags: (result, error, arg) =>
-        result
+        result?.list
           ? [
-              ...result.map(({ id }) => ({ type: apiTypes.ITEMS, id })),
+              ...result.list.map(({ id }) => ({ type: apiTypes.ITEMS, id })),
               apiTypes.ITEMS,
             ]
           : [apiTypes.ITEMS],

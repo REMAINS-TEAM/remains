@@ -16,7 +16,7 @@ import categoriesApi from 'store/api/categories';
 import Container from 'components/Container';
 import NotificationPlate from 'components/NotificationPlate';
 import routes from 'routes';
-import useLazyLoading from 'hooks/useLazyLoading';
+
 import { Item } from 'store/slices/items';
 
 function CategoriesPage() {
@@ -33,19 +33,7 @@ function CategoriesPage() {
     parentId: notEmptyCategoryId,
   });
 
-  const {
-    handleScroll,
-    items: categoryItems,
-    isFetching: isItemFetching,
-    error: getCategoryItemsError,
-    isSuccess: isItemsSuccess,
-  } = useLazyLoading<Item>(
-    itemsApi.useGetItemsQuery,
-    {
-      categoryId: notEmptyCategoryId,
-    },
-    { skip: notEmptyCategoryId === 0 },
-  );
+  const getCategoryItemsError = {};
 
   const error = getCategoryItemsError as {
     status: number;
@@ -66,7 +54,7 @@ function CategoriesPage() {
   const showAllHandler = () => navigate(routes.items);
 
   return (
-    <MainLayout onScroll={handleScroll}>
+    <MainLayout>
       <WithMenuLayout>
         <Box sx={styles.contentContainer}>
           {!categoryId ? (
@@ -95,26 +83,26 @@ function CategoriesPage() {
                 </IconButton>
               </Box>
 
-              <ItemCards items={categoryItems} isLoading={isItemFetching} />
-              {!isPaid && !isAdmin && !!categoryItems.length && (
-                <NotificationPlate
-                  title="Оплатите сервис, чтобы видеть все товары"
-                  color="secondary"
-                  sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}
-                />
-              )}
-              {isItemsSuccess && !categoryItems?.length && (
-                <Container sx={{ width: '100%', height: '100%' }}>
-                  <EmptyState
-                    text={'Здесь пока нет товаров'}
-                    description={`Выберите подкатегорию или добавьте сюда что-нибудь`}
-                  >
-                    <Button variant={'contained'} onClick={addItemHandler}>
-                      Добавить
-                    </Button>
-                  </EmptyState>
-                </Container>
-              )}
+              <ItemCards items={[]} isLoading={false} />
+              {/*{!isPaid && !isAdmin && !!categoryItems.length && (*/}
+              {/*  <NotificationPlate*/}
+              {/*    title="Оплатите сервис, чтобы видеть все товары"*/}
+              {/*    color="secondary"*/}
+              {/*    sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}*/}
+              {/*  />*/}
+              {/*)}*/}
+              {/*{isItemsSuccess && !categoryItems?.length && (*/}
+              {/*  <Container sx={{ width: '100%', height: '100%' }}>*/}
+              {/*    <EmptyState*/}
+              {/*      text={'Здесь пока нет товаров'}*/}
+              {/*      description={`Выберите подкатегорию или добавьте сюда что-нибудь`}*/}
+              {/*    >*/}
+              {/*      <Button variant={'contained'} onClick={addItemHandler}>*/}
+              {/*        Добавить*/}
+              {/*      </Button>*/}
+              {/*    </EmptyState>*/}
+              {/*  </Container>*/}
+              {/*)}*/}
             </>
           )}
         </Box>

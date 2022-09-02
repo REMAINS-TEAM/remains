@@ -19,23 +19,11 @@ import itemsApi from 'store/api/items';
 import ItemCards from 'pages/Categories/units/ItemCards';
 import Header from 'components/Header';
 import PaymentDate from 'pages/ProfilePage/PaymentDate';
-import useLazyLoading from 'hooks/useLazyLoading';
 import { Item } from 'store/slices/items';
 
 function ProfilePage() {
   const user = useSelector(getCurrentUser);
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
-
-  const {
-    handleScroll,
-    items: myItems,
-    isFetching,
-    isSuccess,
-  } = useLazyLoading<Item>(
-    itemsApi.useGetItemsQuery,
-    { userId: user?.id },
-    { skip: !user?.id },
-  );
 
   const openEditProfileModal = () => setEditProfileModalOpen(true);
 
@@ -55,7 +43,7 @@ function ProfilePage() {
     : [];
 
   return (
-    <AuthLayout onScroll={handleScroll}>
+    <AuthLayout>
       <Box sx={styles.contentContainer}>
         <Header
           title="Мой профиль"
@@ -101,16 +89,16 @@ function ProfilePage() {
 
         <Header title="Мои предложения" />
 
-        <ItemCards items={myItems} isLoading={isFetching} />
-        {isSuccess && !myItems?.length && (
-          <Typography variant="inherit" color={'secondary'} sx={{ mt: -2 }}>
-            <p>Пока вы ничего не выкладывали.</p>
-            <p>
-              Чтобы делиться остатками и видеть, что выкладывают другие -
-              следите за положительным балансом счета.
-            </p>
-          </Typography>
-        )}
+        {/*<ItemCards items={myItems} isLoading={isFetching} />*/}
+        {/*{isSuccess && !myItems?.length && (*/}
+        {/*  <Typography variant="inherit" color={'secondary'} sx={{ mt: -2 }}>*/}
+        {/*    <p>Пока вы ничего не выкладывали.</p>*/}
+        {/*    <p>*/}
+        {/*      Чтобы делиться остатками и видеть, что выкладывают другие -*/}
+        {/*      следите за положительным балансом счета.*/}
+        {/*    </p>*/}
+        {/*  </Typography>*/}
+        {/*)}*/}
       </Box>
 
       <EditProfilePopup
