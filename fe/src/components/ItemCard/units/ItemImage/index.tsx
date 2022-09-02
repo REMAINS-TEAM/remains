@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import * as styles from './styles';
 import { Box } from '@mui/material';
-import { HideImage } from '@mui/icons-material';
+import { HideImageOutlined as NoImageIcon } from '@mui/icons-material';
 
 function ItemImage({
   src,
@@ -10,6 +10,12 @@ function ItemImage({
   src?: string;
   withBorder?: boolean;
 }) {
+  const fileExtension = useMemo(() => {
+    const fileName = src?.split('/').pop();
+    if (!fileName?.includes('.')) return undefined;
+    return fileName?.split('.').pop();
+  }, [src]);
+
   return (
     <Box
       sx={{
@@ -17,10 +23,10 @@ function ItemImage({
         boxShadow: withBorder ? '0 1px 2px #ccc' : undefined,
       }}
     >
-      {src ? (
+      {src && fileExtension ? (
         <img src={src} alt={'Изображение товара'} style={styles.image} />
       ) : (
-        <HideImage />
+        <NoImageIcon />
       )}
     </Box>
   );
