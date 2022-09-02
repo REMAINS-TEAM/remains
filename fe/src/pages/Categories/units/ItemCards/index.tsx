@@ -6,7 +6,7 @@ import * as styles from './styles';
 
 interface Props {
   items?: Item[];
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 const ItemCards = forwardRef<HTMLDivElement, Props>(
