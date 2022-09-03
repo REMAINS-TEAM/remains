@@ -9,7 +9,6 @@ interface Props {
   items?: Item[];
   isFetchingPrev?: boolean;
   isFetchingNext?: boolean;
-  isLoading?: boolean; //TODO: delete
 }
 
 const ItemCards = forwardRef<HTMLDivElement, Props>(

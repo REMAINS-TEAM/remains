@@ -17,30 +17,31 @@ import ItemCards from 'pages/Categories/units/ItemCards';
 import { useSelector } from 'react-redux';
 import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 import itemsApi from 'store/api/items';
+import useInfinityScroll from 'hooks/useInfinityScroll';
+import userApi from 'store/api/user';
+import Spinner from 'components/Spinner';
 
 const CompanyPage = () => {
   const { companyId } = useParams();
 
+  const { isSuccess: isUserSuccess } = userApi.useMeQuery();
   const isPaid = useSelector(getPaidStatus);
   const isAdmin = useSelector(getIsAdmin);
 
-  const { data: company } = companiesApi.useGetCompanyByIdQuery(
-    +(companyId || 0),
-    {
+  const { data: company, isFetching: isCompanyFetching } =
+    companiesApi.useGetCompanyByIdQuery(+(companyId || 0), {
       skip: !companyId,
-    },
-  );
+    });
 
   const {
-    data: companyItems,
-    isFetching,
+    handleScroll,
+    items: companyItems,
     isSuccess,
-  } = itemsApi.useGetItemsQuery(
-    {
-      companyId,
-      limit: 100, // TODO: lazy loading
-      offset: 0,
-    },
+    isFetchingPrev,
+    isFetchingNext,
+  } = useInfinityScroll(
+    itemsApi.useGetItemsQuery,
+    { companyId },
     { skip: !companyId || (!isPaid && !isAdmin) },
   );
 
@@ -56,10 +57,11 @@ const CompanyPage = () => {
     : [];
 
   return (
-    <MainLayout>
+    <MainLayout onScroll={handleScroll}>
       <Box width="100%">
         <Header title="Информация о компании" withBackButton />
         <Paper sx={{ p: 2, mb: 6 }}>
+          {isCompanyFetching && <Spinner />}
           <Table sx={{ maxWidth: 500 }}>
             <TableBody>
               {rows.map((row) => (
@@ -84,14 +86,24 @@ const CompanyPage = () => {
         </Paper>
 
         <Header title="Предложения компании" />
-        <ItemCards items={companyItems?.list || []} isLoading={isFetching} />
-        {isSuccess && (isPaid || isAdmin) && !companyItems?.list.length && (
-          <Typography variant="inherit" color={'secondary'}>
-            <p>Пока компания ничего не выкладывала.</p>
-            <p>Следите за обновлениями.</p>
-          </Typography>
+
+        {isUserSuccess && (isPaid || isAdmin) && (
+          <>
+            <ItemCards
+              items={companyItems}
+              isFetchingPrev={isFetchingPrev}
+              isFetchingNext={isFetchingNext}
+            />
+
+            {isSuccess && !companyItems.length && (
+              <Typography variant="inherit" color={'secondary'}>
+                <p>Компания пока ничего не выкладывала.</p>
+                <p>Следите за обновлениями.</p>
+              </Typography>
+            )}
+          </>
         )}
-        {!isPaid && !isAdmin && (
+        {isUserSuccess && !isPaid && !isAdmin && (
           <Typography variant="inherit" color={'secondary'}>
             <p>Не доступно.</p>
             <p>Оплатите сервис, чтобы видеть товары компании.</p>
