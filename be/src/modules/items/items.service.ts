@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Item } from '@prisma/client';
+import { Item, Prisma } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
 
 import { MIME_IMAGES_TYPE_MAP } from 'constants/main';
@@ -34,18 +34,22 @@ export class ItemsService {
       );
     }
 
+    const whereFilter: Prisma.ItemWhereInput = {
+      userId: filter?.userId,
+      categoryId: filter?.categoryId,
+      user: { companyId: filter?.companyId },
+    };
+
+    const amount = await this.prisma.item.count({ where: whereFilter });
+
     const list = await this.prisma.item.findMany({
-      where: {
-        userId: filter?.userId,
-        categoryId: filter?.categoryId,
-        user: { companyId: filter?.companyId },
-      },
+      where: whereFilter,
       take: limit,
       skip: offset,
-      orderBy: [{ updatedAt: 'desc' }, { createdAt: 'desc' }],
+      orderBy: [{ createdAt: 'desc' }],
     });
 
-    return { list, offset };
+    return { amount, limit, offset, isOver: offset + limit >= amount, list };
   }
 
   async findOne(id: number, isPaid: boolean) {

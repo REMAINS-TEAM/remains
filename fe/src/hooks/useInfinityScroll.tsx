@@ -14,7 +14,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
       { limit: number; offset: number },
       any,
       any,
-      { offset: number; list: ResultType[] }
+      { offset: number; list: ResultType[]; isOver: boolean }
     >
   >,
   args?: ArgsType,
@@ -71,7 +71,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     },
     {
       ...loadHookOption,
-      skip: loadHookOption?.skip || disableLoad,
+      skip: curItems?.isOver || loadHookOption?.skip || disableLoad,
     },
   );
 
@@ -106,7 +106,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
         if (
           !disableLoad &&
           scrollTop >= scrollHeight - offsetHeight - PX_TO_END &&
-          nextItems?.list.length === LIMIT
+          !nextItems?.isOver
         ) {
           setOffset(offset + LIMIT);
         }
