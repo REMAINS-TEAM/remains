@@ -19,7 +19,6 @@ import itemsApi from 'store/api/items';
 import ItemCards from 'pages/Categories/units/ItemCards';
 import Header from 'components/Header';
 import PaymentDate from 'pages/ProfilePage/PaymentDate';
-import { Item } from 'store/slices/items';
 import useInfinityScroll from 'hooks/useInfinityScroll';
 
 function ProfilePage() {

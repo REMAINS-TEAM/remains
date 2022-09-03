@@ -25,7 +25,10 @@ function CategoriesPage() {
   const notEmptyCategoryId = categoryId ? +categoryId : 0;
   const [addItemPopupOpen, setAddEditItemPopupOpen] = useState(false);
 
-  const { isSuccess: isUserSuccess } = userApi.useMeQuery();
+  const { isSuccess: isUserSuccess, isError: isUserError } =
+    userApi.useMeQuery();
+  const isGetUserFinished = isUserSuccess || isUserError;
+
   const isPaid = useSelector(getPaidStatus);
   const isAdmin = useSelector(getIsAdmin);
 
@@ -102,7 +105,7 @@ function CategoriesPage() {
                 isFetchingNext={isFetchingNext}
               />
 
-              {isUserSuccess &&
+              {isGetUserFinished &&
                 !isPaid &&
                 !isAdmin &&
                 !!categoryItems.length && (

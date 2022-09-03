@@ -14,7 +14,9 @@ import useInfinityScroll from 'hooks/useInfinityScroll';
 import userApi from 'store/api/user';
 
 const ItemsPage = () => {
-  const { isSuccess: isUserSuccess } = userApi.useMeQuery();
+  const { isSuccess: isUserSuccess, isError: isUserError } =
+    userApi.useMeQuery();
+  const isGetUserFinished = isUserSuccess || isUserError;
 
   const isPaid = useSelector(getPaidStatus);
   const isAdmin = useSelector(getIsAdmin);
@@ -31,7 +33,7 @@ const ItemsPage = () => {
           isFetchingPrev={isFetchingPrev}
           isFetchingNext={isFetchingNext}
         />
-        {isUserSuccess && !isPaid && !isAdmin && !!items.length && (
+        {isGetUserFinished && !isPaid && !isAdmin && !!items.length && (
           <NotificationPlate
             title="Оплатите сервис, чтобы видеть все товары"
             color="secondary"

@@ -24,7 +24,10 @@ import Spinner from 'components/Spinner';
 const CompanyPage = () => {
   const { companyId } = useParams();
 
-  const { isSuccess: isUserSuccess } = userApi.useMeQuery();
+  const { isSuccess: isUserSuccess, isError: isUserError } =
+    userApi.useMeQuery();
+  const isGetUserFinished = isUserSuccess || isUserError;
+
   const isPaid = useSelector(getPaidStatus);
   const isAdmin = useSelector(getIsAdmin);
 
@@ -87,7 +90,7 @@ const CompanyPage = () => {
 
         <Header title="Предложения компании" />
 
-        {isUserSuccess && (isPaid || isAdmin) && (
+        {isGetUserFinished && (isPaid || isAdmin) && (
           <>
             <ItemCards
               items={companyItems}
@@ -103,7 +106,7 @@ const CompanyPage = () => {
             )}
           </>
         )}
-        {isUserSuccess && !isPaid && !isAdmin && (
+        {isGetUserFinished && !isPaid && !isAdmin && (
           <Typography variant="inherit" color={'secondary'}>
             <p>Не доступно.</p>
             <p>Оплатите сервис, чтобы видеть товары компании.</p>
