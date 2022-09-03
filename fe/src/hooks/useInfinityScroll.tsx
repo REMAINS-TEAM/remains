@@ -51,7 +51,10 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
       offset,
       ...args,
     },
-    loadHookOption,
+    {
+      ...loadHookOption,
+      skip: loadHookOption?.skip,
+    },
   );
   const {
     data: nextItems,
@@ -66,7 +69,10 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
       offset: offset + LIMIT,
       ...args,
     },
-    { ...loadHookOption, skip: loadHookOption?.skip || disableLoad },
+    {
+      ...loadHookOption,
+      skip: loadHookOption?.skip || disableLoad,
+    },
   );
 
   const isFetching = isFetchingPrev || isFetchingCur || isFetchingNext;
@@ -100,7 +106,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
         if (
           !disableLoad &&
           scrollTop >= scrollHeight - offsetHeight - PX_TO_END &&
-          nextItems?.list.length !== 0
+          nextItems?.list.length === LIMIT
         ) {
           setOffset(offset + LIMIT);
         }
