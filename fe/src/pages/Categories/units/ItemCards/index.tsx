@@ -13,10 +13,14 @@ interface Props {
   items?: Item[];
   isFetchingPrev?: boolean;
   isFetchingNext?: boolean;
+  hidePayNotification?: boolean;
 }
 
 const ItemCards = forwardRef<HTMLDivElement, Props>(
-  ({ items = [], isFetchingPrev, isFetchingNext }, ref) => {
+  (
+    { items = [], isFetchingPrev, isFetchingNext, hidePayNotification },
+    ref,
+  ) => {
     const { isSuccess: isUserSuccess, isError: isUserError } =
       userApi.useMeQuery();
     const isGetUserFinished = isUserSuccess || isUserError;
@@ -34,13 +38,17 @@ const ItemCards = forwardRef<HTMLDivElement, Props>(
         </Box>
         {isFetchingNext && <Spinner />}
 
-        {isGetUserFinished && !isPaid && !isAdmin && !!items.length && (
-          <NotificationPlate
-            title="Оплатите сервис, чтобы видеть все товары"
-            color="secondary"
-            sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}
-          />
-        )}
+        {!hidePayNotification &&
+          isGetUserFinished &&
+          !isPaid &&
+          !isAdmin &&
+          !!items.length && (
+            <NotificationPlate
+              title="Оплатите сервис, чтобы видеть все товары"
+              color="secondary"
+              sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}
+            />
+          )}
       </>
     );
   },
