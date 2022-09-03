@@ -9,34 +9,28 @@ import ItemCards from 'pages/Categories/units/ItemCards';
 import EmptyState from 'components/EmptyState';
 import AddEditItemPopup from 'components/Popups/AddEditItemPopup';
 import NotFoundPage from 'pages/NotFoundPage';
-import { useSelector } from 'react-redux';
-import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 import BreadCrumbs from 'components/BreadCrumbs';
 import categoriesApi from 'store/api/categories';
 import Container from 'components/Container';
-import NotificationPlate from 'components/NotificationPlate';
 import routes from 'routes';
 
 import useInfinityScroll from 'hooks/useInfinityScroll';
-import userApi from 'store/api/user';
+import { useSelector } from 'react-redux';
+import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 
 function CategoriesPage() {
   const { categoryId } = useParams();
   const notEmptyCategoryId = categoryId ? +categoryId : 0;
   const [addItemPopupOpen, setAddEditItemPopupOpen] = useState(false);
 
-  const { isSuccess: isUserSuccess, isError: isUserError } =
-    userApi.useMeQuery();
-  const isGetUserFinished = isUserSuccess || isUserError;
-
-  const isPaid = useSelector(getPaidStatus);
-  const isAdmin = useSelector(getIsAdmin);
-
   const navigate = useNavigate();
 
   const { data: categories } = categoriesApi.useGetAllQuery({
     parentId: notEmptyCategoryId,
   });
+
+  const isPaid = useSelector(getPaidStatus);
+  const isAdmin = useSelector(getIsAdmin);
 
   const {
     handleScroll,
@@ -49,6 +43,7 @@ function CategoriesPage() {
     itemsApi.useGetItemsQuery,
     { categoryId: notEmptyCategoryId },
     { skip: notEmptyCategoryId === 0 },
+    !isPaid && !isAdmin,
   );
 
   const error = getCategoryItemsError as {
@@ -105,16 +100,6 @@ function CategoriesPage() {
                 isFetchingNext={isFetchingNext}
               />
 
-              {isGetUserFinished &&
-                !isPaid &&
-                !isAdmin &&
-                !!categoryItems.length && (
-                  <NotificationPlate
-                    title="Оплатите сервис, чтобы видеть все товары"
-                    color="secondary"
-                    sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}
-                  />
-                )}
               {isItemsSuccess && !categoryItems?.length && (
                 <Container sx={{ width: '100%', height: '100%' }}>
                   <EmptyState

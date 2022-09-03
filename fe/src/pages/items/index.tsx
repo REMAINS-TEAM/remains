@@ -11,18 +11,18 @@ import Header from 'components/Header';
 import EmptyState from 'components/EmptyState';
 import Container from 'components/Container';
 import useInfinityScroll from 'hooks/useInfinityScroll';
-import userApi from 'store/api/user';
 
 const ItemsPage = () => {
-  const { isSuccess: isUserSuccess, isError: isUserError } =
-    userApi.useMeQuery();
-  const isGetUserFinished = isUserSuccess || isUserError;
-
   const isPaid = useSelector(getPaidStatus);
   const isAdmin = useSelector(getIsAdmin);
 
   const { handleScroll, items, isSuccess, isFetchingPrev, isFetchingNext } =
-    useInfinityScroll(itemsApi.useGetItemsQuery);
+    useInfinityScroll(
+      itemsApi.useGetItemsQuery,
+      undefined,
+      undefined,
+      !isPaid && !isAdmin,
+    );
 
   return (
     <MainLayout onScroll={handleScroll}>
@@ -33,13 +33,7 @@ const ItemsPage = () => {
           isFetchingPrev={isFetchingPrev}
           isFetchingNext={isFetchingNext}
         />
-        {isGetUserFinished && !isPaid && !isAdmin && !!items.length && (
-          <NotificationPlate
-            title="Оплатите сервис, чтобы видеть все товары"
-            color="secondary"
-            sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}
-          />
-        )}
+
         {isSuccess && !items?.length && (
           <Container sx={{ width: '100%', height: '100%' }}>
             <EmptyState

@@ -16,7 +16,8 @@ export const Pagination = createParamDecorator(
     const offset = Number(request.query.offset || 0);
 
     // User items show fully
-    if (userIdFilter === request.user?.id) return { limit, offset };
+    if (request.user?.id && userIdFilter === request.user?.id)
+      return { limit, offset };
 
     let availableLimit = limit;
     if (!isPaid) {
