@@ -20,9 +20,23 @@ import ItemCards from 'pages/Categories/units/ItemCards';
 import Header from 'components/Header';
 import PaymentDate from 'pages/ProfilePage/PaymentDate';
 import { Item } from 'store/slices/items';
+import useInfinityScroll from 'hooks/useInfinityScroll';
 
 function ProfilePage() {
   const user = useSelector(getCurrentUser);
+
+  const {
+    handleScroll,
+    items: myItems,
+    isSuccess,
+    isFetchingPrev,
+    isFetchingNext,
+  } = useInfinityScroll(
+    itemsApi.useGetItemsQuery,
+    { userId: user?.id },
+    { skip: !user?.id },
+  );
+
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
 
   const openEditProfileModal = () => setEditProfileModalOpen(true);
@@ -43,7 +57,7 @@ function ProfilePage() {
     : [];
 
   return (
-    <AuthLayout>
+    <AuthLayout onScroll={handleScroll}>
       <Box sx={styles.contentContainer}>
         <Header
           title="Мой профиль"
@@ -89,16 +103,20 @@ function ProfilePage() {
 
         <Header title="Мои предложения" />
 
-        {/*<ItemCards items={myItems} isLoading={isFetching} />*/}
-        {/*{isSuccess && !myItems?.length && (*/}
-        {/*  <Typography variant="inherit" color={'secondary'} sx={{ mt: -2 }}>*/}
-        {/*    <p>Пока вы ничего не выкладывали.</p>*/}
-        {/*    <p>*/}
-        {/*      Чтобы делиться остатками и видеть, что выкладывают другие -*/}
-        {/*      следите за положительным балансом счета.*/}
-        {/*    </p>*/}
-        {/*  </Typography>*/}
-        {/*)}*/}
+        <ItemCards
+          items={myItems}
+          isFetchingPrev={isFetchingPrev}
+          isFetchingNext={isFetchingNext}
+        />
+        {isSuccess && !myItems?.length && (
+          <Typography variant="inherit" color={'secondary'} sx={{ mt: -2 }}>
+            <p>Пока вы ничего не выкладывали.</p>
+            <p>
+              Чтобы делиться остатками и видеть, что выкладывают другие -
+              следите за положительным балансом счета.
+            </p>
+          </Typography>
+        )}
       </Box>
 
       <EditProfilePopup
