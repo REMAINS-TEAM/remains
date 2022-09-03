@@ -71,7 +71,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     },
     {
       ...loadHookOption,
-      skip: curItems?.isOver || loadHookOption?.skip || disableLoad,
+      skip: loadHookOption?.skip || disableLoad,
     },
   );
 

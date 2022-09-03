@@ -108,7 +108,7 @@ function ProfilePage() {
           isFetchingNext={isFetchingNext}
           hidePayNotification
         />
-        {isSuccess && !myItems?.length && (
+        {isSuccess && !isFetchingPrev && !isFetchingNext && !myItems?.length && (
           <Typography variant="inherit" color={'secondary'} sx={{ mt: -2 }}>
             <p>Пока вы ничего не выкладывали.</p>
             <p>

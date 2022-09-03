@@ -100,18 +100,21 @@ function CategoriesPage() {
                 isFetchingNext={isFetchingNext}
               />
 
-              {isItemsSuccess && !categoryItems?.length && (
-                <Container sx={{ width: '100%', height: '100%' }}>
-                  <EmptyState
-                    text={'Здесь пока нет товаров'}
-                    description={`Выберите подкатегорию или добавьте сюда что-нибудь`}
-                  >
-                    <Button variant={'contained'} onClick={addItemHandler}>
-                      Добавить
-                    </Button>
-                  </EmptyState>
-                </Container>
-              )}
+              {isItemsSuccess &&
+                !isFetchingPrev &&
+                !isFetchingNext &&
+                !categoryItems?.length && (
+                  <Container sx={{ width: '100%', height: '100%' }}>
+                    <EmptyState
+                      text={'Здесь пока нет товаров'}
+                      description={`Выберите подкатегорию или добавьте сюда что-нибудь`}
+                    >
+                      <Button variant={'contained'} onClick={addItemHandler}>
+                        Добавить
+                      </Button>
+                    </EmptyState>
+                  </Container>
+                )}
             </>
           )}
         </Box>

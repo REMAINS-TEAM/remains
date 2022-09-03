@@ -98,12 +98,15 @@ const CompanyPage = () => {
               isFetchingNext={isFetchingNext}
             />
 
-            {isSuccess && !companyItems.length && (
-              <Typography variant="inherit" color={'secondary'}>
-                <p>Компания пока ничего не выкладывала.</p>
-                <p>Следите за обновлениями.</p>
-              </Typography>
-            )}
+            {isSuccess &&
+              !isFetchingPrev &&
+              !isFetchingNext &&
+              !companyItems.length && (
+                <Typography variant="inherit" color={'secondary'}>
+                  <p>Компания пока ничего не выкладывала.</p>
+                  <p>Следите за обновлениями.</p>
+                </Typography>
+              )}
           </>
         )}
         {isGetUserFinished && !isPaid && !isAdmin && (

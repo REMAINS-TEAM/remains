@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { Item } from 'store/slices/items';
 import ItemCard from 'components/ItemCard';
 import { Box } from '@mui/material';
@@ -8,6 +8,7 @@ import NotificationPlate from 'components/NotificationPlate';
 import userApi from 'store/api/user';
 import { useSelector } from 'react-redux';
 import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
+import { useLocation } from 'react-router-dom';
 
 interface Props {
   items?: Item[];
@@ -21,6 +22,14 @@ const ItemCards = forwardRef<HTMLDivElement, Props>(
     { items = [], isFetchingPrev, isFetchingNext, hidePayNotification },
     ref,
   ) => {
+    let location = useLocation();
+    const [data, setData] = useState<Item[]>([]);
+
+    useEffect(() => setData([]), [location]);
+    useEffect(() => {
+      if (!isFetchingPrev && !isFetchingNext) setData(items);
+    }, [items, isFetchingPrev, isFetchingNext]);
+
     const { isSuccess: isUserSuccess, isError: isUserError } =
       userApi.useMeQuery();
     const isGetUserFinished = isUserSuccess || isUserError;
@@ -32,11 +41,11 @@ const ItemCards = forwardRef<HTMLDivElement, Props>(
       <>
         {isFetchingPrev && <Spinner />}
         <Box sx={styles.itemsContainer} ref={ref}>
-          {items?.map((item) => (
+          {data?.map((item) => (
             <ItemCard key={item.id} item={item} />
           ))}
         </Box>
-        {isFetchingNext && <Spinner />}
+        {!!data.length && isFetchingNext && <Spinner />}
 
         {!hidePayNotification &&
           isGetUserFinished &&
