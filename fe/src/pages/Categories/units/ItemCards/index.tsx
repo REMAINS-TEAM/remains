@@ -1,29 +1,31 @@
 import React, { forwardRef } from 'react';
 import { Item } from 'store/slices/items';
 import ItemCard from 'components/ItemCard';
-import { Box, CircularProgress } from '@mui/material';
+import { Box } from '@mui/material';
 import * as styles from './styles';
+import Spinner from 'components/Spinner';
 
 interface Props {
   items?: Item[];
-  isLoading?: boolean;
+  isFetchingPrev?: boolean;
+  isFetchingNext?: boolean;
+  isLoading?: boolean; //TODO: delete
 }
 
 const ItemCards = forwardRef<HTMLDivElement, Props>(
-  ({ items = [], isLoading }, ref) => {
-    if (!items.length && !isLoading) return null;
+  ({ items = [], isFetchingPrev, isFetchingNext }, ref) => {
+    if (!items.length) return null;
 
     return (
-      <Box sx={styles.itemsContainer} ref={ref}>
-        {items.map((item) => (
-          <ItemCard key={item.id} item={item} />
-        ))}
-        {isLoading && (
-          <Box sx={{ width: '100%', textAlign: 'center' }}>
-            <CircularProgress size={22} />
-          </Box>
-        )}
-      </Box>
+      <>
+        {isFetchingPrev && <Spinner />}
+        <Box sx={styles.itemsContainer} ref={ref}>
+          {items.map((item) => (
+            <ItemCard key={item.id} item={item} />
+          ))}
+        </Box>
+        {isFetchingNext && <Spinner />}
+      </>
     );
   },
 );

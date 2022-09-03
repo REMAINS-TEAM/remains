@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React from 'react';
 import MainLayout from 'layouts/MainLayout';
 import * as styles from './styles';
 import { Box } from '@mui/material';
@@ -14,17 +14,35 @@ import useInfinityScroll from 'hooks/useInfinityScroll';
 
 const ItemsPage = () => {
   const isPaid = useSelector(getPaidStatus);
-  const { handleScroll, items, isFetching } = useInfinityScroll(
-    itemsApi.useGetItemsQuery,
-  );
+  const {
+    handleScroll,
+    items,
+    isFetching,
+    isSuccess,
+    isFetchingPrev,
+    isFetchingNext,
+  } = useInfinityScroll(itemsApi.useGetItemsQuery);
 
   return (
     <MainLayout onScroll={handleScroll}>
       <Box sx={styles.contentContainer}>
         <Header title="Все товары" withBackButton />
-        {items?.length ? (
+        {isSuccess && !items?.length && (
+          <Container sx={{ width: '100%', height: '100%' }}>
+            <EmptyState
+              text={'Здесь пока нет товаров'}
+              description={`Будьте первыми. Перейдите в категорию и нажмите "Добавить"`}
+            />
+          </Container>
+        )}
+
+        {items?.length && (
           <>
-            <ItemCards items={items} />
+            <ItemCards
+              items={items}
+              isFetchingPrev={isFetchingPrev}
+              isFetchingNext={isFetchingNext}
+            />
             {!isPaid && !isFetching && (
               <NotificationPlate
                 title="Оплатите сервис, чтобы видеть все товары"
@@ -33,13 +51,6 @@ const ItemsPage = () => {
               />
             )}
           </>
-        ) : (
-          <Container sx={{ width: '100%', height: '100%' }}>
-            <EmptyState
-              text={'Здесь пока нет товаров'}
-              description={`Будьте первыми. Перейдите в категорию и нажмите "Добавить"`}
-            />
-          </Container>
         )}
       </Box>
     </MainLayout>

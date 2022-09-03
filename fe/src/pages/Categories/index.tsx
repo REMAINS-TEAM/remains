@@ -17,13 +17,15 @@ import Container from 'components/Container';
 import NotificationPlate from 'components/NotificationPlate';
 import routes from 'routes';
 
-import { Item } from 'store/slices/items';
+import useInfinityScroll from 'hooks/useInfinityScroll';
+import userApi from 'store/api/user';
 
 function CategoriesPage() {
   const { categoryId } = useParams();
   const notEmptyCategoryId = categoryId ? +categoryId : 0;
   const [addItemPopupOpen, setAddEditItemPopupOpen] = useState(false);
 
+  const { isSuccess: isUserSuccess } = userApi.useMeQuery();
   const isPaid = useSelector(getPaidStatus);
   const isAdmin = useSelector(getIsAdmin);
 
@@ -33,7 +35,18 @@ function CategoriesPage() {
     parentId: notEmptyCategoryId,
   });
 
-  const getCategoryItemsError = {};
+  const {
+    handleScroll,
+    items: categoryItems,
+    isSuccess: isItemsSuccess,
+    isFetchingPrev,
+    isFetchingNext,
+    error: getCategoryItemsError,
+  } = useInfinityScroll(
+    itemsApi.useGetItemsQuery,
+    { categoryId: notEmptyCategoryId },
+    { skip: notEmptyCategoryId === 0 },
+  );
 
   const error = getCategoryItemsError as {
     status: number;
@@ -54,7 +67,7 @@ function CategoriesPage() {
   const showAllHandler = () => navigate(routes.items);
 
   return (
-    <MainLayout>
+    <MainLayout onScroll={handleScroll}>
       <WithMenuLayout>
         <Box sx={styles.contentContainer}>
           {!categoryId ? (
@@ -83,26 +96,34 @@ function CategoriesPage() {
                 </IconButton>
               </Box>
 
-              <ItemCards items={[]} isLoading={false} />
-              {/*{!isPaid && !isAdmin && !!categoryItems.length && (*/}
-              {/*  <NotificationPlate*/}
-              {/*    title="Оплатите сервис, чтобы видеть все товары"*/}
-              {/*    color="secondary"*/}
-              {/*    sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}*/}
-              {/*  />*/}
-              {/*)}*/}
-              {/*{isItemsSuccess && !categoryItems?.length && (*/}
-              {/*  <Container sx={{ width: '100%', height: '100%' }}>*/}
-              {/*    <EmptyState*/}
-              {/*      text={'Здесь пока нет товаров'}*/}
-              {/*      description={`Выберите подкатегорию или добавьте сюда что-нибудь`}*/}
-              {/*    >*/}
-              {/*      <Button variant={'contained'} onClick={addItemHandler}>*/}
-              {/*        Добавить*/}
-              {/*      </Button>*/}
-              {/*    </EmptyState>*/}
-              {/*  </Container>*/}
-              {/*)}*/}
+              <ItemCards
+                items={categoryItems}
+                isFetchingPrev={isFetchingPrev}
+                isFetchingNext={isFetchingNext}
+              />
+
+              {isUserSuccess &&
+                !isPaid &&
+                !isAdmin &&
+                !!categoryItems.length && (
+                  <NotificationPlate
+                    title="Оплатите сервис, чтобы видеть все товары"
+                    color="secondary"
+                    sx={{ display: 'flex', justifyContent: 'center', pb: 4 }}
+                  />
+                )}
+              {isItemsSuccess && !categoryItems?.length && (
+                <Container sx={{ width: '100%', height: '100%' }}>
+                  <EmptyState
+                    text={'Здесь пока нет товаров'}
+                    description={`Выберите подкатегорию или добавьте сюда что-нибудь`}
+                  >
+                    <Button variant={'contained'} onClick={addItemHandler}>
+                      Добавить
+                    </Button>
+                  </EmptyState>
+                </Container>
+              )}
             </>
           )}
         </Box>

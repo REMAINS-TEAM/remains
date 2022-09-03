@@ -26,6 +26,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     data: prevItems,
     isFetching: isFetchingPrev,
     isSuccess: isSuccessPrev,
+    error: errorPrev,
   } = loadHook(
     {
       limit: LIMIT,
@@ -38,6 +39,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     data: curItems,
     isFetching: isFetchingCur,
     isSuccess: isSuccessCur,
+    error: errorCur,
   } = loadHook(
     {
       limit: LIMIT,
@@ -50,6 +52,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     data: nextItems,
     isFetching: isFetchingNext,
     isSuccess: isSuccessNext,
+    error: errorNext,
   } = loadHook(
     {
       limit: LIMIT,
@@ -61,6 +64,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
 
   const isFetching = isFetchingPrev || isFetchingCur || isFetchingNext;
   const isSuccess = isSuccessPrev && isSuccessCur && isSuccessNext;
+  const error = errorPrev || errorCur || errorNext;
 
   const items = useMemo(() => {
     const arr = new Array(LIMIT * (offset + 1));
@@ -104,5 +108,6 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     isSuccessCur,
     isSuccessPrev,
     isSuccessNext,
+    error,
   };
 }
