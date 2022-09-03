@@ -33,10 +33,10 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
   } = loadHook(
     {
       limit: LIMIT,
-      offset: offset - LIMIT,
+      offset: Math.max(0, offset - LIMIT),
       ...args,
     },
-    { ...loadHookOption, skip: offset < LIMIT || loadHookOption?.skip },
+    { ...loadHookOption, skip: loadHookOption?.skip },
   );
   const {
     data: curItems,
@@ -106,7 +106,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
         }
       }
     },
-    [offset, items, nextItems, isFetching],
+    [disableLoad, offset, items, nextItems, isFetching],
   );
 
   return {
