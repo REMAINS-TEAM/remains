@@ -5,7 +5,7 @@ import {
 import { QueryDefinition } from '@reduxjs/toolkit/query';
 import React, { useCallback, useMemo, useState } from 'react';
 
-const LIMIT = 5;
+const LIMIT = 10;
 const PX_TO_END = 400;
 
 export default function useInfinityScroll<ResultType, ArgsType = any>(
@@ -36,7 +36,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
       offset: offset - LIMIT,
       ...args,
     },
-    { skip: offset < LIMIT || loadHookOption?.skip },
+    { ...loadHookOption, skip: offset < LIMIT || loadHookOption?.skip },
   );
   const {
     data: curItems,
@@ -66,7 +66,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
       offset: offset + LIMIT,
       ...args,
     },
-    loadHookOption,
+    { ...loadHookOption, skip: loadHookOption?.skip || disableLoad },
   );
 
   const isFetching = isFetchingPrev || isFetchingCur || isFetchingNext;
