@@ -3,9 +3,10 @@ import {
   UseQueryStateOptions,
 } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import { QueryDefinition } from '@reduxjs/toolkit/query';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import usePrevious from 'hooks/usePrevious';
 
-const LIMIT = 10;
+const LIMIT = 5;
 const PX_TO_END = 400;
 
 export default function useInfinityScroll<ResultType, ArgsType = any>(
@@ -22,6 +23,13 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
   disableLoadByScroll?: boolean,
 ) {
   const [offset, setOffset] = useState(0);
+  const prevArgs = usePrevious(args);
+
+  useEffect(() => {
+    if (JSON.stringify(args) !== JSON.stringify(prevArgs)) {
+      setOffset(0);
+    }
+  }, [args, prevArgs]);
 
   const {
     data: prevItems,
@@ -33,10 +41,10 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
   } = loadHook(
     {
       limit: LIMIT,
-      offset: Math.max(0, offset - LIMIT),
+      offset: offset - LIMIT,
       ...args,
     },
-    { ...loadHookOption, skip: loadHookOption?.skip },
+    { ...loadHookOption, skip: loadHookOption?.skip || offset === 0 },
   );
   const {
     data: curItems,
@@ -84,14 +92,14 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
   const isError = isErrorPrev || isErrorCur || isErrorNext;
 
   const items = useMemo(() => {
-    const arr = new Array(LIMIT * (offset + 1));
-    for (const data of [prevItems, curItems, nextItems]) {
-      if (data) {
-        arr.splice(data.offset, data.list.length, ...data.list);
-      }
-    }
-    return arr.filter((item) => item.id);
-  }, [offset, prevItems, curItems, nextItems]);
+    if (!isSuccess) return [];
+
+    return [
+      ...(isNotRunPrev || !prevItems?.list.length ? [] : prevItems?.list || []),
+      ...(curItems?.list || []),
+      ...(isNotRunNext || !nextItems?.list.length ? [] : nextItems?.list || []),
+    ];
+  }, [isSuccess, prevItems, curItems, nextItems, isNotRunPrev, isNotRunNext]);
 
   const handleScroll = useCallback(
     (e: React.SyntheticEvent) => {
