@@ -6,8 +6,10 @@ import { QueryDefinition } from '@reduxjs/toolkit/query';
 import React, { useCallback, useEffect, useState } from 'react';
 import usePrevious from 'hooks/usePrevious';
 
-const LIMIT = 5; //TODO change
+const LIMIT = 10;
 const PX_TO_END = 400;
+
+//TODO: При переходе с главной на категорию грузит еще и categoryId=0
 
 export default function useInfinityScroll<ResultType, ArgsType = any>(
   loadHook: UseQuery<
@@ -49,6 +51,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     },
     { ...loadHookOption, skip: loadHookOption?.skip || hookArgs.offset === 0 },
   );
+
   const {
     data: curItems,
     isFetching: isFetchingCur,
@@ -56,10 +59,8 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     isError: isErrorCur,
     error: errorCur,
     isUninitialized: isNotRunCur,
-  } = loadHook(hookArgs, {
-    ...loadHookOption,
-    skip: loadHookOption?.skip,
-  });
+  } = loadHook(hookArgs, loadHookOption);
+
   const {
     data: nextItems,
     isFetching: isFetchingNext,
