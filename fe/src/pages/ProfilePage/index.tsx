@@ -28,7 +28,7 @@ function ProfilePage() {
     handleScroll,
     items: myItems,
     isSuccess,
-    isFetchingPrev,
+    isFetchingCur,
     isFetchingNext,
   } = useInfinityScroll(
     itemsApi.useGetItemsQuery,
@@ -104,11 +104,11 @@ function ProfilePage() {
 
         <ItemCards
           items={myItems}
-          isFetchingPrev={isFetchingPrev}
+          isFetchingCur={isFetchingCur}
           isFetchingNext={isFetchingNext}
           hidePayNotification
         />
-        {isSuccess && !isFetchingPrev && !isFetchingNext && !myItems?.length && (
+        {isSuccess && !isFetchingCur && !isFetchingNext && !myItems?.length && (
           <Typography variant="inherit" color={'secondary'} sx={{ mt: -2 }}>
             <p>Пока вы ничего не выкладывали.</p>
             <p>

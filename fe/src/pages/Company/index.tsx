@@ -40,7 +40,7 @@ const CompanyPage = () => {
     handleScroll,
     items: companyItems,
     isSuccess,
-    isFetchingPrev,
+    isFetchingCur,
     isFetchingNext,
   } = useInfinityScroll(
     itemsApi.useGetItemsQuery,
@@ -94,12 +94,12 @@ const CompanyPage = () => {
           <>
             <ItemCards
               items={companyItems}
-              isFetchingPrev={isFetchingPrev}
+              isFetchingCur={isFetchingCur}
               isFetchingNext={isFetchingNext}
             />
 
             {isSuccess &&
-              !isFetchingPrev &&
+              !isFetchingCur &&
               !isFetchingNext &&
               !companyItems.length && (
                 <Typography variant="inherit" color={'secondary'}>

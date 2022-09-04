@@ -35,7 +35,7 @@ function CategoriesPage() {
     handleScroll,
     items: categoryItems,
     isSuccess: isItemsSuccess,
-    isFetchingPrev,
+    isFetchingCur,
     isFetchingNext,
     error: getCategoryItemsError,
   } = useInfinityScroll(
@@ -95,12 +95,12 @@ function CategoriesPage() {
 
               <ItemCards
                 items={categoryItems}
-                isFetchingPrev={isFetchingPrev}
+                isFetchingCur={isFetchingCur}
                 isFetchingNext={isFetchingNext}
               />
 
               {isItemsSuccess &&
-                !isFetchingPrev &&
+                !isFetchingCur &&
                 !isFetchingNext &&
                 !categoryItems?.length && (
                   <Container sx={{ width: '100%', height: '100%' }}>

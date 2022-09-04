@@ -16,7 +16,7 @@ const ItemsPage = () => {
   const isPaid = useSelector(getPaidStatus);
   const isAdmin = useSelector(getIsAdmin);
 
-  const { handleScroll, items, isSuccess, isFetchingPrev, isFetchingNext } =
+  const { handleScroll, items, isSuccess, isFetchingCur, isFetchingNext } =
     useInfinityScroll(
       itemsApi.useGetItemsQuery,
       undefined,
@@ -30,7 +30,7 @@ const ItemsPage = () => {
         <Header title="Все товары" withBackButton />
         <ItemCards
           items={items}
-          isFetchingPrev={isFetchingPrev}
+          isFetchingCur={isFetchingCur}
           isFetchingNext={isFetchingNext}
         />
 
