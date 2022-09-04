@@ -20,13 +20,12 @@ import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 
 function CategoriesPage() {
   const { categoryId } = useParams();
-  const notEmptyCategoryId = categoryId ? +categoryId : 0;
   const [addItemPopupOpen, setAddEditItemPopupOpen] = useState(false);
 
   const navigate = useNavigate();
 
   const { data: categories } = categoriesApi.useGetAllQuery({
-    parentId: notEmptyCategoryId,
+    parentId: +(categoryId || 0),
   });
 
   const isPaid = useSelector(getPaidStatus);
@@ -41,8 +40,8 @@ function CategoriesPage() {
     error: getCategoryItemsError,
   } = useInfinityScroll(
     itemsApi.useGetItemsQuery,
-    { categoryId: notEmptyCategoryId },
-    { skip: notEmptyCategoryId === 0 },
+    { categoryId: +(categoryId || 0) },
+    { skip: !categoryId || +categoryId === 0 },
     !isPaid && !isAdmin,
   );
 

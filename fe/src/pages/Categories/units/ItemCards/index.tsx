@@ -36,7 +36,7 @@ const ItemCards = forwardRef<HTMLDivElement, Props>(
             <ItemCard key={item.id} item={item} />
           ))}
         </Box>
-        {!!items.length && isFetchingNext && <Spinner />}
+        {isFetchingNext && <Spinner />}
 
         {!hidePayNotification &&
           isGetUserFinished &&

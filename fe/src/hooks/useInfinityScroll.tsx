@@ -3,13 +3,11 @@ import {
   UseQueryStateOptions,
 } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import { QueryDefinition } from '@reduxjs/toolkit/query';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import usePrevious from 'hooks/usePrevious';
 
 const LIMIT = 10;
 const PX_TO_END = 400;
-
-//TODO: При переходе с главной на категорию грузит еще и categoryId=0
 
 export default function useInfinityScroll<ResultType, ArgsType = any>(
   loadHook: UseQuery<
@@ -30,13 +28,26 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     ...args,
   });
 
+  // Clear items and reset offset when args are changed
   const prevArgs = usePrevious(args);
   useEffect(() => {
     if (JSON.stringify(args) !== JSON.stringify(prevArgs)) {
       setHookArgs({ offset: 0, limit: LIMIT, ...args });
+      setItems([]);
     }
-  }, [args, prevArgs]);
+  }, [args, prevArgs, setHookArgs]);
 
+  // If hook use old args
+  const inconsistentArgs = useMemo(() => {
+    const { limit, offset, ...oldArgs } = hookArgs;
+    return (
+      args !== undefined &&
+      oldArgs !== undefined &&
+      JSON.stringify(oldArgs) !== JSON.stringify(args)
+    );
+  }, [args, hookArgs]);
+
+  // RTK Query hooks (prev, current, next)
   const {
     data: prevItems,
     isFetching: isFetchingPrev,
@@ -49,7 +60,10 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
       ...hookArgs,
       offset: hookArgs.offset - LIMIT,
     },
-    { ...loadHookOption, skip: loadHookOption?.skip || hookArgs.offset === 0 },
+    {
+      ...loadHookOption,
+      skip: loadHookOption?.skip || hookArgs.offset === 0 || inconsistentArgs,
+    },
   );
 
   const {
@@ -59,7 +73,10 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     isError: isErrorCur,
     error: errorCur,
     isUninitialized: isNotRunCur,
-  } = loadHook(hookArgs, loadHookOption);
+  } = loadHook(hookArgs, {
+    ...loadHookOption,
+    skip: loadHookOption?.skip || inconsistentArgs,
+  });
 
   const {
     data: nextItems,
@@ -75,7 +92,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     },
     {
       ...loadHookOption,
-      skip: loadHookOption?.skip || disableLoadByScroll,
+      skip: loadHookOption?.skip || disableLoadByScroll || inconsistentArgs,
     },
   );
 
@@ -109,7 +126,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     isFetching,
   ]);
 
-  // When scroll is on up or down change param for query (offset)
+  // When scroll is on up or down - change param for query (offset)
   const handleScroll = useCallback(
     (e: React.SyntheticEvent) => {
       const { scrollTop, scrollHeight, offsetHeight } =
