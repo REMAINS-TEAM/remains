@@ -9,7 +9,7 @@ import { Code, User } from '@prisma/client';
 import { PrismaException } from 'exceptions/prismaException';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { addDays, addMonths } from 'date-fns';
+import { addDays } from 'date-fns';
 import jwt from 'jsonwebtoken';
 import {
   generateMessageCallUrl,
@@ -64,7 +64,7 @@ export class UsersService {
       if (!user) {
         // create user with trial period
         user = await this.prisma.user.create({
-          data: { phone, paymentExpiredDate: addMonths(new Date(), 1) },
+          data: { phone, paymentExpiredDate: addDays(new Date(), 30) },
         });
       }
     } catch (err) {

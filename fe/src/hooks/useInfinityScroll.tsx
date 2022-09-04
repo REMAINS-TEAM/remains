@@ -19,7 +19,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
   >,
   args?: ArgsType,
   loadHookOption?: UseQueryStateOptions<any, any>,
-  disableLoad?: boolean,
+  disableLoadByScroll?: boolean,
 ) {
   const [offset, setOffset] = useState(0);
 
@@ -71,7 +71,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     },
     {
       ...loadHookOption,
-      skip: loadHookOption?.skip || disableLoad,
+      skip: loadHookOption?.skip || disableLoadByScroll,
     },
   );
 
@@ -104,7 +104,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
         }
 
         if (
-          !disableLoad &&
+          !disableLoadByScroll &&
           scrollTop >= scrollHeight - offsetHeight - PX_TO_END &&
           !nextItems?.isOver
         ) {
@@ -112,7 +112,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
         }
       }
     },
-    [disableLoad, offset, items, nextItems, isFetching],
+    [disableLoadByScroll, offset, items, nextItems, isFetching],
   );
 
   return {

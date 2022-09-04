@@ -18,7 +18,6 @@ function ConfirmPhonePopup({ open, setOpen, phone }: ConfirmPhonePopupProps) {
   useResponseNotifications({
     result,
     onSuccess: ({ token }) => {
-      console.log('token', token);
       dispatch(setGeneralVariables({ [LS_KEY_TOKEN]: token }));
       setOpen(false);
     },
