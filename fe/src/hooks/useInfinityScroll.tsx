@@ -32,8 +32,8 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
   const prevArgs = usePrevious(args);
   useEffect(() => {
     if (JSON.stringify(args) !== JSON.stringify(prevArgs)) {
-      setHookArgs({ offset: 0, limit: LIMIT, ...args });
       setItems([]);
+      setHookArgs({ offset: 0, limit: LIMIT, ...args });
     }
   }, [args, prevArgs, setHookArgs]);
 
@@ -109,7 +109,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
 
   // Fill result array
   useEffect(() => {
-    if (!isSuccess || isFetching) return;
+    if (!isSuccess || isFetching || inconsistentArgs) return;
 
     setItems([
       ...(isNotRunPrev || !prevItems?.list.length ? [] : prevItems?.list || []),
@@ -117,6 +117,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
       ...(isNotRunNext || !nextItems?.list.length ? [] : nextItems?.list || []),
     ]);
   }, [
+    inconsistentArgs,
     isSuccess,
     prevItems,
     curItems,
