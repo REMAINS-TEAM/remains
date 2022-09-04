@@ -3,10 +3,10 @@ import {
   UseQueryStateOptions,
 } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import { QueryDefinition } from '@reduxjs/toolkit/query';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import usePrevious from 'hooks/usePrevious';
 
-const LIMIT = 5;
+const LIMIT = 5; //TODO change
 const PX_TO_END = 400;
 
 export default function useInfinityScroll<ResultType, ArgsType = any>(
@@ -22,12 +22,16 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
   loadHookOption?: UseQueryStateOptions<any, any>,
   disableLoadByScroll?: boolean,
 ) {
-  const [offset, setOffset] = useState(0);
-  const prevArgs = usePrevious(args);
+  const [hookArgs, setHookArgs] = useState<{ limit: number; offset: number }>({
+    offset: 0,
+    limit: LIMIT,
+    ...args,
+  });
 
+  const prevArgs = usePrevious(args);
   useEffect(() => {
     if (JSON.stringify(args) !== JSON.stringify(prevArgs)) {
-      setOffset(0);
+      setHookArgs({ offset: 0, limit: LIMIT, ...args });
     }
   }, [args, prevArgs]);
 
@@ -40,11 +44,10 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     isUninitialized: isNotRunPrev,
   } = loadHook(
     {
-      limit: LIMIT,
-      offset: offset - LIMIT,
-      ...args,
+      ...hookArgs,
+      offset: hookArgs.offset - LIMIT,
     },
-    { ...loadHookOption, skip: loadHookOption?.skip || offset === 0 },
+    { ...loadHookOption, skip: loadHookOption?.skip || hookArgs.offset === 0 },
   );
   const {
     data: curItems,
@@ -53,17 +56,10 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     isError: isErrorCur,
     error: errorCur,
     isUninitialized: isNotRunCur,
-  } = loadHook(
-    {
-      limit: LIMIT,
-      offset,
-      ...args,
-    },
-    {
-      ...loadHookOption,
-      skip: loadHookOption?.skip,
-    },
-  );
+  } = loadHook(hookArgs, {
+    ...loadHookOption,
+    skip: loadHookOption?.skip,
+  });
   const {
     data: nextItems,
     isFetching: isFetchingNext,
@@ -73,9 +69,8 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     isUninitialized: isNotRunNext,
   } = loadHook(
     {
-      limit: LIMIT,
-      offset: offset + LIMIT,
-      ...args,
+      ...hookArgs,
+      offset: hookArgs.offset + LIMIT,
     },
     {
       ...loadHookOption,
@@ -83,6 +78,7 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
     },
   );
 
+  // Query response params
   const isFetching = isFetchingPrev || isFetchingCur || isFetchingNext;
   const isSuccess =
     (isNotRunPrev || isSuccessPrev) &&
@@ -91,24 +87,39 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
   const error = errorPrev || errorCur || errorNext;
   const isError = isErrorPrev || isErrorCur || isErrorNext;
 
-  const items = useMemo(() => {
-    if (!isSuccess) return [];
+  const [items, setItems] = useState<ResultType[]>([]);
 
-    return [
+  // Fill result array
+  useEffect(() => {
+    if (!isSuccess || isFetching) return;
+
+    setItems([
       ...(isNotRunPrev || !prevItems?.list.length ? [] : prevItems?.list || []),
       ...(curItems?.list || []),
       ...(isNotRunNext || !nextItems?.list.length ? [] : nextItems?.list || []),
-    ];
-  }, [isSuccess, prevItems, curItems, nextItems, isNotRunPrev, isNotRunNext]);
+    ]);
+  }, [
+    isSuccess,
+    prevItems,
+    curItems,
+    nextItems,
+    isNotRunPrev,
+    isNotRunNext,
+    isFetching,
+  ]);
 
+  // When scroll is on up or down change param for query (offset)
   const handleScroll = useCallback(
     (e: React.SyntheticEvent) => {
       const { scrollTop, scrollHeight, offsetHeight } =
         e.target as HTMLDivElement;
 
       if (!isFetching && items?.length) {
-        if (scrollTop <= PX_TO_END && offset !== 0) {
-          setOffset(offset - LIMIT);
+        if (scrollTop <= PX_TO_END && hookArgs.offset !== 0) {
+          setHookArgs((prev) => ({
+            ...prev,
+            offset: prev.offset - LIMIT,
+          }));
         }
 
         if (
@@ -116,11 +127,14 @@ export default function useInfinityScroll<ResultType, ArgsType = any>(
           scrollTop >= scrollHeight - offsetHeight - PX_TO_END &&
           !nextItems?.isOver
         ) {
-          setOffset(offset + LIMIT);
+          setHookArgs((prev) => ({
+            ...prev,
+            offset: prev.offset + LIMIT,
+          }));
         }
       }
     },
-    [disableLoadByScroll, offset, items, nextItems, isFetching],
+    [disableLoadByScroll, hookArgs, nextItems, isFetching, items],
   );
 
   return {
