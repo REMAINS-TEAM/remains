@@ -22,6 +22,7 @@ import { useParams } from 'react-router-dom';
 import { setOpen } from 'store/slices/menu';
 import { useDispatch } from 'react-redux';
 import NotificationPlate from 'components/NotificationPlate';
+import Spinner from 'components/Spinner';
 
 export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
   const theme = useTheme();
@@ -128,6 +129,7 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
           )}
         </Box>
       )}
+      {isFetching && <Spinner sx={{ mt: 3 }} />}
     </>
   );
 }
