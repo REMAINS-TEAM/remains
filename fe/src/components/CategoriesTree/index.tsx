@@ -117,16 +117,21 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
               ))
           ) : (
             <Typography variant="h3" color="secondary" sx={{ mt: 2 }}>
-              Нет вложенных категорий
+              {`Нет вложенных категорий ${
+                !data?.parentCategory?._count.items ? 'и товаров' : ''
+              }`}
             </Typography>
           )}
-          {isMobile && categoryId && +categoryId !== 0 && (
-            <NotificationPlate
-              title="Закройте меню, чтобы увидеть товары"
-              color="secondary"
-              sx={{ mt: 3, pl: 0.3, fontSize: 14 }}
-            />
-          )}
+          {isMobile &&
+            categoryId &&
+            +categoryId !== 0 &&
+            !!data?.parentCategory?._count.items && (
+              <NotificationPlate
+                title="Закройте меню, чтобы увидеть товары"
+                color="secondary"
+                sx={{ mt: 3, pl: 0.3, fontSize: 14 }}
+              />
+            )}
         </Box>
       )}
       {isFetching && <Spinner sx={{ mt: 3 }} />}

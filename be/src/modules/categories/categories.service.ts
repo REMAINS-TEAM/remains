@@ -22,6 +22,7 @@ export class CategoriesService {
       if (parentId && Number(parentId) !== 0) {
         parentCategory = await this.prisma.category.findUnique({
           where: { id: +parentId },
+          include: { _count: { select: { items: true } } },
         });
       }
 
