@@ -118,7 +118,7 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
           ) : (
             <Typography variant="h3" color="secondary" sx={{ mt: 2 }}>
               {`Нет вложенных категорий ${
-                !data?.parentCategory?._count.items ? 'и товаров' : ''
+                !data?.parentCategory?._count?.items ? 'и товаров' : ''
               }`}
             </Typography>
           )}

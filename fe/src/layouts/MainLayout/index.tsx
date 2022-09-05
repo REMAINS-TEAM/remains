@@ -8,10 +8,12 @@ function MainLayout({
   children,
   forAll,
   onScroll,
+  onTouchMove,
 }: {
   children: ReactNode;
   forAll?: boolean;
   onScroll?: (e: React.SyntheticEvent) => void;
+  onTouchMove?: (e: React.SyntheticEvent) => void;
 }) {
   const navigate = useNavigate();
 
@@ -25,7 +27,7 @@ function MainLayout({
   }, [forAll]);
 
   return (
-    <Box sx={styles.root} onScroll={onScroll}>
+    <Box sx={styles.root} onScroll={onScroll} onTouchMove={onTouchMove}>
       <Box sx={styles.center}>{children}</Box>
     </Box>
   );
