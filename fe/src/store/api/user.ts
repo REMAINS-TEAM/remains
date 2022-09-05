@@ -47,8 +47,10 @@ export const usersApi = api.injectEndpoints({
       invalidatesTags: [apiTypes.USERS],
     }),
 
-    me: build.query<User, void>({
+    me: build.query<User | null, void>({
       async queryFn(_args, _queryApi, _extraOptions, fetchWithBQ) {
+        if (!localStorage.getItem(LS_KEY_TOKEN)) return { data: null };
+
         const meResponse = await fetchWithBQ({
           url: `${apiTypes.USERS}/me`,
           method: 'GET',
