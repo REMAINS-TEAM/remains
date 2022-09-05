@@ -3,7 +3,7 @@ import Popup from 'components/Popups/index';
 import { AuthPopupProps } from './types';
 import usersApi from 'store/api/user';
 import { Controller, useForm } from 'react-hook-form';
-import MuiPhoneNumber from 'material-ui-phone-number';
+import MuiPhoneNumber from 'material-ui-phone-number-2';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { authSchema } from 'components/Popups/AuthPopup/validation';
 import ConfirmPhonePopup from 'components/Popups/ConfirmPhonePopup';
@@ -61,6 +61,7 @@ function AuthPopup({ open, setOpen }: AuthPopupProps) {
             control={control}
             render={({ field }) => (
               <MuiPhoneNumber
+                onlyCountries={['ru']}
                 inputProps={{ pattern: '[0-9]*' }}
                 sx={{ minWidth: '250px' }}
                 autoFocus

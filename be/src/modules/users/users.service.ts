@@ -96,7 +96,9 @@ export class UsersService {
       smscResponse = await axios.get(
         generateMessageCallUrl(
           phone,
-          `Звонок от Sell Remains. Ваш код: ${code}`,
+          `Звонок от Sell Remains. Ваш код: ${String(code)
+            .split('')
+            .join(',')}`,
         ),
       );
     } catch (e) {

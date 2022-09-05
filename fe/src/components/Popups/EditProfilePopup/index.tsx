@@ -10,7 +10,7 @@ import {
   AlternateEmail as EmailIcon,
   Phone as PhoneIcon,
 } from '@mui/icons-material';
-import MuiPhoneNumber from 'material-ui-phone-number';
+import MuiPhoneNumber from 'material-ui-phone-number-2';
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from 'store/selectors/user';
 import AutocompleteField from 'components/AutocompleteField';
@@ -149,6 +149,7 @@ function EditProfilePopup({ open, setOpen }: RegisterPopupProps) {
               control={control}
               render={({ field }) => (
                 <MuiPhoneNumber
+                  onlyCountries={['ru']}
                   autoFocus
                   margin="dense"
                   id={'user.phone'}
