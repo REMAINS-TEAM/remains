@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, SxProps } from '@mui/system';
 import * as styles from './styles';
 import Carousel from 'react-material-ui-carousel';
+import { HideImageOutlined as NoImageIcon } from '@mui/icons-material';
 
 function ImagesCarousel({
   itemId,
@@ -10,7 +11,11 @@ function ImagesCarousel({
   itemId: number;
   images: string[];
 }) {
-  return (
+  return !images.length ? (
+    <Box sx={styles.noImage}>
+      <NoImageIcon />
+    </Box>
+  ) : (
     <Carousel
       autoPlay={false}
       navButtonsAlwaysVisible

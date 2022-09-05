@@ -16,6 +16,7 @@ import {
 import Header from 'components/Header';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Paper } from '@mui/material';
+import Spinner from 'components/Spinner';
 
 function ItemPage() {
   const { itemId } = useParams();
@@ -29,7 +30,12 @@ function ItemPage() {
     { skip: !itemId },
   );
 
-  if (isLoading) return <MainLayout>Loading...</MainLayout>;
+  if (isLoading)
+    return (
+      <MainLayout>
+        <Spinner />
+      </MainLayout>
+    );
 
   if (!item) return null;
 

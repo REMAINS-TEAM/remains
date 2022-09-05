@@ -12,6 +12,14 @@ export const carousel: SxProps = {
   position: 'relative',
 };
 
+export const noImage: SxProps = {
+  height: '100%',
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
 export const imageContainer = (theme: Theme) => ({
   height: `calc(100vh - ${APP_HEADER_HEIGHT}px - ${APP_FOOTER_HEIGHT}px - 200px)`,
   overflow: 'hidden',
