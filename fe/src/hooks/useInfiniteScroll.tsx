@@ -4,7 +4,6 @@ import {
   UseQueryStateOptions,
 } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import { QueryDefinition } from '@reduxjs/toolkit/query';
-import { Item } from 'store/slices/items';
 
 const LIMIT = 5;
 
@@ -26,18 +25,26 @@ export default function useInfiniteScroll<ResultType, ArgsType = any>(
     ...args,
   });
 
-  const [items, setItems] = useState<Item[]>([]);
+  const [items, setItems] = useState<ResultType[]>([]);
 
-  const hook = loadHook(hookArgs, loadHookOption);
+  const loadHookResult = loadHook(hookArgs, loadHookOption);
 
   useEffect(() => {
-    if (hook.isSuccess && !hook.isFetching && hook.data) {
-      setItems((prev) => [...prev, ...hook.data.list]);
+    if (
+      loadHookResult.isSuccess &&
+      !loadHookResult.isFetching &&
+      loadHookResult.data
+    ) {
+      setItems((prev) => [...prev, ...loadHookResult.data.list]);
     }
-  }, [hook.isSuccess, hook.isFetching, hook.data]);
+  }, [
+    loadHookResult.isSuccess,
+    loadHookResult.isFetching,
+    loadHookResult.data,
+  ]);
 
   const loadMore = () =>
     setHookArgs((prev) => ({ ...prev, offset: prev.offset + LIMIT }));
 
-  return { loadMore, items, hook, setHookArgs };
+  return { loadMore, items, loadHookResult, setHookArgs };
 }

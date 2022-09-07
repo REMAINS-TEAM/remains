@@ -11,39 +11,35 @@ import EmptyState from 'components/EmptyState';
 import Container from 'components/Container';
 import InfiniteScroll from 'components/InfiniteScroll';
 import Spinner from 'components/Spinner';
-import useInfiniteScroll from 'hooks/useInfiniteScroll';
+import { Item } from 'store/slices/items';
 
 const ItemsPage = () => {
   const isPaid = useSelector(getPaidStatus);
   const isAdmin = useSelector(getIsAdmin);
 
-  const {
-    items,
-    loadMore,
-    hook: { isFetching, isSuccess, data },
-  } = useInfiniteScroll(itemsApi.useGetItemsQuery);
-
-  if (isFetching && !items.length) return <Spinner sx={{ mt: 3 }} />;
-
   return (
     <MainLayout>
       <Box sx={styles.contentContainer}>
-        <InfiniteScroll
-          length={items.length}
-          next={loadMore}
-          hasMore={(isPaid || isAdmin) && !data?.isOver}
+        <InfiniteScroll<Item>
+          hasMore={isPaid || isAdmin}
+          loadHook={itemsApi.useGetItemsQuery}
           endText="Вы просмотрели все товары"
         >
-          <Header title="Все товары" withBackButton />
-          <ItemCards items={items} isFetching={isFetching} />
+          {({ items, loadHookResult: { isFetching, isSuccess, data } }) => (
+            <>
+              <Header title={'Все товары'} withBackButton />
+              <ItemCards items={items} isFetching={isFetching} />
 
-          {isSuccess && !isFetching && data && !items.length && (
-            <Container sx={{ width: '100%', height: '100%' }}>
-              <EmptyState
-                text={'Здесь пока нет товаров'}
-                description={`Будьте первыми. Перейдите в категорию и нажмите "Добавить"`}
-              />
-            </Container>
+              {isFetching && !items.length && <Spinner />}
+              {isSuccess && !isFetching && data && !items.length && (
+                <Container sx={{ width: '100%', height: '100%' }}>
+                  <EmptyState
+                    text={'Здесь пока нет товаров'}
+                    description={`Будьте первыми. Перейдите в категорию и нажмите "Добавить"`}
+                  />
+                </Container>
+              )}
+            </>
           )}
         </InfiniteScroll>
       </Box>

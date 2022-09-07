@@ -3,32 +3,39 @@ import Spinner from 'components/Spinner';
 import { Typography } from '@mui/material';
 import ReactInfiniteScroll from 'react-infinite-scroll-component';
 import { InfiniteScrollProps } from './types';
+import useInfiniteScroll from 'hooks/useInfiniteScroll';
 
-const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
+export default function InfiniteScroll<T>({
   children,
   endText,
-  length,
+  loadHook,
+  hookArgs,
   hasMore,
-  next,
-}) => {
+}: InfiniteScrollProps<T>) {
+  const { items, loadMore, loadHookResult } = useInfiniteScroll<T>(
+    loadHook,
+    hookArgs,
+  );
+
   return (
     <ReactInfiniteScroll
-      dataLength={length}
-      next={next}
-      hasMore={hasMore === undefined || hasMore}
+      dataLength={items.length}
+      next={loadMore}
+      hasMore={!!hasMore}
+      // hasMore={!!hasMore && loadHookResult.data?.isOver}
       scrollableTarget="main-layout"
       loader={<Spinner sx={{ height: 30 }} />}
       endMessage={
-        length ? (
+        items.length ? (
           <Typography variant="subtitle2" color="secondary" textAlign="center">
             {endText || 'Вы просмотрели всё'}
           </Typography>
         ) : undefined
       }
     >
-      {children}
+      {typeof children === 'function'
+        ? children({ loadHookResult, items })
+        : children}
     </ReactInfiniteScroll>
   );
-};
-
-export default React.memo(InfiniteScroll);
+}

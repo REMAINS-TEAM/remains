@@ -1,9 +1,15 @@
 import { ReactNode } from 'react';
+import { LoadHook } from 'hooks/useInfinityScroll';
 
-export interface InfiniteScrollProps {
-  children: ReactNode;
+interface ChildrenFunctionArgs<T> {
+  items: T[];
+  loadHookResult: any;
+}
+
+export interface InfiniteScrollProps<T> {
+  children: ((args: ChildrenFunctionArgs<T>) => ReactNode) | ReactNode;
   endText?: string;
+  loadHook: LoadHook<T>;
+  hookArgs?: Record<string, any>;
   hasMore?: boolean;
-  length: number;
-  next: () => void;
 }

@@ -50,7 +50,7 @@ const CompanyPage = () => {
 
   const rows = company
     ? [
-        { title: 'Название', value: company.name },
+        { title: 'Название:', value: company.name },
         { title: 'Описание', value: company.description },
         {
           title: 'Дата регистрации на сайте',

@@ -124,37 +124,38 @@ function CategoriesPage() {
               </Container>
             </>
           ) : (
-            <InfiniteScroll
-              length={items.length}
-              next={increaseOffset}
-              hasMore={(isPaid || isAdmin) && !data?.isOver}
-            >
-              <Box sx={styles.headerContainer}>
-                <BreadCrumbs data={categories?.tree || []} />
-                <IconButton
-                  sx={{ p: 0 }}
-                  title="Добавить товар в эту категорию"
-                  onClick={addItemHandler}
-                >
-                  <SpeedDialIcon />
-                </IconButton>
-              </Box>
-
-              <ItemCards items={items} isFetching={isFetching} />
-
-              {isSuccess && !isFetching && !items?.length && (
-                <Container sx={{ width: '100%', height: '100%' }}>
-                  <EmptyState
-                    text={'Здесь пока нет товаров'}
-                    description={`Выберите подкатегорию или добавьте сюда что-нибудь`}
-                  >
-                    <Button variant={'contained'} onClick={addItemHandler}>
-                      Добавить
-                    </Button>
-                  </EmptyState>
-                </Container>
-              )}
-            </InfiniteScroll>
+            <h1>TST</h1>
+            // <InfiniteScroll
+            //   length={items.length}
+            //   next={increaseOffset}
+            //   hasMore={(isPaid || isAdmin) && !data?.isOver}
+            // >
+            //   <Box sx={styles.headerContainer}>
+            //     <BreadCrumbs data={categories?.tree || []} />
+            //     <IconButton
+            //       sx={{ p: 0 }}
+            //       title="Добавить товар в эту категорию"
+            //       onClick={addItemHandler}
+            //     >
+            //       <SpeedDialIcon />
+            //     </IconButton>
+            //   </Box>
+            //
+            //   <ItemCards items={items} isFetching={isFetching} />
+            //
+            //   {isSuccess && !isFetching && !items?.length && (
+            //     <Container sx={{ width: '100%', height: '100%' }}>
+            //       <EmptyState
+            //         text={'Здесь пока нет товаров'}
+            //         description={`Выберите подкатегорию или добавьте сюда что-нибудь`}
+            //       >
+            //         <Button variant={'contained'} onClick={addItemHandler}>
+            //           Добавить
+            //         </Button>
+            //       </EmptyState>
+            //     </Container>
+            //   )}
+            // </InfiniteScroll>
           )}
         </Box>
       </WithMenuLayout>

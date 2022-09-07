@@ -9,15 +9,17 @@ import usePrevious from 'hooks/usePrevious';
 const LIMIT = 10;
 const PX_TO_END = 400;
 
+export type LoadHook<ResultType> = UseQuery<
+  QueryDefinition<
+    { limit: number; offset: number },
+    any,
+    any,
+    { offset: number; list: ResultType[]; isOver: boolean }
+  >
+>;
+
 export default function useInfinityScroll<ResultType, ArgsType = any>(
-  loadHook: UseQuery<
-    QueryDefinition<
-      { limit: number; offset: number },
-      any,
-      any,
-      { offset: number; list: ResultType[]; isOver: boolean }
-    >
-  >,
+  loadHook: LoadHook<ResultType>,
   args?: ArgsType,
   loadHookOption?: UseQueryStateOptions<any, any>,
   disableLoadByScroll?: boolean,
