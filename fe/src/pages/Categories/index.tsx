@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MainLayout from 'layouts/MainLayout';
 import WithMenuLayout from 'layouts/WithMenuLayout';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -17,6 +17,11 @@ import routes from 'routes';
 import useInfinityScroll from 'hooks/useInfinityScroll';
 import { useSelector } from 'react-redux';
 import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
+import { Item } from 'store/slices/items';
+import InfiniteScroll from 'components/InfiniteScroll';
+import { useLocation } from 'react-router';
+
+const LIMIT = 5;
 
 function CategoriesPage() {
   const { categoryId } = useParams();
@@ -31,19 +36,57 @@ function CategoriesPage() {
   const isPaid = useSelector(getPaidStatus);
   const isAdmin = useSelector(getIsAdmin);
 
+  // const {
+  //   handleScroll,
+  //   items: categoryItems,
+  //   isSuccess: isItemsSuccess,
+  //   isFetchingCur,
+  //   isFetchingNext,
+  //   error: getCategoryItemsError,
+  // } = useInfinityScroll(
+  //   itemsApi.useGetItemsQuery,
+  //   { categoryId: +(categoryId || 0) },
+  //   { skip: !categoryId || +categoryId === 0 },
+  //   !isPaid && !isAdmin,
+  // );
+
+  const [items, setItems] = useState<Item[]>([]);
+  const [hookArgs, setHookArgs] = useState<{
+    limit: number;
+    offset: number;
+    categoryId: number;
+  }>({
+    offset: 0,
+    limit: LIMIT,
+    categoryId: 0,
+  });
+
+  useEffect(() => {
+    setHookArgs((prev) => ({
+      ...prev,
+      offset: 0,
+      categoryId: +(categoryId || 0),
+    }));
+    setItems([]);
+  }, [categoryId]);
+
   const {
-    handleScroll,
-    items: categoryItems,
-    isSuccess: isItemsSuccess,
-    isFetchingCur,
-    isFetchingNext,
+    data,
+    isFetching,
+    isSuccess,
     error: getCategoryItemsError,
-  } = useInfinityScroll(
-    itemsApi.useGetItemsQuery,
-    { categoryId: +(categoryId || 0) },
-    { skip: !categoryId || +categoryId === 0 },
-    !isPaid && !isAdmin,
-  );
+  } = itemsApi.useGetItemsQuery(hookArgs, {
+    skip: !hookArgs.categoryId || hookArgs.categoryId === 0,
+  });
+
+  useEffect(() => {
+    if (isSuccess && !isFetching && data) {
+      setItems((prev) => [...prev, ...data.list]);
+    }
+  }, [isSuccess, isFetching, data]);
+
+  const increaseOffset = () =>
+    setHookArgs((prev) => ({ ...prev, offset: prev.offset + LIMIT }));
 
   const error = getCategoryItemsError as {
     status: number;
@@ -64,7 +107,7 @@ function CategoriesPage() {
   const showAllHandler = () => navigate(routes.items);
 
   return (
-    <MainLayout onScroll={handleScroll}>
+    <MainLayout>
       <WithMenuLayout>
         <Box sx={styles.contentContainer}>
           {!categoryId ? (
@@ -81,7 +124,11 @@ function CategoriesPage() {
               </Container>
             </>
           ) : (
-            <>
+            <InfiniteScroll
+              length={items.length}
+              next={increaseOffset}
+              hasMore={(isPaid || isAdmin) && !data?.isOver}
+            >
               <Box sx={styles.headerContainer}>
                 <BreadCrumbs data={categories?.tree || []} />
                 <IconButton
@@ -93,28 +140,21 @@ function CategoriesPage() {
                 </IconButton>
               </Box>
 
-              <ItemCards
-                items={categoryItems}
-                isFetchingCur={isFetchingCur}
-                isFetchingNext={isFetchingNext}
-              />
+              <ItemCards items={items} isFetching={isFetching} />
 
-              {isItemsSuccess &&
-                !isFetchingCur &&
-                !isFetchingNext &&
-                !categoryItems?.length && (
-                  <Container sx={{ width: '100%', height: '100%' }}>
-                    <EmptyState
-                      text={'Здесь пока нет товаров'}
-                      description={`Выберите подкатегорию или добавьте сюда что-нибудь`}
-                    >
-                      <Button variant={'contained'} onClick={addItemHandler}>
-                        Добавить
-                      </Button>
-                    </EmptyState>
-                  </Container>
-                )}
-            </>
+              {isSuccess && !isFetching && !items?.length && (
+                <Container sx={{ width: '100%', height: '100%' }}>
+                  <EmptyState
+                    text={'Здесь пока нет товаров'}
+                    description={`Выберите подкатегорию или добавьте сюда что-нибудь`}
+                  >
+                    <Button variant={'contained'} onClick={addItemHandler}>
+                      Добавить
+                    </Button>
+                  </EmptyState>
+                </Container>
+              )}
+            </InfiniteScroll>
           )}
         </Box>
       </WithMenuLayout>

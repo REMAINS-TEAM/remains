@@ -27,7 +27,12 @@ function MainLayout({
   }, [forAll]);
 
   return (
-    <Box sx={styles.root} onScroll={onScroll} onTouchMove={onTouchMove}>
+    <Box
+      sx={styles.root}
+      onScroll={onScroll}
+      onTouchMove={onTouchMove}
+      id="main-layout"
+    >
       <Box sx={styles.center}>{children}</Box>
     </Box>
   );

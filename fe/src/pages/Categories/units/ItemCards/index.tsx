@@ -12,13 +12,12 @@ import { useLocation } from 'react-router';
 
 interface Props {
   items?: Item[];
-  isFetchingCur?: boolean;
-  isFetchingNext?: boolean;
+  isFetching?: boolean;
   hidePayNotification?: boolean;
 }
 
 const ItemCards = forwardRef<HTMLDivElement, Props>(
-  ({ items = [], isFetchingCur, isFetchingNext, hidePayNotification }, ref) => {
+  ({ items = [], isFetching, hidePayNotification }, ref) => {
     const { isSuccess: isUserSuccess, isError: isUserError } =
       userApi.useMeQuery();
     const isGetUserFinished = isUserSuccess || isUserError;
@@ -31,10 +30,8 @@ const ItemCards = forwardRef<HTMLDivElement, Props>(
 
     useEffect(() => setData([]), [location]);
     useEffect(() => {
-      if (!isFetchingCur && !isFetchingNext) setData(items);
-    }, [items, isFetchingCur, isFetchingNext]);
-
-    if (isFetchingCur) return <Spinner />;
+      if (!isFetching) setData(items);
+    }, [items, isFetching]);
 
     return (
       <>
@@ -43,7 +40,6 @@ const ItemCards = forwardRef<HTMLDivElement, Props>(
             <ItemCard key={item.id} item={item} />
           ))}
         </Box>
-        {isFetchingNext && <Spinner />}
 
         {!hidePayNotification &&
           isGetUserFinished &&

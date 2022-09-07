@@ -102,12 +102,7 @@ function ProfilePage() {
 
         <Header title="Мои предложения" />
 
-        <ItemCards
-          items={myItems}
-          isFetchingCur={isFetchingCur}
-          isFetchingNext={isFetchingNext}
-          hidePayNotification
-        />
+        <ItemCards items={myItems} hidePayNotification />
         {isSuccess && !isFetchingCur && !isFetchingNext && !myItems?.length && (
           <Typography variant="inherit" color={'secondary'} sx={{ mt: -2 }}>
             <p>Пока вы ничего не выкладывали.</p>

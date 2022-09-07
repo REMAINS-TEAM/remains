@@ -92,11 +92,7 @@ const CompanyPage = () => {
 
         {isGetUserFinished && (isPaid || isAdmin) && (
           <>
-            <ItemCards
-              items={companyItems}
-              isFetchingCur={isFetchingCur}
-              isFetchingNext={isFetchingNext}
-            />
+            <ItemCards items={companyItems} />
 
             {isSuccess &&
               !isFetchingCur &&
