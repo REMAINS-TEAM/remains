@@ -8,7 +8,10 @@ import usePrevious from 'hooks/usePrevious';
 
 const LIMIT = 5;
 
-export default function useInfiniteScroll<ResultType, ArgsType = any>(
+export default function useInfiniteScroll<
+  ResultType extends { id: number | string },
+  ArgsType = any,
+>(
   loadHook: UseQuery<
     QueryDefinition<
       { limit: number; offset: number },
@@ -30,22 +33,28 @@ export default function useInfiniteScroll<ResultType, ArgsType = any>(
 
   const loadHookResult = loadHook(hookArgs, loadHookOption);
 
-  // Clear items and reset offset when args are changed
   const prevArgs = usePrevious(args);
+
+  // Clear items and reset offset when args are changed
   useEffect(() => {
     if (JSON.stringify(args) !== JSON.stringify(prevArgs)) {
-      setItems([]);
       setHookArgs({ offset: 0, limit: LIMIT, ...args });
+      setItems([]);
     }
-  }, [args, prevArgs, setHookArgs]);
+  }, [args, prevArgs]);
 
   useEffect(() => {
     if (
       loadHookResult.isSuccess &&
       !loadHookResult.isFetching &&
-      loadHookResult.data
+      !!loadHookResult.data?.list?.length
     ) {
-      setItems((prev) => [...prev, ...loadHookResult.data.list]);
+      setItems((prev) => {
+        //prevent double adding
+        if (prev.find((item) => item.id === loadHookResult.data.list?.[0]?.id))
+          return prev;
+        return [...prev, ...loadHookResult.data.list];
+      });
     }
   }, [
     loadHookResult.isSuccess,
@@ -56,5 +65,5 @@ export default function useInfiniteScroll<ResultType, ArgsType = any>(
   const loadMore = () =>
     setHookArgs((prev) => ({ ...prev, offset: prev.offset + LIMIT }));
 
-  return { loadMore, items, loadHookResult, setHookArgs };
+  return { loadMore, items, loadHookResult };
 }

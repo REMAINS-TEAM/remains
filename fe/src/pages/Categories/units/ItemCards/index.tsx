@@ -1,14 +1,12 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef } from 'react';
 import { Item } from 'store/slices/items';
 import ItemCard from 'components/ItemCard';
 import { Box } from '@mui/material';
 import * as styles from './styles';
-import Spinner from 'components/Spinner';
 import NotificationPlate from 'components/NotificationPlate';
 import userApi from 'store/api/user';
 import { useSelector } from 'react-redux';
 import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
-import { useLocation } from 'react-router';
 
 interface Props {
   items?: Item[];
@@ -25,18 +23,10 @@ const ItemCards = forwardRef<HTMLDivElement, Props>(
     const isPaid = useSelector(getPaidStatus);
     const isAdmin = useSelector(getIsAdmin);
 
-    let location = useLocation();
-    const [data, setData] = useState<Item[]>([]);
-
-    useEffect(() => setData([]), [location]);
-    useEffect(() => {
-      if (!isFetching) setData(items);
-    }, [items, isFetching]);
-
     return (
       <>
         <Box sx={styles.itemsContainer} ref={ref}>
-          {data?.map((item) => (
+          {items?.map((item) => (
             <ItemCard key={item.id} item={item} />
           ))}
         </Box>

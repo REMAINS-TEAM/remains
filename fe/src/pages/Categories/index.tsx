@@ -3,7 +3,12 @@ import MainLayout from 'layouts/MainLayout';
 import WithMenuLayout from 'layouts/WithMenuLayout';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as styles from './styles';
-import { Box, Button, IconButton, SpeedDialIcon } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  SpeedDialIcon as AddIcon,
+} from '@mui/material';
 import itemsApi from 'store/api/items';
 import ItemCards from 'pages/Categories/units/ItemCards';
 import EmptyState from 'components/EmptyState';
@@ -39,28 +44,36 @@ function CategoriesPage() {
       <WithMenuLayout>
         <Box sx={styles.contentContainer}>
           {!categoryId ? (
-            <>
-              <Container sx={{ width: '100%', height: '100%' }}>
-                <EmptyState
-                  text={'Выберите категорию'}
-                  description={'Или посмотрите всё, что есть'}
-                >
-                  <Button variant="contained" onClick={showAllHandler}>
-                    Показать всё
-                  </Button>
-                </EmptyState>
-              </Container>
-            </>
+            <Container sx={{ width: '100%', height: '100%' }}>
+              <EmptyState
+                text={'Выберите категорию'}
+                description={'Или посмотрите всё, что есть'}
+              >
+                <Button variant="contained" onClick={showAllHandler}>
+                  Показать всё
+                </Button>
+              </EmptyState>
+            </Container>
           ) : (
             <InfiniteScroll<Item>
               hasMore={isPaid || isAdmin}
               loadHook={itemsApi.useGetItemsQuery}
               hookArgs={{ categoryId }}
-              endText={
-                isPaid || isAdmin ? 'Вы просмотрели все товары в категории' : ''
+              showEndText={isPaid || isAdmin}
+              emptyStateComponent={
+                <Container sx={{ width: '100%', height: '100%' }}>
+                  <EmptyState
+                    text={'Здесь пока нет товаров'}
+                    description={`Выберите подкатегорию или добавьте сюда что-нибудь`}
+                  >
+                    <Button variant={'contained'} onClick={addItemHandler}>
+                      Добавить
+                    </Button>
+                  </EmptyState>
+                </Container>
               }
             >
-              {({ items, loadHookResult: { isFetching, isSuccess } }) => (
+              {({ items, loadHookResult: { isFetching } }) => (
                 <>
                   <Box sx={styles.headerContainer}>
                     <BreadCrumbs data={categories?.tree || []} />
@@ -69,23 +82,14 @@ function CategoriesPage() {
                       title="Добавить товар в эту категорию"
                       onClick={addItemHandler}
                     >
-                      <SpeedDialIcon />
+                      <AddIcon />
                     </IconButton>
                   </Box>
-                  {isFetching && !items.length && <Spinner />}
-                  <ItemCards items={items} isFetching={isFetching} />
-
-                  {isSuccess && !isFetching && !items.length && (
-                    <Container sx={{ width: '100%', height: '100%' }}>
-                      <EmptyState
-                        text={'Здесь пока нет товаров'}
-                        description={`Выберите подкатегорию или добавьте сюда что-нибудь`}
-                      >
-                        <Button variant={'contained'} onClick={addItemHandler}>
-                          Добавить
-                        </Button>
-                      </EmptyState>
-                    </Container>
+                  {isFetching && !items.length && (
+                    <Spinner sx={{ height: 30 }} />
+                  )}
+                  {!!items.length && (
+                    <ItemCards items={items} isFetching={isFetching} />
                   )}
                 </>
               )}
