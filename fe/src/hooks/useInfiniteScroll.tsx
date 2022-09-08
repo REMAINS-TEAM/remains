@@ -4,6 +4,7 @@ import {
   UseQueryStateOptions,
 } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import { QueryDefinition } from '@reduxjs/toolkit/query';
+import usePrevious from 'hooks/usePrevious';
 
 const LIMIT = 5;
 
@@ -28,6 +29,15 @@ export default function useInfiniteScroll<ResultType, ArgsType = any>(
   const [items, setItems] = useState<ResultType[]>([]);
 
   const loadHookResult = loadHook(hookArgs, loadHookOption);
+
+  // Clear items and reset offset when args are changed
+  const prevArgs = usePrevious(args);
+  useEffect(() => {
+    if (JSON.stringify(args) !== JSON.stringify(prevArgs)) {
+      setItems([]);
+      setHookArgs({ offset: 0, limit: LIMIT, ...args });
+    }
+  }, [args, prevArgs, setHookArgs]);
 
   useEffect(() => {
     if (

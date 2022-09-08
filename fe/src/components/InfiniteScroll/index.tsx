@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Spinner from 'components/Spinner';
 import { Typography } from '@mui/material';
 import ReactInfiniteScroll from 'react-infinite-scroll-component';
