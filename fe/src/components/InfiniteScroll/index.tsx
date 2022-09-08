@@ -21,8 +21,7 @@ export default function InfiniteScroll<T>({
     <ReactInfiniteScroll
       dataLength={items.length}
       next={loadMore}
-      hasMore={!!hasMore}
-      // hasMore={!!hasMore && loadHookResult.data?.isOver}
+      hasMore={!!hasMore && !loadHookResult?.data?.isOver}
       scrollableTarget="main-layout"
       loader={<Spinner sx={{ height: 30 }} />}
       endMessage={

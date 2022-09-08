@@ -25,13 +25,13 @@ const ItemsPage = () => {
           loadHook={itemsApi.useGetItemsQuery}
           endText="Вы просмотрели все товары"
         >
-          {({ items, loadHookResult: { isFetching, isSuccess, data } }) => (
+          {({ items, loadHookResult: { isFetching, isSuccess } }) => (
             <>
               <Header title={'Все товары'} withBackButton />
+              {isFetching && !items.length && <Spinner />}
               <ItemCards items={items} isFetching={isFetching} />
 
-              {isFetching && !items.length && <Spinner />}
-              {isSuccess && !isFetching && data && !items.length && (
+              {isSuccess && !isFetching && !items.length && (
                 <Container sx={{ width: '100%', height: '100%' }}>
                   <EmptyState
                     text={'Здесь пока нет товаров'}
