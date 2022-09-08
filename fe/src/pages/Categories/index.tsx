@@ -85,10 +85,9 @@ function CategoriesPage() {
                       <AddIcon />
                     </IconButton>
                   </Box>
-                  {isFetching && !items.length && (
-                    <Spinner sx={{ height: 30 }} />
-                  )}
-                  {!!items.length && (
+                  {!items.length ? (
+                    isFetching && <Spinner sx={{ height: 30 }} />
+                  ) : (
                     <ItemCards items={items} isFetching={isFetching} />
                   )}
                 </>

@@ -23,6 +23,7 @@ const ItemsPage = () => {
         <InfiniteScroll<Item>
           hasMore={isPaid || isAdmin}
           loadHook={itemsApi.useGetItemsQuery}
+          showEndText
           endText="Вы просмотрели все товары"
         >
           {({ items, loadHookResult: { isFetching, isSuccess } }) => (
