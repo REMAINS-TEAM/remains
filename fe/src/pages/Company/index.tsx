@@ -17,9 +17,10 @@ import ItemCards from 'pages/Categories/units/ItemCards';
 import { useSelector } from 'react-redux';
 import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 import itemsApi from 'store/api/items';
-import useInfinityScroll from 'hooks/useInfinityScroll';
 import userApi from 'store/api/user';
 import Spinner from 'components/Spinner';
+import InfiniteScroll from 'components/InfiniteScroll';
+import { Item } from 'store/slices/items';
 
 const CompanyPage = () => {
   const { companyId } = useParams();
@@ -36,18 +37,6 @@ const CompanyPage = () => {
       skip: !companyId,
     });
 
-  const {
-    handleScroll,
-    items: companyItems,
-    isSuccess,
-    isFetchingCur,
-    isFetchingNext,
-  } = useInfinityScroll(
-    itemsApi.useGetItemsQuery,
-    { companyId },
-    { skip: !companyId || (!isPaid && !isAdmin) },
-  );
-
   const rows = company
     ? [
         { title: 'Название:', value: company.name },
@@ -60,7 +49,7 @@ const CompanyPage = () => {
     : [];
 
   return (
-    <MainLayout onScroll={handleScroll}>
+    <MainLayout>
       <Box width="100%">
         <Header title="Информация о компании" withBackButton />
         <Paper sx={{ p: 2, mb: 6 }}>
@@ -91,19 +80,23 @@ const CompanyPage = () => {
         <Header title="Предложения компании" />
 
         {isGetUserFinished && (isPaid || isAdmin) && (
-          <>
-            <ItemCards items={companyItems} />
-
-            {isSuccess &&
-              !isFetchingCur &&
-              !isFetchingNext &&
-              !companyItems.length && (
-                <Typography variant="inherit" color={'secondary'}>
-                  <p>Компания пока ничего не выкладывала.</p>
-                  <p>Следите за обновлениями.</p>
-                </Typography>
-              )}
-          </>
+          <InfiniteScroll<Item>
+            hasMore={true}
+            loadHook={itemsApi.useGetItemsQuery}
+            hookArgs={{ companyId }}
+            showEndText
+            endText="Пока это все предложения данной компании"
+            emptyStateComponent={
+              <Typography variant="inherit" color={'secondary'}>
+                <p>Компания пока ничего не выкладывала.</p>
+                <p>Следите за обновлениями.</p>
+              </Typography>
+            }
+          >
+            {({ items, loadHookResult: { isFetching } }) => (
+              <ItemCards items={items} isFetching={isFetching} />
+            )}
+          </InfiniteScroll>
         )}
         {isGetUserFinished && !isPaid && !isAdmin && (
           <Typography variant="inherit" color={'secondary'}>

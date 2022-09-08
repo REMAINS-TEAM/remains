@@ -20,6 +20,9 @@ export default function InfiniteScroll<T extends { id: number | string }>({
     hookArgs,
   );
 
+  if (loadHookResult.isFetching && !items.length)
+    return <Spinner sx={{ height: 30, mt: 2 }} />;
+
   if (loadHookResult.isSuccess && !loadHookResult.isFetching && !items.length)
     return emptyStateComponent || <EmptyState text={'Здесь пусто'} />;
 

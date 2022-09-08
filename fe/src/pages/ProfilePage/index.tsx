@@ -19,22 +19,11 @@ import itemsApi from 'store/api/items';
 import ItemCards from 'pages/Categories/units/ItemCards';
 import Header from 'components/Header';
 import PaymentDate from 'pages/ProfilePage/PaymentDate';
-import useInfinityScroll from 'hooks/useInfinityScroll';
+import { Item } from 'store/slices/items';
+import InfiniteScroll from 'components/InfiniteScroll';
 
 function ProfilePage() {
   const user = useSelector(getCurrentUser);
-
-  const {
-    handleScroll,
-    items: myItems,
-    isSuccess,
-    isFetchingCur,
-    isFetchingNext,
-  } = useInfinityScroll(
-    itemsApi.useGetItemsQuery,
-    { userId: user?.id },
-    { skip: !user?.id },
-  );
 
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
 
@@ -56,7 +45,7 @@ function ProfilePage() {
     : [];
 
   return (
-    <AuthLayout onScroll={handleScroll}>
+    <AuthLayout>
       <Box sx={styles.contentContainer}>
         <Header
           title="Мой профиль"
@@ -102,16 +91,25 @@ function ProfilePage() {
 
         <Header title="Мои предложения" />
 
-        <ItemCards items={myItems} hidePayNotification />
-        {isSuccess && !isFetchingCur && !isFetchingNext && !myItems?.length && (
-          <Typography variant="inherit" color={'secondary'} sx={{ mt: -2 }}>
-            <p>Пока вы ничего не выкладывали.</p>
-            <p>
-              Чтобы делиться остатками и видеть, что выкладывают другие -
-              следите за положительным балансом счета.
-            </p>
-          </Typography>
-        )}
+        <InfiniteScroll<Item>
+          hasMore={true}
+          loadHook={itemsApi.useGetItemsQuery}
+          hookArgs={{ userId: user?.id }}
+          showEndText
+          emptyStateComponent={
+            <Typography variant="inherit" color={'secondary'} sx={{ mt: -2 }}>
+              <p>Пока вы ничего не выкладывали.</p>
+              <p>
+                Чтобы делиться остатками и видеть, что выкладывают другие -
+                следите за положительным балансом счета.
+              </p>
+            </Typography>
+          }
+        >
+          {({ items, loadHookResult: { isFetching } }) => (
+            <ItemCards items={items} isFetching={isFetching} />
+          )}
+        </InfiniteScroll>
       </Box>
 
       <EditProfilePopup

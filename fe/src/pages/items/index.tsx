@@ -20,27 +20,23 @@ const ItemsPage = () => {
   return (
     <MainLayout>
       <Box sx={styles.contentContainer}>
+        <Header title={'Все товары'} withBackButton />
         <InfiniteScroll<Item>
           hasMore={isPaid || isAdmin}
           loadHook={itemsApi.useGetItemsQuery}
-          showEndText
+          showEndText={isPaid || isAdmin}
           endText="Вы просмотрели все товары"
+          emptyStateComponent={
+            <Container sx={{ width: '100%', height: '100%' }}>
+              <EmptyState
+                text={'Здесь пока нет товаров'}
+                description={`Будьте первыми. Перейдите в категорию и нажмите "Добавить"`}
+              />
+            </Container>
+          }
         >
-          {({ items, loadHookResult: { isFetching, isSuccess } }) => (
-            <>
-              <Header title={'Все товары'} withBackButton />
-              {isFetching && !items.length && <Spinner />}
-              <ItemCards items={items} isFetching={isFetching} />
-
-              {isSuccess && !isFetching && !items.length && (
-                <Container sx={{ width: '100%', height: '100%' }}>
-                  <EmptyState
-                    text={'Здесь пока нет товаров'}
-                    description={`Будьте первыми. Перейдите в категорию и нажмите "Добавить"`}
-                  />
-                </Container>
-              )}
-            </>
+          {({ items, loadHookResult: { isFetching } }) => (
+            <ItemCards items={items} isFetching={isFetching} />
           )}
         </InfiniteScroll>
       </Box>
