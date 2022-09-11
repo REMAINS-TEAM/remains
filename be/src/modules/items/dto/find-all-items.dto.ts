@@ -29,6 +29,7 @@ export class FindAllItemsDto {
 
   @Type(() => Number)
   @IsArray()
+  @IsOptional()
   @IsNumber({}, { each: true })
   brandIds?: number[];
 }
