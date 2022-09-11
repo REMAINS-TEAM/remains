@@ -17,6 +17,7 @@ export class CategoriesService {
     let categoriesWithCountSub = [];
     let parentCategory: Category | null = null;
     let tree: Category[] = [];
+    let filters: Record<string, any> | null = null;
 
     try {
       if (parentId && Number(parentId) !== 0) {
@@ -28,12 +29,6 @@ export class CategoriesService {
 
       let categories;
       let notEmptyIds: number[] = [];
-      if (onlyNotEmpty) {
-        const notEmpties = await this.prisma.item.findMany({
-          distinct: ['categoryId'],
-        });
-        notEmptyIds = notEmpties.map((item) => item.categoryId);
-      }
 
       categories = await this.prisma.category.findMany({
         where: {
@@ -60,6 +55,21 @@ export class CategoriesService {
       }
 
       if (parentCategory) {
+        //find all brands
+        const itemsWithUniqueBrands = await this.prisma.item.findMany({
+          where: { categoryId: parentCategory.id },
+          distinct: ['brandId'],
+          include: {
+            brand: {
+              select: { id: true, title: true },
+            },
+          },
+        });
+        filters = {
+          brands: itemsWithUniqueBrands.map((item) => item.brand),
+        };
+
+        //make a tree
         tree = [parentCategory];
         let parentId = parentCategory.parentId;
 
@@ -80,7 +90,7 @@ export class CategoriesService {
       throw new PrismaException(err as Error);
     }
 
-    return { list: categoriesWithCountSub, parentCategory, tree };
+    return { list: categoriesWithCountSub, parentCategory, tree, filters };
   }
 
   async findOne(id: number): Promise<Category | null> {

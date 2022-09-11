@@ -53,6 +53,7 @@ model Brand {
   title           String
   description     String      @default("")
   categories      Category[]
+  items           Item[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 }
@@ -75,8 +76,10 @@ model Item {
   userId          Int
   images          String[]
   price           Int
-  category        Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category        Category    @relation(fields: [categoryId], references: [id])
   categoryId      Int
+  brand           Brand?      @relation(fields: [brandId], references: [id])
+  brandId         Int?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 }
