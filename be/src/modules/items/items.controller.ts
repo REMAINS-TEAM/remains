@@ -32,14 +32,14 @@ export class ItemsController {
   @Get()
   @UseGuards(GetIsPaidOrAdminGuard)
   async findAll(
-    @Query() { categoryId, userId, companyId }: FindAllItemsDto,
+    @Query() { categoryId, userId, companyId, brandIds }: FindAllItemsDto,
     @IsPaid() isPaid: boolean,
     @Pagination() { limit, offset }: { limit: number; offset: number },
   ) {
     return this.itemsService.findAll({
       limit,
       offset,
-      filter: { categoryId, userId, companyId },
+      filter: { categoryId, userId, companyId, brandIds },
       isPaid,
     });
   }

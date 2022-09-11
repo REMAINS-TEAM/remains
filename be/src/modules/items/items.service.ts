@@ -25,7 +25,12 @@ export class ItemsService {
   }: {
     limit?: number;
     offset?: number;
-    filter?: { userId?: number; categoryId?: number; companyId?: number };
+    filter?: {
+      userId?: number;
+      categoryId?: number;
+      companyId?: number;
+      brandIds?: number[];
+    };
     isPaid: boolean;
   }) {
     if (!isPaid && filter?.companyId) {
@@ -38,6 +43,7 @@ export class ItemsService {
       userId: filter?.userId,
       categoryId: filter?.categoryId,
       user: { companyId: filter?.companyId },
+      brandId: { in: filter?.brandIds },
     };
 
     const amount = await this.prisma.item.count({ where: whereFilter });

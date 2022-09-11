@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class FindAllItemsDto {
@@ -26,4 +26,9 @@ export class FindAllItemsDto {
   @IsOptional()
   @Type(() => Number)
   companyId?: number;
+
+  @Type(() => Number)
+  @IsArray()
+  @IsNumber({}, { each: true })
+  brandIds?: number[];
 }
