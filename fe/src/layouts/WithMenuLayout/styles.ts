@@ -7,6 +7,7 @@ export const menuWithHeaderContainer = (theme: Theme) => ({
   flex: 'none',
   width: '280px',
   height: `calc(100vh - ${APP_HEADER_HEIGHT}px - ${APP_FOOTER_HEIGHT}px - 48px)`,
+  overflowY: 'auto',
   flexDirection: 'column',
   position: 'fixed',
   zIndex: 1000,
