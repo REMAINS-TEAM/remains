@@ -34,6 +34,11 @@ export class UpdateItemDto {
   @Type(() => Number)
   categoryId?: number;
 
+  @IsNumber()
+  @IsOptional()
+  @Type(() => Number)
+  brandId?: number;
+
   @IsArray()
   @IsOptional()
   deletedImageNames?: string[];

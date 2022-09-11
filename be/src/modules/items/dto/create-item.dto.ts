@@ -1,4 +1,10 @@
-import { IsString, Length, IsPositive, IsNumber } from 'class-validator';
+import {
+  IsString,
+  Length,
+  IsPositive,
+  IsNumber,
+  IsOptional,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateItemDto {
@@ -22,4 +28,9 @@ export class CreateItemDto {
   @IsNumber()
   @Type(() => Number)
   categoryId: number;
+
+  @IsNumber()
+  @IsOptional()
+  @Type(() => Number)
+  brandId?: number;
 }

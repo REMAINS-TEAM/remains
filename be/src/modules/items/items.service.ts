@@ -134,6 +134,7 @@ export class ItemsService {
       description: string;
       price: number;
       categoryId: number;
+      brandId?: number;
     },
     images: Express.Multer.File[],
   ) {
@@ -149,6 +150,7 @@ export class ItemsService {
           description: data.description,
           price: +data.price,
           categoryId: +data.categoryId,
+          brandId: data.brandId ? +data.brandId : null,
           images: [],
           userId,
         },
