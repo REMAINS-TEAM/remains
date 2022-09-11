@@ -11,9 +11,15 @@ const Header = ({
   title,
   left,
   right,
+  sx = {},
 }: HeaderProps) => {
   return (
-    <Box sx={styles.headerContainer}>
+    <Box
+      sx={{
+        ...styles.headerContainer,
+        ...(sx as any),
+      }}
+    >
       <Box sx={styles.column}>
         {withBackButton && <BackButton onClick={onBackButtonClick} />}
         <Typography variant="h1" color="secondary">

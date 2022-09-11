@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux';
 import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 import { Item } from 'store/slices/items';
 import InfiniteScroll from 'components/InfiniteScroll';
-import Spinner from 'components/Spinner';
+import Header from 'components/Header';
 
 function CategoriesPage() {
   const { categoryId } = useParams();
@@ -55,41 +55,57 @@ function CategoriesPage() {
               </EmptyState>
             </Container>
           ) : (
-            <InfiniteScroll<Item>
-              hasMore={isPaid || isAdmin}
-              loadHook={itemsApi.useGetItemsQuery}
-              hookArgs={{ categoryId }}
-              showEndText={isPaid || isAdmin}
-              emptyStateComponent={
-                <Container sx={{ width: '100%', height: '100%' }}>
-                  <EmptyState
-                    text={'Здесь пока нет товаров'}
-                    description={`Выберите подкатегорию или добавьте сюда что-нибудь`}
+            <>
+              <Header
+                sx={{ mt: 1, mb: 2 }}
+                title=""
+                left={<BreadCrumbs data={categories?.tree || []} />}
+                right={
+                  <IconButton
+                    sx={{ p: 0 }}
+                    title="Добавить товар в эту категорию"
+                    onClick={addItemHandler}
                   >
-                    <Button variant={'contained'} onClick={addItemHandler}>
-                      Добавить
-                    </Button>
-                  </EmptyState>
-                </Container>
-              }
-            >
-              {({ items, loadHookResult: { isFetching } }) => (
-                <>
-                  <Box sx={styles.headerContainer}>
-                    <BreadCrumbs data={categories?.tree || []} />
-                    <IconButton
-                      sx={{ p: 0 }}
-                      title="Добавить товар в эту категорию"
-                      onClick={addItemHandler}
+                    <AddIcon />
+                  </IconButton>
+                }
+              />
+              <InfiniteScroll<Item>
+                hasMore={isPaid || isAdmin}
+                loadHook={itemsApi.useGetItemsQuery}
+                hookArgs={{ categoryId }}
+                showEndText={isPaid || isAdmin}
+                emptyStateComponent={
+                  <Container sx={{ width: '100%', height: '100%' }}>
+                    <EmptyState
+                      text={'Здесь пока нет товаров'}
+                      description={`Выберите подкатегорию или добавьте сюда что-нибудь`}
                     >
-                      <AddIcon />
-                    </IconButton>
-                  </Box>
+                      <Button variant={'contained'} onClick={addItemHandler}>
+                        Добавить
+                      </Button>
+                    </EmptyState>
+                  </Container>
+                }
+              >
+                {({ items, loadHookResult: { isFetching } }) => (
+                  <>
+                    {/*<Box sx={styles.headerContainer}>*/}
+                    {/*  <BreadCrumbs data={categories?.tree || []} />*/}
+                    {/*  <IconButton*/}
+                    {/*    sx={{ p: 0 }}*/}
+                    {/*    title="Добавить товар в эту категорию"*/}
+                    {/*    onClick={addItemHandler}*/}
+                    {/*  >*/}
+                    {/*    <AddIcon />*/}
+                    {/*  </IconButton>*/}
+                    {/*</Box>*/}
 
-                  <ItemCards items={items} isFetching={isFetching} />
-                </>
-              )}
-            </InfiniteScroll>
+                    <ItemCards items={items} isFetching={isFetching} />
+                  </>
+                )}
+              </InfiniteScroll>
+            </>
           )}
         </Box>
       </WithMenuLayout>

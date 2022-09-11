@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { SxProps } from '@mui/system';
 
 export interface HeaderProps {
   title: string;
@@ -6,4 +7,5 @@ export interface HeaderProps {
   onBackButtonClick?: () => void;
   left?: ReactNode;
   right?: ReactNode;
+  sx?: SxProps;
 }
