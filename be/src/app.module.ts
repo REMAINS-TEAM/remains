@@ -17,6 +17,7 @@ import { StorageModule } from 'modules/storage/storage.module';
 import { PaymentModule } from 'modules/payment/payment.module';
 import { WebhooksModule } from 'modules/webhooks/webhooks.module';
 import { OrdersModule } from 'modules/orders/orders.module';
+import { BrandsModule } from 'modules/brands/brands.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { OrdersModule } from 'modules/orders/orders.module';
     CompaniesModule,
     CategoriesModule,
     ItemsModule,
+    BrandsModule,
     StorageModule,
     ScheduleModule.forRoot(),
     SchedulerModule,
