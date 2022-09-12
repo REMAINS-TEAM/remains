@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import categoriesApi from 'store/api/categories';
+import React, { useState } from 'react';
 import * as styles from './styles';
 import BackButton from 'components/BackButton';
 import {
@@ -18,42 +17,28 @@ import {
 } from '@mui/material';
 import TreeItem from './units/TreeItem';
 import { CategoriesTreeProps } from './types';
-import { useParams } from 'react-router-dom';
 import { setOpen } from 'store/slices/menu';
 import { useDispatch } from 'react-redux';
 import NotificationPlate from 'components/NotificationPlate';
 import Spinner from 'components/Spinner';
 
-export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
+export default function CategoriesTree({
+  onSelect,
+  data,
+  isFetching,
+}: CategoriesTreeProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const [onlyNotEmpty, setOnlyNotEmpty] = useState(false);
 
-  const { categoryId } = useParams();
-
   const dispatch = useDispatch();
-
-  const [selectedCategoryId, setSelectedCategoryId] = useState(
-    categoryId ? +categoryId : 0,
-  );
-
-  useEffect(() => {
-    setSelectedCategoryId(categoryId ? +categoryId : 0);
-  }, [categoryId]);
-
-  const { data, isFetching } = categoriesApi.useGetAllQuery({
-    parentId: selectedCategoryId,
-  });
 
   const categoryTitle = data?.parentCategory?.title;
 
-  const backClickHandler = () =>
-    setSelectedCategoryId(data?.parentCategory?.parentId || 0);
-
-  useEffect(() => {
-    if (onSelect && data) onSelect(data.tree);
-  }, [data]);
+  const backClickHandler = () => {
+    if (onSelect) onSelect(data?.parentCategory?.parentId || 0);
+  };
 
   const hideMobileMenu = () => dispatch(setOpen(false));
 
@@ -108,7 +93,9 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
                 <TreeItem
                   key={category.id}
                   title={category.title}
-                  onClick={() => setSelectedCategoryId(category.id)}
+                  onClick={() => {
+                    if (onSelect) onSelect(category.id);
+                  }}
                   count={{
                     subCategories: category._count.subCategories,
                     items: category._count.items,
@@ -123,8 +110,7 @@ export default function CategoriesTree({ onSelect }: CategoriesTreeProps) {
             </Typography>
           )}
           {isMobile &&
-            categoryId &&
-            +categoryId !== 0 &&
+            data?.parentCategory?.id === 0 &&
             !!data?.parentCategory?._count.items && (
               <NotificationPlate
                 title="Закройте меню, чтобы увидеть товары"

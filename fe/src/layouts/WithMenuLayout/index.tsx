@@ -1,14 +1,22 @@
 import React, { ReactNode, useEffect } from 'react';
 import * as styles from './styles';
-import { Box, useMediaQuery, useTheme } from '@mui/material';
+import {
+  Box,
+  Divider,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import CategoriesTree from 'components/CategoriesTree';
 import { Category } from 'store/slices/categories';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import routes from 'routes';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMenuState } from 'store/selectors/menu';
 import { setShowBurger } from 'store/slices/menu';
 import { AppDispatch } from 'store';
+import CategoryFilters from 'components/CategoryFilters';
+import categoriesApi from 'store/api/categories';
 
 const WithMenuLayout = ({ children }: { children: ReactNode }) => {
   const dispatch: AppDispatch = useDispatch();
@@ -18,15 +26,18 @@ const WithMenuLayout = ({ children }: { children: ReactNode }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const navigate = useNavigate();
+  const { categoryId } = useParams();
 
-  const onSelectCategoryHandler = (tree: Category[]) => {
-    if (!tree.length || tree[tree.length - 1]?.id === 0) {
-      return navigate(routes.main);
-    }
+  const { data, isFetching } = categoriesApi.useGetAllQuery({
+    parentId: +(categoryId || 0),
+  });
+
+  const onSelectCategoryHandler = (categoryId: number) => {
+    if (categoryId === 0) return navigate(routes.main);
 
     navigate(
       generatePath(routes.category, {
-        categoryId: String(tree[tree.length - 1].id),
+        categoryId: String(categoryId),
       }),
     );
   };
@@ -42,7 +53,17 @@ const WithMenuLayout = ({ children }: { children: ReactNode }) => {
     <>
       {menu.open && (
         <Box sx={styles.menuWithHeaderContainer}>
-          <CategoriesTree onSelect={onSelectCategoryHandler} />
+          <CategoriesTree
+            onSelect={onSelectCategoryHandler}
+            data={data}
+            isFetching={isFetching}
+          />
+          {categoryId && (
+            <CategoryFilters
+              categoryId={+categoryId}
+              filters={{ brands: [{ id: 1 }] }}
+            />
+          )}
         </Box>
       )}
       {!(menu.open && isMobile) && (

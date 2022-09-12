@@ -26,6 +26,7 @@ export const headerTitle = {
 export const listContainer: SxProps = {
   p: 0,
   pl: 1,
+  pb: 2,
   m: 0,
   mt: 1,
 };
