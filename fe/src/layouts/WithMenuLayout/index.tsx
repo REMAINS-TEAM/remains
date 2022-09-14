@@ -52,7 +52,10 @@ const WithMenuLayout = ({ children }: { children: ReactNode }) => {
             isFetching={isFetching}
           />
           {categoryId && !isFetching && data?.filters && (
-            <CategoryFilters categoryId={+categoryId} filters={data.filters} />
+            <CategoryFilters
+              categoryId={+categoryId}
+              filterOptions={data.filters}
+            />
           )}
         </Box>
       )}

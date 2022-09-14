@@ -16,12 +16,12 @@ const FilterListItem = ({
 }: {
   id: number;
   title: string;
-  onChange?: () => void;
+  onChange: (id: number) => void;
   checked?: boolean;
 }) => {
   return (
     <ListItem key={id} disablePadding>
-      <ListItemButton onClick={() => null} sx={{ p: 0.4, pl: 4 }}>
+      <ListItemButton onClick={() => onChange(id)} sx={{ p: 0.4, pl: 4 }}>
         <ListItemIcon sx={{ minWidth: 20 }}>
           <Checkbox
             sx={{ p: 0 }}
