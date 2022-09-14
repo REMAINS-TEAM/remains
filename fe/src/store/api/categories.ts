@@ -3,10 +3,19 @@ import { Category } from '../slices/categories';
 import { getQueryString } from 'utils';
 import { Company } from 'store/slices/user';
 
+export interface ICategoryFilters {
+  brands: { id: number; title: string }[] | null;
+}
+
 export const categoriesApi = api.injectEndpoints({
   endpoints: (build) => ({
     getAll: build.query<
-      { list: Category[]; parentCategory: Category | null; tree: Category[] },
+      {
+        list: Category[];
+        parentCategory: Category | null;
+        tree: Category[];
+        filters: ICategoryFilters;
+      },
       Record<string, string | number | undefined> | void
     >({
       query: (params) => apiTypes.CATEGORIES + getQueryString(params),

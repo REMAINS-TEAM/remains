@@ -1,23 +1,22 @@
 import React from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import * as styles from './styles';
 import BrandsFilter from 'components/CategoryFilters/BrandsFilter';
+import { ICategoryFilters } from 'store/api/categories';
 
 const CategoryFilters = ({
   categoryId,
   filters,
 }: {
   categoryId: number;
-  filters: any;
+  filters: ICategoryFilters;
 }) => {
-  const isNotEmpty = Object.values(filters).some(
-    (filter) => (filter as any)?.length,
-  );
+  const isNotEmpty = Object.values(filters).some((filter) => filter?.length);
 
   return (
     <>
       <Box sx={styles.container}>
-        {filters.brands?.length && <BrandsFilter />}
+        <BrandsFilter brands={filters.brands} />
         {isNotEmpty && (
           <Button variant="outlined" sx={{ mt: 1 }}>
             Применить фильтры

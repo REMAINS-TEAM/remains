@@ -65,8 +65,12 @@ export class CategoriesService {
             },
           },
         });
+
         filters = {
-          brands: itemsWithUniqueBrands.map((item) => item.brand),
+          brands: itemsWithUniqueBrands.reduce(
+            (acc, item) => (item.brand ? [...acc, item.brand] : acc),
+            [] as { id: number; title: string }[],
+          ),
         };
 
         //make a tree

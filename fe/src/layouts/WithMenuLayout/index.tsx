@@ -1,14 +1,7 @@
 import React, { ReactNode, useEffect } from 'react';
 import * as styles from './styles';
-import {
-  Box,
-  Divider,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
 import CategoriesTree from 'components/CategoriesTree';
-import { Category } from 'store/slices/categories';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import routes from 'routes';
 import { useDispatch, useSelector } from 'react-redux';
@@ -58,11 +51,8 @@ const WithMenuLayout = ({ children }: { children: ReactNode }) => {
             data={data}
             isFetching={isFetching}
           />
-          {categoryId && (
-            <CategoryFilters
-              categoryId={+categoryId}
-              filters={{ brands: [{ id: 1 }] }}
-            />
+          {categoryId && !isFetching && data?.filters && (
+            <CategoryFilters categoryId={+categoryId} filters={data.filters} />
           )}
         </Box>
       )}

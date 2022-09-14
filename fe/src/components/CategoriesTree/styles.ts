@@ -21,11 +21,12 @@ export const headerTitle = {
   display: 'flex',
   alignItems: 'center',
   columnGap: 1,
+  pl: 1.5,
 };
 
 export const listContainer: SxProps = {
   p: 0,
-  pl: 1,
+  pl: 2.5,
   pb: 2,
   m: 0,
   mt: 1,
