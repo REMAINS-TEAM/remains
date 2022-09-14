@@ -14,7 +14,7 @@ export const header: SxProps<Theme> = {
   pl: 2.5,
   display: 'flex',
   alignItems: 'center',
-  columnGap: 2,
+  columnGap: 1,
 };
 
 export const list: SxProps<Theme> = {

@@ -8,19 +8,19 @@ import {
 } from '@mui/material';
 import * as styles from './styles';
 
-const BrandItem = ({
+const FilterListItem = ({
   id,
   title,
   onChange,
   checked,
 }: {
-  id?: number;
+  id: number;
   title: string;
   onChange?: () => void;
   checked?: boolean;
 }) => {
   return (
-    <ListItem key={id || 0} disablePadding>
+    <ListItem key={id} disablePadding>
       <ListItemButton onClick={() => null} sx={{ p: 0.4, pl: 4 }}>
         <ListItemIcon sx={{ minWidth: 20 }}>
           <Checkbox
@@ -42,4 +42,4 @@ const BrandItem = ({
   );
 };
 
-export default BrandItem;
+export default FilterListItem;

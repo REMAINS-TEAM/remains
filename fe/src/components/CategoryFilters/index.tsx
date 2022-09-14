@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
 import * as styles from './styles';
-import BrandsFilter from 'components/CategoryFilters/BrandsFilter';
+import Filter from 'components/CategoryFilters/Filter';
 import { ICategoryFilters } from 'store/api/categories';
 
 const CategoryFilters = ({
@@ -16,7 +16,7 @@ const CategoryFilters = ({
   return (
     <>
       <Box sx={styles.container}>
-        <BrandsFilter brands={filters.brands} />
+        <Filter items={filters.brands} />
         {isNotEmpty && (
           <Button variant="outlined" sx={{ mt: 1 }}>
             Применить фильтры
