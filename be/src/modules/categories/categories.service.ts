@@ -73,6 +73,11 @@ export class CategoriesService {
           ),
         };
 
+        //add to end
+        if (!!itemsWithUniqueBrands.find(({ brand }) => !brand)) {
+          filters.brands.push({ id: -1, title: 'Не указан' });
+        }
+
         //make a tree
         tree = [parentCategory];
         let parentId = parentCategory.parentId;

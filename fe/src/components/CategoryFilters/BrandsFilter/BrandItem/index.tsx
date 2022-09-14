@@ -20,7 +20,7 @@ const BrandItem = ({
   checked?: boolean;
 }) => {
   return (
-    <ListItem key={id || -1} disablePadding>
+    <ListItem key={id || 0} disablePadding>
       <ListItemButton onClick={() => null} sx={{ p: 0.4, pl: 4 }}>
         <ListItemIcon sx={{ minWidth: 20 }}>
           <Checkbox
