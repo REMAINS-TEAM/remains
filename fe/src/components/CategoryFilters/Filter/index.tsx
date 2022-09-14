@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Checkbox, Divider, List, Typography } from '@mui/material';
+import { Box, Checkbox, Divider, FormControlLabel, List } from '@mui/material';
 import * as styles from './styles';
 import FilterListItem from './FilterListItem';
 
@@ -45,17 +45,17 @@ const Filter = ({
   return (
     <Box sx={styles.container}>
       <Box sx={styles.header}>
-        <Checkbox
-          sx={{ p: 0, pl: 1.5, pr: 1 }}
-          edge="start"
-          checked={isAllSelected}
-          onChange={selectAllHandler}
-          tabIndex={-1}
-          disableRipple
+        <FormControlLabel
+          label={title}
+          control={
+            <Checkbox
+              sx={{ p: 0, pl: 1.4, pr: 2 }}
+              checked={isAllSelected}
+              indeterminate={!!selectedIds.length && !isAllSelected}
+              onChange={selectAllHandler}
+            />
+          }
         />
-        <Typography variant="h3" color="secondary">
-          {title}
-        </Typography>
       </Box>
       <Divider />
       <List sx={styles.list}>
