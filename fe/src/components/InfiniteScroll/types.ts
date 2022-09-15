@@ -1,5 +1,9 @@
 import { ReactNode } from 'react';
-import { LoadHook } from 'hooks/useInfinityScroll';
+import { UseQuery } from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import { QueryDefinition } from '@reduxjs/toolkit/query';
+export type LoadHook<ResultType> = UseQuery<
+  QueryDefinition<{ limit: number; offset: number }, any, any, any>
+>;
 
 interface ChildrenFunctionArgs<T> {
   items: T[];

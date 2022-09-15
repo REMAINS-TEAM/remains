@@ -7,6 +7,8 @@ import NotificationPlate from 'components/NotificationPlate';
 import userApi from 'store/api/user';
 import { useSelector } from 'react-redux';
 import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
+import Container from 'components/Container';
+import EmptyState from 'components/EmptyState';
 
 interface Props {
   items?: Item[];
@@ -30,6 +32,15 @@ const ItemCards = forwardRef<HTMLDivElement, Props>(
             <ItemCard key={item.id} item={item} />
           ))}
         </Box>
+
+        {!isFetching && items && items.length === 0 && (
+          <Container sx={{ width: '100%', height: '100%' }}>
+            <EmptyState
+              text={'Здесь пока нет товаров'}
+              description={`Будьте первыми. Перейдите в категорию и нажмите "Добавить"`}
+            />
+          </Container>
+        )}
 
         {!hidePayNotification &&
           isGetUserFinished &&
