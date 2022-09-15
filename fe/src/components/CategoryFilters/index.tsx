@@ -28,12 +28,13 @@ const CategoryFilters = ({
     <>
       <Box sx={styles.container}>
         <Filter
-          title="Брэнд"
+          title="Производитель"
           options={filterOptions.brands}
           onChange={(ids) => changeFilter('brandIds', ids)}
         />
+
         {isNotEmpty && (
-          <Button variant="outlined" sx={{ mt: 1 }}>
+          <Button variant="outlined" sx={{ mt: 2 }}>
             Применить фильтры
           </Button>
         )}

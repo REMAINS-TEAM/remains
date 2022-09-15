@@ -6,6 +6,7 @@ export const container = {
   flexDirection: 'column',
   bgcolor: 'background.paper',
   borderRadius: 1,
+  boxShadow: '0 1px 2px #ccc',
   color: (theme: Theme) => theme.palette.grey[700],
 };
 
