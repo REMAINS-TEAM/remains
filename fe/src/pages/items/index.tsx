@@ -17,10 +17,11 @@ const ItemsPage = () => {
   const isPaid = useSelector(getPaidStatus);
   const isAdmin = useSelector(getIsAdmin);
 
-  const [offset, setOffset] = useState(0);
+  const [page, setPage] = useState(1);
+
   const { data, isFetching } = itemsApi.useGetItemsQuery({
     limit: ITEMS_PER_PAGE,
-    offset,
+    offset: (page - 1) * ITEMS_PER_PAGE,
   });
 
   const pagesCount = Math.ceil((data?.amount || 0) / ITEMS_PER_PAGE);
@@ -30,17 +31,16 @@ const ItemsPage = () => {
     data.amount <= ITEMS_PER_PAGE ||
     (!isPaid && !isAdmin);
 
-  const changePage = (page: number) => setOffset((page - 1) * ITEMS_PER_PAGE);
-
   return (
     <MainLayout ref={layoutRef}>
       <Box sx={styles.contentContainer}>
         <Header title="Все товары" withBackButton />
         <WithPaginationLayout
+          page={page}
+          setPage={setPage}
           count={pagesCount}
           hidden={isHiddenPagination}
           scrollContainerRef={layoutRef}
-          onChangePage={changePage}
         >
           <ItemCards
             items={data?.list}

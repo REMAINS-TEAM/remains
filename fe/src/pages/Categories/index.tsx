@@ -39,9 +39,10 @@ function CategoriesPage() {
   });
 
   const [loadArgs, setLoadArgs] = useState<GetAllItemsArgs>();
+  const [page, setPage] = useState(1);
 
   const { data, isFetching } = itemsApi.useGetItemsQuery(loadArgs, {
-    skip: !loadArgs,
+    skip: !loadArgs || !categoryId,
   });
 
   useEffect(() => {
@@ -55,18 +56,20 @@ function CategoriesPage() {
   }, [categoryId]);
 
   const pagesCount = Math.ceil((data?.amount || 0) / ITEMS_PER_PAGE);
+
   const isHiddenPagination =
     isFetching ||
     !data ||
     data.amount <= ITEMS_PER_PAGE ||
     (!isPaid && !isAdmin);
 
-  const changePage = (page: number) =>
+  useEffect(() => {
     setLoadArgs((prev) => ({
       ...prev,
       limit: ITEMS_PER_PAGE,
       offset: (page - 1) * ITEMS_PER_PAGE,
     }));
+  }, [page]);
 
   const addItemHandler = () => setAddEditItemPopupOpen(true);
   const showAllHandler = () => navigate(routes.items);
@@ -103,10 +106,11 @@ function CategoriesPage() {
                 }
               />
               <WithPaginationLayout
+                page={page}
+                setPage={setPage}
                 count={pagesCount}
                 hidden={isHiddenPagination}
                 scrollContainerRef={layoutRef}
-                onChangePage={changePage}
               >
                 <ItemCards
                   items={data?.list}
@@ -138,7 +142,7 @@ function CategoriesPage() {
         open={addItemPopupOpen}
         setOpen={setAddEditItemPopupOpen}
         category={categories?.tree[categories.tree.length - 1] || null}
-        // onAdd={() => setOffset(0)} //TODOs
+        onAdd={() => setPage(1)}
       />
     </MainLayout>
   );

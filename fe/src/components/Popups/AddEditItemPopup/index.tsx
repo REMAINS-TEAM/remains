@@ -71,7 +71,7 @@ function AddEditItemPopup({
     if (updateItemResult?.status === QueryStatus.fulfilled && onEdit) {
       onEdit(updateItemResult.data);
     }
-  }, [createItemResult, updateItemResult, onAdd, onEdit]);
+  }, [createItemResult, updateItemResult]);
 
   const {
     control,

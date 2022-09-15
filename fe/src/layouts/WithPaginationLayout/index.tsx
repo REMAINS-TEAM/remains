@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Pagination } from '@mui/material';
 import { WithPaginationLayoutProps } from './types';
 
 const WithPaginationLayout: React.FC<WithPaginationLayoutProps> = ({
   children,
+  page,
+  setPage,
   count,
   scrollContainerRef,
   hidden,
-  onChangePage,
 }) => {
-  const [page, setPage] = useState(1);
-
   const onChangePageHandler = (
     e: React.ChangeEvent<unknown>,
     pageNumber: number,
@@ -18,10 +17,6 @@ const WithPaginationLayout: React.FC<WithPaginationLayoutProps> = ({
     scrollContainerRef?.current?.scrollTo({ top: 0, behavior: 'smooth' });
     setPage(pageNumber);
   };
-
-  useEffect(() => {
-    if (onChangePage) onChangePage(page);
-  }, [page]);
 
   return (
     <>
