@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import MainLayout from 'layouts/MainLayout';
 import WithMenuLayout from 'layouts/WithMenuLayout';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,7 +9,7 @@ import {
   IconButton,
   SpeedDialIcon as AddIcon,
 } from '@mui/material';
-import itemsApi, { GetAllItemsArgs } from 'store/api/items';
+import itemsApi, { GetAllItemsArgs, ItemFilters } from 'store/api/items';
 import ItemCards from 'pages/Categories/units/ItemCards';
 import EmptyState from 'components/EmptyState';
 import AddEditItemPopup from 'components/Popups/AddEditItemPopup';
@@ -22,11 +22,14 @@ import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 import Header from 'components/Header';
 import { ITEMS_PER_PAGE } from 'global/constants';
 import WithPaginationLayout from 'layouts/WithPaginationLayout';
+import useRouterQuery from 'hooks/useRouterQuery';
 
 function CategoriesPage() {
   const layoutRef = useRef<HTMLDivElement | null>(null);
 
   const { categoryId } = useParams();
+  const queryParams = useRouterQuery();
+
   const [addItemPopupOpen, setAddEditItemPopupOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -45,16 +48,25 @@ function CategoriesPage() {
     skip: !loadArgs || !categoryId,
   });
 
-  // Change offset when categoryId is changed (reset to 0)
+  const filters: ItemFilters = useMemo(
+    () => ({
+      categoryId: categoryId ? +categoryId : undefined,
+      brandIds: queryParams.get('brandIds')
+        ? queryParams.get('brandIds')?.split(',').map(Number)
+        : undefined,
+    }),
+    [categoryId, queryParams],
+  );
+
+  // Change offset when filter is changed (reset to 0)
   useEffect(() => {
-    if (!categoryId) return;
     setLoadArgs((prev) => ({
       ...prev,
       limit: ITEMS_PER_PAGE,
       offset: 0,
-      categoryId: +categoryId,
+      ...filters,
     }));
-  }, [categoryId]);
+  }, [filters]);
 
   // Change offset when page is changed
   useEffect(() => {

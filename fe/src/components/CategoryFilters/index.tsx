@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import * as styles from './styles';
-import Filter from 'components/CategoryFilters/Filter';
+import Filter from './Filter';
 import { CategoryFiltersProps, FilterValues } from './types';
+import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 const CategoryFilters = ({
   categoryId,
   filterOptions,
 }: CategoryFiltersProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [filters, setFilters] = useState<FilterValues | null>(null);
 
   const isNotEmpty = Object.values(filterOptions).some(
@@ -18,11 +23,15 @@ const CategoryFilters = ({
     setFilters((prev) => ({ ...prev, [name]: ids }));
   };
 
-  useEffect(() => {
-    // console.log('Тут вызываем функцию из пропсов');
-    // показывать ошибку если не выбран ин один бренд
-    console.log('filters', filters);
-  }, [filters]);
+  // TODO: показывать ошибку если не выбран ин один бренд
+
+  const applyFilters = () => {
+    const query = {
+      ...(filters?.brandIds.length && { brandIds: filters.brandIds.join(',') }),
+    };
+
+    navigate(`${location.pathname}?${new URLSearchParams(query)}`);
+  };
 
   if (!isNotEmpty) return null;
 
@@ -42,7 +51,7 @@ const CategoryFilters = ({
           onChange={(ids) => changeFilter('brandIds', ids)}
         />
 
-        <Button variant="contained" sx={{ mt: 2 }}>
+        <Button variant="contained" onClick={applyFilters} sx={{ mt: 2 }}>
           Применить фильтры
         </Button>
       </Box>

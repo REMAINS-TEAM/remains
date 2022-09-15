@@ -5,14 +5,16 @@ export const getQueryString = (
   obj: Record<string, any> | undefined | void,
 ): string => {
   if (!obj) return '';
+
   const queryString = Object.entries(obj)
     .filter(([_, value]) => value !== undefined)
-    .map(
-      ([key, value]) =>
-        `${encodeURIComponent(key)}=${encodeURIComponent(
-          value as string | number,
-        )}`,
-    )
+    .map(([key, value]) => {
+      if (Array.isArray(value))
+        return value
+          .map((v) => `${encodeURIComponent(key)}[]=${encodeURIComponent(v)}`)
+          .join('&');
+      return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+    })
     .join('&');
   return queryString ? `?${queryString}` : '';
 };
