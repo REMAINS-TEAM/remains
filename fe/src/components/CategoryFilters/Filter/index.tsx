@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Checkbox, Divider, FormControlLabel, List } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  Divider,
+  FormControlLabel,
+  List,
+  Typography,
+} from '@mui/material';
 import * as styles from './styles';
 import FilterListItem from './FilterListItem';
 
@@ -46,7 +53,7 @@ const Filter = ({
     <Box sx={styles.container}>
       <Box sx={styles.header}>
         <FormControlLabel
-          label={title}
+          label={<Typography variant="subtitle2">{title + ':'}</Typography>}
           control={
             <Checkbox
               sx={{ p: 0, pl: 1.4, pr: 2 }}

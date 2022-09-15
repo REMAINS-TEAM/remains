@@ -1,4 +1,4 @@
-import React, { forwardRef, ReactNode, useEffect } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import * as styles from './styles';
 import { Box } from '@mui/material';
 import { LS_KEY_DEMO, LS_KEY_TOKEN } from 'global/constants';

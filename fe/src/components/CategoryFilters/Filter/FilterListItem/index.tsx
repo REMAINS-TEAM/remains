@@ -21,7 +21,7 @@ const FilterListItem = ({
 }) => {
   return (
     <ListItem key={id} disablePadding>
-      <ListItemButton onClick={() => onChange(id)} sx={{ p: 0.4, pl: 4 }}>
+      <ListItemButton onClick={() => onChange(id)} sx={{ p: 0.2, pl: 4 }}>
         <ListItemIcon sx={{ minWidth: 20 }}>
           <Checkbox
             sx={{ p: 0 }}
@@ -35,7 +35,11 @@ const FilterListItem = ({
           id={`brand-${id}`}
           sx={{ pr: 2, pl: 1 }}
           primaryTypographyProps={{ sx: styles.itemText }}
-          primary={title}
+          primary={
+            <>
+              <span>{title}</span>
+            </>
+          }
         />
       </ListItemButton>
     </ListItem>

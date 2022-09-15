@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import * as styles from './styles';
 import Filter from 'components/CategoryFilters/Filter';
 import { CategoryFiltersProps, FilterValues } from './types';
@@ -24,22 +24,29 @@ const CategoryFilters = ({
     console.log('filters', filters);
   }, [filters]);
 
+  if (!isNotEmpty) return null;
+
   return (
-    <>
+    <Box sx={{ mt: 3 }}>
+      {/*<Typography*/}
+      {/*  variant="subtitle2"*/}
+      {/*  color="secondary"*/}
+      {/*  sx={{ pl: 2.5, fontWeight: 600, mb: 1 }}*/}
+      {/*>*/}
+      {/*  Фильтры:*/}
+      {/*</Typography>*/}
       <Box sx={styles.container}>
         <Filter
-          title="Производитель"
+          title="Брэнды"
           options={filterOptions.brands}
           onChange={(ids) => changeFilter('brandIds', ids)}
         />
 
-        {isNotEmpty && (
-          <Button variant="outlined" sx={{ mt: 2 }}>
-            Применить фильтры
-          </Button>
-        )}
+        <Button variant="contained" sx={{ mt: 2 }}>
+          Применить фильтры
+        </Button>
       </Box>
-    </>
+    </Box>
   );
 };
 

@@ -11,7 +11,7 @@ export const container = {
 };
 
 export const header: SxProps<Theme> = {
-  p: 2,
+  p: 1,
   pl: 2.5,
   display: 'flex',
   alignItems: 'center',

@@ -78,10 +78,11 @@ function ItemCard({ item }: { item: Item }) {
             <Box sx={styles.rightSide}>
               <Box>
                 <Typography
-                  variant="h5"
+                  variant="h2"
+                  component="div"
                   sx={{
                     fontFamily: 'inherit',
-                    lineHeight: 0.5,
+                    lineHeight: 1,
                     whiteSpace: 'nowrap',
                   }}
                 >
