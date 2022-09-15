@@ -5,6 +5,7 @@ import { deleteById } from 'store/slices/items';
 
 export interface ItemFilters {
   categoryId?: number;
+  userId?: number;
   brandIds?: number[];
 }
 
