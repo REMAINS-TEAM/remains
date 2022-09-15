@@ -1,28 +1,17 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import MainLayout from 'layouts/MainLayout';
 import Header from 'components/Header';
-import { standardFormat } from 'utils';
-import companiesApi from 'store/api/companies';
-import {
-  Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
-} from '@mui/material';
-import ItemCards from 'pages/Categories/units/ItemCards';
+import { Box, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
-import itemsApi from 'store/api/items';
 import userApi from 'store/api/user';
-import Spinner from 'components/Spinner';
-import InfiniteScroll from 'components/InfiniteScroll';
-import { Item } from 'store/slices/items';
+import CompanyItems from './CompanyItems';
+import CompanyInfo from './CompanyInfo';
 
 const CompanyPage = () => {
+  const layoutRef = useRef<HTMLDivElement | null>(null);
+
   const { companyId } = useParams();
 
   const { isSuccess: isUserSuccess, isError: isUserError } =
@@ -32,72 +21,17 @@ const CompanyPage = () => {
   const isPaid = useSelector(getPaidStatus);
   const isAdmin = useSelector(getIsAdmin);
 
-  const { data: company, isFetching: isCompanyFetching } =
-    companiesApi.useGetCompanyByIdQuery(+(companyId || 0), {
-      skip: !companyId,
-    });
-
-  const rows = company
-    ? [
-        { title: 'Название:', value: company.name },
-        { title: 'Описание', value: company.description },
-        {
-          title: 'Дата регистрации на сайте',
-          value: standardFormat(company.createdAt),
-        },
-      ]
-    : [];
-
   return (
-    <MainLayout>
+    <MainLayout ref={layoutRef}>
       <Box width="100%">
         <Header title="Информация о компании" withBackButton />
-        <Paper sx={{ p: 2, mb: 6 }}>
-          {isCompanyFetching && <Spinner />}
-          <Table sx={{ maxWidth: 500 }}>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.title}>
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    sx={{ fontWeight: 600 }}
-                  >
-                    {row.title}:
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography variant="inherit" color={'secondary'}>
-                      {row.value || 'Не указано'}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              ))}
-              <br />
-            </TableBody>
-          </Table>
-        </Paper>
+        {companyId && <CompanyInfo companyId={+companyId} />}
 
         <Header title="Предложения компании" />
-
-        {isGetUserFinished && (isPaid || isAdmin) && (
-          <InfiniteScroll<Item>
-            hasMore={true}
-            loadHook={itemsApi.useGetItemsQuery}
-            hookArgs={{ companyId }}
-            showEndText
-            endText="Пока это все предложения данной компании"
-            emptyStateComponent={
-              <Typography variant="inherit" color={'secondary'}>
-                <p>Компания пока ничего не выкладывала.</p>
-                <p>Следите за обновлениями.</p>
-              </Typography>
-            }
-          >
-            {({ items, loadHookResult: { isFetching } }) => (
-              <ItemCards items={items} isFetching={isFetching} />
-            )}
-          </InfiniteScroll>
+        {isGetUserFinished && (isPaid || isAdmin) && companyId && (
+          <CompanyItems companyId={+companyId} layoutRef={layoutRef} />
         )}
+
         {isGetUserFinished && !isPaid && !isAdmin && (
           <Typography variant="inherit" color={'secondary'}>
             <p>Не доступно.</p>

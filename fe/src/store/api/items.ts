@@ -7,6 +7,7 @@ export interface ItemFilters {
   categoryId?: number;
   userId?: number;
   brandIds?: number[];
+  companyId?: number;
 }
 
 export type GetAllItemsArgs =
