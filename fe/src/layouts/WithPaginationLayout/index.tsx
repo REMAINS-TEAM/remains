@@ -23,8 +23,10 @@ const WithPaginationLayout: React.FC<WithPaginationLayoutProps> = ({
       {children}
       {!hidden && (
         <Pagination
+          size="large"
           sx={{
-            mt: 1,
+            pt: 2,
+            pb: 3,
             width: '100%',
             display: 'flex',
             justifyContent: 'center',

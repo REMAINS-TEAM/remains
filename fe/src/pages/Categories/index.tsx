@@ -45,6 +45,7 @@ function CategoriesPage() {
     skip: !loadArgs || !categoryId,
   });
 
+  // Change offset when categoryId is changed (reset to 0)
   useEffect(() => {
     if (!categoryId) return;
     setLoadArgs((prev) => ({
@@ -55,14 +56,7 @@ function CategoriesPage() {
     }));
   }, [categoryId]);
 
-  const pagesCount = Math.ceil((data?.amount || 0) / ITEMS_PER_PAGE);
-
-  const isHiddenPagination =
-    isFetching ||
-    !data ||
-    data.amount <= ITEMS_PER_PAGE ||
-    (!isPaid && !isAdmin);
-
+  // Change offset when page is changed
   useEffect(() => {
     setLoadArgs((prev) => ({
       ...prev,
@@ -70,6 +64,14 @@ function CategoriesPage() {
       offset: (page - 1) * ITEMS_PER_PAGE,
     }));
   }, [page]);
+
+  const pagesCount = Math.ceil((data?.amount || 0) / ITEMS_PER_PAGE);
+
+  const isHiddenPagination =
+    isFetching ||
+    !data ||
+    data.amount <= ITEMS_PER_PAGE ||
+    (!isPaid && !isAdmin);
 
   const addItemHandler = () => setAddEditItemPopupOpen(true);
   const showAllHandler = () => navigate(routes.items);
