@@ -18,6 +18,7 @@ import {
 import { useSelector } from 'react-redux';
 import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 import NotificationPlate from 'components/NotificationPlate';
+import { QueryStatus } from '@reduxjs/toolkit/query';
 
 const fields = {
   TITLE: 'title',
@@ -32,6 +33,8 @@ function AddEditItemPopup({
   setOpen,
   category,
   itemId,
+  onAdd,
+  onEdit,
 }: AddEditItemPopupProps) {
   const isPaid = useSelector(getPaidStatus);
   const isAdmin = useSelector(getIsAdmin);
@@ -59,6 +62,16 @@ function AddEditItemPopup({
       !itemId ? 'добавлении' : 'редактировании'
     } товара`,
   });
+
+  useEffect(() => {
+    if (createItemResult?.status === QueryStatus.fulfilled && onAdd) {
+      onAdd(createItemResult.data);
+    }
+
+    if (updateItemResult?.status === QueryStatus.fulfilled && onEdit) {
+      onEdit(updateItemResult.data);
+    }
+  }, [createItemResult, updateItemResult, onAdd, onEdit]);
 
   const {
     control,

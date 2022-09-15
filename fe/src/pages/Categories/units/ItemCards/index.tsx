@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, ReactNode } from 'react';
 import { Item } from 'store/slices/items';
 import ItemCard from 'components/ItemCard';
 import { Box } from '@mui/material';
@@ -15,10 +15,11 @@ interface Props {
   items?: Item[];
   isFetching?: boolean;
   hidePayNotification?: boolean;
+  emptyState?: ReactNode;
 }
 
 const ItemCards = forwardRef<HTMLDivElement, Props>(
-  ({ items = [], isFetching, hidePayNotification }, ref) => {
+  ({ items = [], isFetching, hidePayNotification, emptyState }, ref) => {
     const { isSuccess: isUserSuccess, isError: isUserError } =
       userApi.useMeQuery();
     const isGetUserFinished = isUserSuccess || isUserError;
@@ -38,10 +39,12 @@ const ItemCards = forwardRef<HTMLDivElement, Props>(
 
         {!isFetching && items && items.length === 0 && (
           <Container sx={{ width: '100%', height: '100%' }}>
-            <EmptyState
-              text={'Здесь пока нет товаров'}
-              description={`Будьте первыми. Перейдите в категорию и нажмите "Добавить"`}
-            />
+            {emptyState || (
+              <EmptyState
+                text={'Здесь пока пусто'}
+                description="Следите за обновлениями"
+              />
+            )}
           </Container>
         )}
 

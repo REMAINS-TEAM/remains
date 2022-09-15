@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 export const getQueryString = (
-  obj: Record<string, string | number | undefined | void> | undefined | void,
+  obj: Record<string, any> | undefined | void,
 ): string => {
   if (!obj) return '';
   const queryString = Object.entries(obj)

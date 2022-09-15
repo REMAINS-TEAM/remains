@@ -3,11 +3,20 @@ import { Item } from '../slices/items';
 import { getQueryString } from 'utils';
 import { deleteById } from 'store/slices/items';
 
+export interface ItemFilters {
+  categoryId?: number;
+  brandIds?: number[];
+}
+
+export type GetAllItemsArgs =
+  | ({ limit: number; offset: number } & ItemFilters)
+  | undefined;
+
 export const itemsApi = api.injectEndpoints({
   endpoints: (build) => ({
     getItems: build.query<
       { list: Item[]; offset: number; isOver: boolean; amount: number },
-      Record<string, string | number | undefined> | void
+      GetAllItemsArgs
     >({
       query: (params) => `items` + getQueryString(params),
       providesTags: (result, error, arg) =>
