@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import MainLayout from 'layouts/MainLayout';
 import * as styles from './styles';
 import { Box, Pagination } from '@mui/material';
@@ -11,6 +11,8 @@ import Header from 'components/Header';
 const LIMIT = 5;
 
 const ItemsPage = () => {
+  const layoutRef = useRef<HTMLDivElement | null>(null);
+
   const isPaid = useSelector(getPaidStatus);
   const isAdmin = useSelector(getIsAdmin);
 
@@ -20,10 +22,13 @@ const ItemsPage = () => {
     offset: (page - 1) * LIMIT,
   });
 
-  const changePage = (e: React.ChangeEvent<unknown>, p: number) => setPage(p);
+  const changePage = (e: React.ChangeEvent<unknown>, pageNumber: number) => {
+    layoutRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    setPage(pageNumber);
+  };
 
   return (
-    <MainLayout>
+    <MainLayout ref={layoutRef}>
       <Box sx={styles.contentContainer}>
         <Header title={'Все товары'} withBackButton />
         <ItemCards items={data?.list} isFetching={isFetching} />

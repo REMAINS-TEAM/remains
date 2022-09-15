@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 import Container from 'components/Container';
 import EmptyState from 'components/EmptyState';
+import Spinner from 'components/Spinner';
 
 interface Props {
   items?: Item[];
@@ -24,6 +25,8 @@ const ItemCards = forwardRef<HTMLDivElement, Props>(
 
     const isPaid = useSelector(getPaidStatus);
     const isAdmin = useSelector(getIsAdmin);
+
+    if (isFetching) return <Spinner />;
 
     return (
       <>
