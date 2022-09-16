@@ -8,6 +8,7 @@ export const apiTypes = {
   USERS: 'users',
   COMPANIES: 'companies',
   SEARCH: 'search',
+  BRANDS: 'brands',
 };
 
 export default createApi({

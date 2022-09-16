@@ -30,6 +30,8 @@ import NotificationPlate from 'components/NotificationPlate';
 import { QueryStatus } from '@reduxjs/toolkit/query';
 import { MAX_LENGTH_NAME } from 'components/Popups/EditProfilePopup/validation';
 import AutocompleteField from 'components/AutocompleteField';
+import categoriesApi from 'store/api/categories';
+import brandsApi from 'store/api/brands';
 
 const fields = {
   TITLE: 'title',
@@ -54,6 +56,13 @@ function AddEditItemPopup({
   const { data: item } = itemsApi.useGetItemByIdQuery(itemId || 0, {
     skip: !itemId || !open,
   });
+
+  const { data: brands } = brandsApi.useGetAllBrandsQuery(
+    {
+      categoryId: category?.id,
+    },
+    { skip: !open || !category },
+  );
 
   const [createItemRequest, createItemResult] =
     itemsApi.useCreateItemMutation();
@@ -318,8 +327,11 @@ function AddEditItemPopup({
                 // helperText={errors[fields.BRAND]?.message}
                 {...field}
               >
-                <MenuItem value={1}>Брэнд 1</MenuItem>
-                <MenuItem value={2}>Брэнд 2</MenuItem>
+                {brands?.map((brand) => (
+                  <MenuItem key={brand.id} value={brand.id}>
+                    {brand.title}
+                  </MenuItem>
+                ))}
                 <MenuItem value={0}>Другой</MenuItem>
               </Select>
             </FormControl>
