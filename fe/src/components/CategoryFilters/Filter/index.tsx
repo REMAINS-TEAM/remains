@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
+  IconProps,
+  styled,
   Typography,
 } from '@mui/material';
 import FilterListItem from './FilterListItem';
@@ -10,6 +13,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const Filter = ({
   title,
+  icon,
   options,
   onChange,
   defaultExpanded,
@@ -18,6 +22,7 @@ const Filter = ({
   options: { id: number; title: string }[] | null;
   onChange?: (ids: number[]) => void;
   defaultExpanded?: boolean;
+  icon?: ReactElement;
 }) => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
@@ -29,7 +34,7 @@ const Filter = ({
 
   useEffect(() => {
     if (!options) return;
-    selectAllHandler();
+    // selectAllHandler();
   }, [options]);
 
   useEffect(() => {
@@ -52,7 +57,7 @@ const Filter = ({
   return (
     <Accordion
       disableGutters={true}
-      sx={{ boxShadow: 'none', pt: 0 }}
+      sx={{ boxShadow: 'none', pt: 0, background: 'none' }}
       defaultExpanded={defaultExpanded}
     >
       <AccordionSummary
@@ -67,9 +72,15 @@ const Filter = ({
         aria-controls="panel1bh-content"
         id="panel1bh-header"
       >
-        <Typography>{title}</Typography>
+        {icon &&
+          React.cloneElement(
+            icon,
+            { color: 'secondary', sx: { mr: 1.5 } },
+            null,
+          )}
+        <Typography color="secondary">{title}</Typography>
       </AccordionSummary>
-      <AccordionDetails sx={{ px: 0, pt: 0 }}>
+      <AccordionDetails sx={{ px: 0, pt: 1, mt: -1 }}>
         {options.map(({ id, title }) => (
           <FilterListItem
             key={id}

@@ -5,6 +5,7 @@ import Filter from './Filter';
 import { CategoryFiltersProps, FilterValues } from './types';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
+import { PrecisionManufacturingOutlined as BrandsIcon } from '@mui/icons-material';
 
 const CategoryFilters = ({
   categoryId,
@@ -46,13 +47,26 @@ const CategoryFilters = ({
       {/*</Typography>*/}
       <Box sx={styles.container}>
         <Filter
-          title="Брэнды"
+          title="Производитель"
+          icon={<BrandsIcon />}
           defaultExpanded
           options={filterOptions.brands}
           onChange={(ids) => changeFilter('brandIds', ids)}
         />
+        {/*<Filter*/}
+        {/*  title="Производитель"*/}
+        {/*  icon={<BrandsIcon />}*/}
+        {/*  options={filterOptions.brands}*/}
+        {/*  onChange={(ids) => changeFilter('brandIds', ids)}*/}
+        {/*/>*/}
+        {/*<Filter*/}
+        {/*  title="Производитель"*/}
+        {/*  icon={<BrandsIcon />}*/}
+        {/*  options={filterOptions.brands}*/}
+        {/*  onChange={(ids) => changeFilter('brandIds', ids)}*/}
+        {/*/>*/}
 
-        <Button variant="outlined" onClick={applyFilters} sx={{ mt: 1 }}>
+        <Button variant="outlined" onClick={applyFilters} sx={{ mt: 1.5 }}>
           Применить фильтры
         </Button>
       </Box>
