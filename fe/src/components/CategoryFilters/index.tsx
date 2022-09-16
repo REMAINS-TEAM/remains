@@ -47,11 +47,12 @@ const CategoryFilters = ({
       <Box sx={styles.container}>
         <Filter
           title="Брэнды"
+          defaultExpanded
           options={filterOptions.brands}
           onChange={(ids) => changeFilter('brandIds', ids)}
         />
 
-        <Button variant="contained" onClick={applyFilters} sx={{ mt: 2 }}>
+        <Button variant="outlined" onClick={applyFilters} sx={{ mt: 1 }}>
           Применить фильтры
         </Button>
       </Box>

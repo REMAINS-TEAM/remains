@@ -15,18 +15,18 @@ export const headerSide = {
   columnGap: 1,
   alignItems: 'center',
   justifyContent: 'space-between',
+  pl: 1,
 };
 
 export const headerTitle = {
   display: 'flex',
   alignItems: 'center',
   columnGap: 1,
-  pl: 1.5,
 };
 
 export const listContainer: SxProps = {
   p: 0,
-  pl: 2.5,
+  pl: 2,
   pb: 2,
   m: 0,
   mt: 1,

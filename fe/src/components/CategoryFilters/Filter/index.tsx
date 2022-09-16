@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Box,
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  List,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Typography,
 } from '@mui/material';
-import * as styles from './styles';
 import FilterListItem from './FilterListItem';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const Filter = ({
   title,
   options,
   onChange,
+  defaultExpanded,
 }: {
   title: string;
   options: { id: number; title: string }[] | null;
   onChange?: (ids: number[]) => void;
+  defaultExpanded?: boolean;
 }) => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
@@ -50,22 +50,26 @@ const Filter = ({
   };
 
   return (
-    <Box sx={styles.container}>
-      <Box sx={styles.header}>
-        <FormControlLabel
-          label={<Typography variant="subtitle2">{title + ':'}</Typography>}
-          control={
-            <Checkbox
-              sx={{ p: 0, pl: 1.4, pr: 2 }}
-              checked={isAllSelected}
-              indeterminate={!!selectedIds.length && !isAllSelected}
-              onChange={selectAllHandler}
-            />
-          }
-        />
-      </Box>
-      <Divider />
-      <List sx={styles.list}>
+    <Accordion
+      disableGutters={true}
+      sx={{ boxShadow: 'none', pt: 0 }}
+      defaultExpanded={defaultExpanded}
+    >
+      <AccordionSummary
+        sx={{
+          p: 0,
+          '& .Mui-expanded': {
+            my: 1,
+            minHeight: 0,
+          },
+        }}
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1bh-content"
+        id="panel1bh-header"
+      >
+        <Typography>{title}</Typography>
+      </AccordionSummary>
+      <AccordionDetails sx={{ px: 0, pt: 0 }}>
         {options.map(({ id, title }) => (
           <FilterListItem
             key={id}
@@ -75,8 +79,8 @@ const Filter = ({
             onChange={onChangeItemChecked}
           />
         ))}
-      </List>
-    </Box>
+      </AccordionDetails>
+    </Accordion>
   );
 };
 
