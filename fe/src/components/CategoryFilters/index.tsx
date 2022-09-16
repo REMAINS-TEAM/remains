@@ -7,10 +7,7 @@ import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { PrecisionManufacturingOutlined as BrandsIcon } from '@mui/icons-material';
 
-const CategoryFilters = ({
-  categoryId,
-  filterOptions,
-}: CategoryFiltersProps) => {
+const CategoryFilters = ({ filterOptions }: CategoryFiltersProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 

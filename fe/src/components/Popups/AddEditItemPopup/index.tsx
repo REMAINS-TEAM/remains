@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Popup from 'components/Popups/index';
 import { AddEditItemPopupProps } from 'components/Popups/AddEditItemPopup/types';
-import { Box, InputAdornment, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from '@mui/material';
 import UploadedImage from './units/UploadedImage';
 import * as styles from './styles';
 import { Controller, useForm } from 'react-hook-form';
@@ -19,11 +28,14 @@ import { useSelector } from 'react-redux';
 import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 import NotificationPlate from 'components/NotificationPlate';
 import { QueryStatus } from '@reduxjs/toolkit/query';
+import { MAX_LENGTH_NAME } from 'components/Popups/EditProfilePopup/validation';
+import AutocompleteField from 'components/AutocompleteField';
 
 const fields = {
   TITLE: 'title',
   DESCRIPTION: 'description',
   PRICE: 'price',
+  BRAND: 'brand',
 };
 
 type FieldsType = typeof fields[keyof typeof fields];
@@ -291,26 +303,50 @@ function AddEditItemPopup({
         )}
       />
 
-      <Controller
-        name="price"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            margin="dense"
-            id="price"
-            label="Цена"
-            type="number"
-            variant="outlined"
-            error={!!errors[fields.PRICE]}
-            helperText={errors[fields.PRICE]?.message}
-            InputProps={{
-              inputProps: { pattern: '[0-9]*' },
-              endAdornment: <InputAdornment position="end">₽</InputAdornment>,
-            }}
-            {...field}
-          />
-        )}
-      />
+      <Box width="100%" display="flex" columnGap={1} rowGap={1}>
+        <Controller
+          name="brand"
+          control={control}
+          render={({ field }) => (
+            <FormControl sx={{ flex: 1 }} margin="dense">
+              <InputLabel id="brand">Производитель</InputLabel>
+              <Select
+                labelId="brand"
+                label={'Производитель'}
+                variant="outlined"
+                error={!!errors[fields.BRAND]}
+                // helperText={errors[fields.BRAND]?.message}
+                {...field}
+              >
+                <MenuItem value={1}>Брэнд 1</MenuItem>
+                <MenuItem value={2}>Брэнд 2</MenuItem>
+                <MenuItem value={0}>Другой</MenuItem>
+              </Select>
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="price"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              sx={{ flex: 1 }}
+              margin="dense"
+              id="price"
+              label="Цена"
+              type="number"
+              variant="outlined"
+              error={!!errors[fields.PRICE]}
+              helperText={errors[fields.PRICE]?.message}
+              InputProps={{
+                inputProps: { pattern: '[0-9]*' },
+                endAdornment: <InputAdornment position="end">₽</InputAdornment>,
+              }}
+              {...field}
+            />
+          )}
+        />
+      </Box>
 
       <Typography variant="subtitle1" color="secondary" sx={{ mt: 1 }}>
         Фото (от 1 до 10):
