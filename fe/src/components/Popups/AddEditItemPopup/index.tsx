@@ -4,6 +4,7 @@ import { AddEditItemPopupProps } from 'components/Popups/AddEditItemPopup/types'
 import {
   Box,
   FormControl,
+  FormHelperText,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -37,7 +38,7 @@ const fields = {
   TITLE: 'title',
   DESCRIPTION: 'description',
   PRICE: 'price',
-  BRAND: 'brand',
+  BRAND: 'brandId',
 };
 
 type FieldsType = typeof fields[keyof typeof fields];
@@ -143,7 +144,11 @@ function AddEditItemPopup({
 
   if (!category && !itemId) return null;
 
+  console.log('errors', errors);
+
   const onSubmit = (fieldsValues: Record<FieldsType, string>) => {
+    console.log(fieldsValues);
+
     if (Object.keys(errors).length) return;
     if (!imageFiles.length && !imagesSrc.length) {
       notification.show(
@@ -314,17 +319,19 @@ function AddEditItemPopup({
 
       <Box width="100%" display="flex" columnGap={1} rowGap={1}>
         <Controller
-          name="brand"
+          name={fields.BRAND}
           control={control}
           render={({ field }) => (
-            <FormControl sx={{ flex: 1 }} margin="dense">
-              <InputLabel id="brand">Производитель</InputLabel>
+            <FormControl
+              sx={{ flex: 1 }}
+              margin="dense"
+              error={!!errors[fields.BRAND]}
+            >
+              <InputLabel id={fields.BRAND}>Производитель</InputLabel>
               <Select
-                labelId="brand"
+                labelId={fields.BRAND}
                 label={'Производитель'}
                 variant="outlined"
-                error={!!errors[fields.BRAND]}
-                // helperText={errors[fields.BRAND]?.message}
                 {...field}
               >
                 {brands?.map((brand) => (
@@ -334,6 +341,7 @@ function AddEditItemPopup({
                 ))}
                 <MenuItem value={0}>Другой</MenuItem>
               </Select>
+              <FormHelperText>{errors[fields.BRAND]?.message}</FormHelperText>
             </FormControl>
           )}
         />
