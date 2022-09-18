@@ -144,11 +144,7 @@ function AddEditItemPopup({
 
   if (!category && !itemId) return null;
 
-  console.log('errors', errors);
-
   const onSubmit = (fieldsValues: Record<FieldsType, string>) => {
-    console.log(fieldsValues);
-
     if (Object.keys(errors).length) return;
     if (!imageFiles.length && !imagesSrc.length) {
       notification.show(

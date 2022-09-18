@@ -1,11 +1,8 @@
-import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
-  IconProps,
-  styled,
   Typography,
 } from '@mui/material';
 import FilterListItem from './FilterListItem';
@@ -17,25 +14,24 @@ const Filter = ({
   options,
   onChange,
   defaultExpanded,
+  defaultSelectedIds,
 }: {
   title: string;
   options: { id: number; title: string }[] | null;
   onChange?: (ids: number[]) => void;
   defaultExpanded?: boolean;
   icon?: ReactElement;
+  defaultSelectedIds?: number[];
 }) => {
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [selectedIds, setSelectedIds] = useState<number[]>(
+    defaultSelectedIds || [],
+  );
 
   const isAllSelected = selectedIds.length === options?.length;
 
   const selectAllHandler = () => {
     setSelectedIds(isAllSelected ? [] : options?.map(({ id }) => id) || []);
   };
-
-  useEffect(() => {
-    if (!options) return;
-    // selectAllHandler();
-  }, [options]);
 
   useEffect(() => {
     if (!onChange) return;
