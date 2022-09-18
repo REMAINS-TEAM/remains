@@ -50,15 +50,21 @@ const CategoryFilters = ({ filterOptions }: CategoryFiltersProps) => {
     if (isMobile) hideMobileMenu();
   };
 
-  const defaultFilters: FilterValues = useMemo(
-    () => ({
+  const resetFilters = () => {
+    setFilters(null);
+    navigate(`${location.pathname}`);
+
+    if (isMobile) hideMobileMenu();
+  };
+
+  useEffect(() => {
+    setFilters({
       [filterNames.BRAND_IDS]: queryParams
         .get(filterNames.BRAND_IDS)
         ?.split(',')
         .map(Number),
-    }),
-    [queryParams],
-  );
+    });
+  }, [queryParams]);
 
   if (!isNotEmpty) return null;
 
@@ -67,13 +73,16 @@ const CategoryFilters = ({ filterOptions }: CategoryFiltersProps) => {
       <Filter
         title="Брэнд"
         icon={<BrandsIcon />}
-        defaultSelectedIds={defaultFilters[filterNames.BRAND_IDS]}
         defaultExpanded
         options={filterOptions.brands}
+        values={filters?.brandIds || []}
         onChange={(ids) => changeFilter(filterNames.BRAND_IDS, ids)}
       />
 
-      <Button variant="contained" onClick={applyFilters} sx={{ mt: 1.5 }}>
+      <Button variant="outlined" onClick={resetFilters} sx={{ mt: 1.5 }}>
+        Сбросить
+      </Button>
+      <Button variant="contained" onClick={applyFilters} sx={{ mt: 1 }}>
         Применить
       </Button>
     </Box>

@@ -12,42 +12,27 @@ const Filter = ({
   title,
   icon,
   options,
+  values,
   onChange,
   defaultExpanded,
-  defaultSelectedIds,
 }: {
   title: string;
   options: { id: number; title: string }[] | null;
+  values?: number[];
   onChange?: (ids: number[]) => void;
   defaultExpanded?: boolean;
   icon?: ReactElement;
-  defaultSelectedIds?: number[];
 }) => {
-  const [selectedIds, setSelectedIds] = useState<number[]>(
-    defaultSelectedIds || [],
-  );
-
-  const isAllSelected = selectedIds.length === options?.length;
-
-  const selectAllHandler = () => {
-    setSelectedIds(isAllSelected ? [] : options?.map(({ id }) => id) || []);
-  };
-
-  useEffect(() => {
-    if (!onChange) return;
-    onChange(isAllSelected ? [] : selectedIds);
-  }, [selectedIds]);
-
   if (!options || !options?.length) return null;
 
   const onChangeItemChecked = (id: number) => {
-    setSelectedIds((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((_id) => _id !== id);
-      } else {
-        return [...prev, id];
-      }
-    });
+    if (!onChange) return;
+
+    if (values?.includes(id)) {
+      return onChange(values.filter((_id) => _id !== id));
+    } else {
+      return onChange([...(values || []), id]);
+    }
   };
 
   return (
@@ -82,7 +67,7 @@ const Filter = ({
             key={id}
             id={id}
             title={title}
-            checked={selectedIds.includes(id)}
+            checked={values?.includes(id)}
             onChange={onChangeItemChecked}
           />
         ))}
