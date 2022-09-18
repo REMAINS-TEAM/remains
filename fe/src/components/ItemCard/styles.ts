@@ -35,7 +35,6 @@ export const rightSide: SxProps = {
   height: '100%',
   columnGap: 2,
   textAlign: 'right',
-  pt: 1,
 
   '@media screen and (max-width: 600px)': {
     justifyContent: 'flex-end',
@@ -46,6 +45,6 @@ export const rightSide: SxProps = {
 export const dotsButton: SxProps = {
   position: 'absolute',
   right: '-4px',
-  top: '-12px',
+  top: '-14px',
   p: 1,
 };

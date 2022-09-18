@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, useMediaQuery, useTheme } from '@mui/material';
 import * as styles from './styles';
 import Filter from './Filter';
 import {
@@ -12,10 +12,17 @@ import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { PrecisionManufacturingOutlined as BrandsIcon } from '@mui/icons-material';
 import useRouterQuery from 'hooks/useRouterQuery';
+import { useDispatch } from 'react-redux';
+import { setOpen } from 'store/slices/menu';
 
 const CategoryFilters = ({ filterOptions }: CategoryFiltersProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   const navigate = useNavigate();
   const location = useLocation();
+
+  const dispatch = useDispatch();
 
   const queryParams = useRouterQuery();
 
@@ -24,6 +31,8 @@ const CategoryFilters = ({ filterOptions }: CategoryFiltersProps) => {
   const isNotEmpty = Object.values(filterOptions).some(
     (option) => option?.length,
   );
+
+  const hideMobileMenu = () => dispatch(setOpen(false));
 
   const changeFilter = (name: FilterName, ids: number[]) => {
     setFilters((prev) => ({ ...prev, [name]: ids }));
@@ -37,6 +46,8 @@ const CategoryFilters = ({ filterOptions }: CategoryFiltersProps) => {
     };
 
     navigate(`${location.pathname}?${new URLSearchParams(query)}`);
+
+    if (isMobile) hideMobileMenu();
   };
 
   const defaultFilters: FilterValues = useMemo(
@@ -54,7 +65,7 @@ const CategoryFilters = ({ filterOptions }: CategoryFiltersProps) => {
   return (
     <Box sx={styles.container}>
       <Filter
-        title="Производитель"
+        title="Брэнд"
         icon={<BrandsIcon />}
         defaultSelectedIds={defaultFilters[filterNames.BRAND_IDS]}
         defaultExpanded
@@ -62,8 +73,8 @@ const CategoryFilters = ({ filterOptions }: CategoryFiltersProps) => {
         onChange={(ids) => changeFilter(filterNames.BRAND_IDS, ids)}
       />
 
-      <Button variant="outlined" onClick={applyFilters} sx={{ mt: 1.5 }}>
-        Применить фильтры
+      <Button variant="contained" onClick={applyFilters} sx={{ mt: 1.5 }}>
+        Применить
       </Button>
     </Box>
   );

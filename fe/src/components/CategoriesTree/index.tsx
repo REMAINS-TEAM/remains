@@ -110,13 +110,13 @@ export default function CategoriesTree({
             </Typography>
           )}
           {isMobile &&
-            data?.parentCategory?.id === 0 &&
+            data?.parentCategory?.id !== 0 &&
             !!data?.parentCategory?._count.items && (
               <NotificationPlate
                 title="Закройте меню, чтобы увидеть товары"
                 color="secondary"
                 onClick={hideMobileMenu}
-                sx={{ mt: 3, pl: 0.3, fontSize: 14, cursor: 'pointer' }}
+                sx={{ mt: 3, fontSize: 14, cursor: 'pointer' }}
               />
             )}
         </Box>

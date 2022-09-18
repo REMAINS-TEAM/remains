@@ -28,6 +28,6 @@ export const AddItemSchema = Joi.object({
     .message('Введите корректную цену'),
   brandId: Joi.number()
     .required()
-    .messages({ 'number.base': 'Выберите производителя' })
+    .messages({ 'number.base': 'Выберите брэнд' })
     .custom((value) => (value === 0 ? undefined : value)),
 });

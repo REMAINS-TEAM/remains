@@ -82,15 +82,15 @@ function ItemCard({ item }: { item: Item }) {
                   component="div"
                   sx={{
                     fontFamily: 'inherit',
-                    lineHeight: 1,
+                    lineHeight: 0.6,
                     whiteSpace: 'nowrap',
                   }}
                 >
                   {item.price.toLocaleString('ru')} ₽
                 </Typography>
-                <br />
                 {!isMobile && (
                   <Button
+                    sx={{ my: 2 }}
                     aria-controls="details"
                     variant="outlined"
                     size={'small'}
@@ -100,12 +100,12 @@ function ItemCard({ item }: { item: Item }) {
                   </Button>
                 )}
               </Box>
-              <Box display="flex" flexDirection="column">
+              <Box display="flex" flexDirection="column" sx={{ mt: 1 }}>
                 {item.brand && (
                   <Typography
                     variant="caption"
                     color="secondary"
-                    sx={{ whiteSpace: 'nowrap' }}
+                    sx={{ whiteSpace: 'nowrap', lineHeight: 3 }}
                   >
                     {item.brand?.title}
                   </Typography>
@@ -113,9 +113,9 @@ function ItemCard({ item }: { item: Item }) {
                 <Typography
                   variant="caption"
                   color="secondary"
-                  sx={{ whiteSpace: 'nowrap' }}
+                  sx={{ whiteSpace: 'nowrap', lineHeight: 0.5 }}
                 >
-                  {standardFormat(item.updatedAt, true)}
+                  {standardFormat(item.updatedAt)}
                 </Typography>
               </Box>
             </Box>

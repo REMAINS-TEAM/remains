@@ -323,10 +323,10 @@ function AddEditItemPopup({
               margin="dense"
               error={!!errors[fields.BRAND]}
             >
-              <InputLabel id={fields.BRAND}>Производитель</InputLabel>
+              <InputLabel id={fields.BRAND}>Брэнд</InputLabel>
               <Select
                 labelId={fields.BRAND}
-                label={'Производитель'}
+                label="Брэнд"
                 variant="outlined"
                 {...field}
               >

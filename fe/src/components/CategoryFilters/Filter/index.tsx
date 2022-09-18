@@ -76,7 +76,7 @@ const Filter = ({
           )}
         <Typography color="secondary">{title}</Typography>
       </AccordionSummary>
-      <AccordionDetails sx={{ px: 0, pt: 1, mt: -1 }}>
+      <AccordionDetails sx={{ px: 0, pt: 1 }}>
         {options.map(({ id, title }) => (
           <FilterListItem
             key={id}
