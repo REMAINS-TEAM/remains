@@ -29,6 +29,10 @@ export const itemFields: InfoField[] = [
     accessor: (item) => item.category?.title || 'Не указана',
   },
   {
+    name: 'Брэнд',
+    accessor: (item) => item.brand?.title || 'Не указан',
+  },
+  {
     name: 'Цена',
     accessor: (item) => (
       <Typography

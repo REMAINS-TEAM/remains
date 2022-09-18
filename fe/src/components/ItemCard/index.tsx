@@ -100,7 +100,16 @@ function ItemCard({ item }: { item: Item }) {
                   </Button>
                 )}
               </Box>
-              <Box>
+              <Box display="flex" flexDirection="column">
+                {item.brand && (
+                  <Typography
+                    variant="caption"
+                    color="secondary"
+                    sx={{ whiteSpace: 'nowrap' }}
+                  >
+                    {item.brand?.title}
+                  </Typography>
+                )}
                 <Typography
                   variant="caption"
                   color="secondary"

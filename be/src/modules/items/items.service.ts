@@ -55,6 +55,7 @@ export class ItemsService {
 
     const list = await this.prisma.item.findMany({
       where: whereFilter,
+      include: { brand: { select: { id: true, title: true } } },
       take: limit,
       skip: offset,
       orderBy: [{ createdAt: 'desc' }],
@@ -74,6 +75,7 @@ export class ItemsService {
               company: { select: { id: true, name: true, description: true } },
             },
           },
+          brand: { select: { id: true, title: true } },
           category: { select: { title: true, description: true } },
         },
       });

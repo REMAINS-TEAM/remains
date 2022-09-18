@@ -17,6 +17,7 @@ export interface Item {
   updatedAt: Date;
   user: Partial<User> | null;
   category: Partial<Category>;
+  brand: { id: number; title: string } | null;
 }
 
 const initialState: {
