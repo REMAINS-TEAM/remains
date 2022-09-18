@@ -75,7 +75,7 @@ export class CategoriesService {
 
         //add to end
         if (!!itemsWithUniqueBrands.find(({ brand }) => !brand)) {
-          filters.brands.push({ id: -1, title: 'Не указан' });
+          filters.brands.push({ id: 0, title: 'Не указан' });
         }
 
         //make a tree

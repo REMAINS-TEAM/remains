@@ -21,8 +21,6 @@ const CategoryFilters = ({ filterOptions }: CategoryFiltersProps) => {
     setFilters((prev) => ({ ...prev, [name]: ids }));
   };
 
-  // TODO: показывать ошибку если не выбран ин один бренд
-
   const applyFilters = () => {
     const query = {
       ...(filters?.brandIds.length && { brandIds: filters.brandIds.join(',') }),
@@ -34,39 +32,18 @@ const CategoryFilters = ({ filterOptions }: CategoryFiltersProps) => {
   if (!isNotEmpty) return null;
 
   return (
-    <Box sx={{ mt: 3 }}>
-      {/*<Typography*/}
-      {/*  variant="subtitle2"*/}
-      {/*  color="secondary"*/}
-      {/*  sx={{ pl: 2.5, fontWeight: 600, mb: 1 }}*/}
-      {/*>*/}
-      {/*  Фильтры:*/}
-      {/*</Typography>*/}
-      <Box sx={styles.container}>
-        <Filter
-          title="Производитель"
-          icon={<BrandsIcon />}
-          defaultExpanded
-          options={filterOptions.brands}
-          onChange={(ids) => changeFilter('brandIds', ids)}
-        />
-        {/*<Filter*/}
-        {/*  title="Производитель"*/}
-        {/*  icon={<BrandsIcon />}*/}
-        {/*  options={filterOptions.brands}*/}
-        {/*  onChange={(ids) => changeFilter('brandIds', ids)}*/}
-        {/*/>*/}
-        {/*<Filter*/}
-        {/*  title="Производитель"*/}
-        {/*  icon={<BrandsIcon />}*/}
-        {/*  options={filterOptions.brands}*/}
-        {/*  onChange={(ids) => changeFilter('brandIds', ids)}*/}
-        {/*/>*/}
+    <Box sx={styles.container}>
+      <Filter
+        title="Производитель"
+        icon={<BrandsIcon />}
+        defaultExpanded
+        options={filterOptions.brands}
+        onChange={(ids) => changeFilter('brandIds', ids)}
+      />
 
-        <Button variant="outlined" onClick={applyFilters} sx={{ mt: 1.5 }}>
-          Применить фильтры
-        </Button>
-      </Box>
+      <Button variant="outlined" onClick={applyFilters} sx={{ mt: 1.5 }}>
+        Применить фильтры
+      </Button>
     </Box>
   );
 };

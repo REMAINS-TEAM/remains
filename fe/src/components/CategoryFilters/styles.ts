@@ -1,10 +1,8 @@
-import { Theme } from '@mui/material';
-
 export const container = {
   display: 'flex',
   flexDirection: 'column',
   // rowGap: 2,
-  mt: 1,
+  mt: 3,
   px: 2.5,
   pt: 1,
   pb: 3,

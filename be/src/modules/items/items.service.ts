@@ -43,7 +43,12 @@ export class ItemsService {
       userId: filter?.userId,
       categoryId: filter?.categoryId,
       user: { companyId: filter?.companyId },
-      brandId: { in: filter?.brandIds },
+      OR: filter?.brandIds
+        ? [
+            { brandId: { in: filter?.brandIds } },
+            { brandId: filter?.brandIds?.includes(0) ? null : undefined },
+          ]
+        : undefined,
     };
 
     const amount = await this.prisma.item.count({ where: whereFilter });
