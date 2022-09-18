@@ -10,7 +10,7 @@ export class BrandsService {
 
   async findAll({ categoryId }: FindAllDto) {
     let brands: Brand[] | null;
-    let rootCategory = null;
+    let categoryIdsTree: number[] = [];
 
     if (categoryId !== undefined) {
       let category: Category | null;
@@ -25,31 +25,32 @@ export class BrandsService {
       if (!category) throw new NotFoundException('No such category');
 
       let parentId = category.parentId;
-      if (parentId === 0) {
-        rootCategory = category;
-      } else {
-        while (parentId !== 0) {
+      categoryIdsTree = [category.id];
+
+      let isError = false;
+      while (parentId !== 0 && !isError) {
+        try {
           const category = await this.prisma.category.findUnique({
             where: { id: parentId },
           });
           if (category) {
             parentId = category.parentId;
-            rootCategory = category;
+            categoryIdsTree.push(category.id);
           } else {
-            break;
+            isError = true;
           }
+        } catch (e) {
+          isError = true;
         }
       }
-
-      if (!rootCategory) return [];
     }
 
     try {
-      // find brands for root category
+      // find brands for categories tree
       brands = await this.prisma.brand.findMany({
         where: {
           categories: {
-            some: { id: rootCategory?.id },
+            some: { id: { in: categoryIdsTree } },
           },
         },
       });
