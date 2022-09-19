@@ -90,7 +90,6 @@ export class CategoriesService {
             parentId = category.parentId;
             tree.unshift(category);
           } else {
-            // TODO: может вызвать исключение? Произойдет если одна из категорий удалена например
             break;
           }
         }

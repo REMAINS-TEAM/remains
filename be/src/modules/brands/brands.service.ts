@@ -27,8 +27,7 @@ export class BrandsService {
       let parentId = category.parentId;
       categoryIdsTree = [category.id];
 
-      let isError = false;
-      while (parentId !== 0 && !isError) {
+      while (parentId !== 0) {
         try {
           const category = await this.prisma.category.findUnique({
             where: { id: parentId },
@@ -37,10 +36,10 @@ export class BrandsService {
             parentId = category.parentId;
             categoryIdsTree.push(category.id);
           } else {
-            isError = true;
+            break;
           }
         } catch (e) {
-          isError = true;
+          break;
         }
       }
     }
