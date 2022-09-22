@@ -29,9 +29,6 @@ import { useSelector } from 'react-redux';
 import { getIsAdmin, getPaidStatus } from 'store/selectors/user';
 import NotificationPlate from 'components/NotificationPlate';
 import { QueryStatus } from '@reduxjs/toolkit/query';
-import { MAX_LENGTH_NAME } from 'components/Popups/EditProfilePopup/validation';
-import AutocompleteField from 'components/AutocompleteField';
-import categoriesApi from 'store/api/categories';
 import brandsApi from 'store/api/brands';
 
 const fields = {
@@ -60,9 +57,9 @@ function AddEditItemPopup({
 
   const { data: brands } = brandsApi.useGetAllBrandsQuery(
     {
-      categoryId: category?.id,
+      categoryId: category?.id || item?.categoryId,
     },
-    { skip: !open || !category },
+    { skip: !open || (!category && !item?.categoryId) },
   );
 
   const [createItemRequest, createItemResult] =
@@ -115,10 +112,12 @@ function AddEditItemPopup({
 
   useEffect(() => {
     if (!item) return;
+
     reset({
       [fields.TITLE]: item.title,
       [fields.DESCRIPTION]: item.description,
       [fields.PRICE]: item.price,
+      [fields.BRAND]: item.brand?.id || 0,
     } as Record<FieldsType, string>);
     setImagesSrc(
       item.images.map((fileName) => `/api/storage/items/${itemId}/${fileName}`),

@@ -16,6 +16,7 @@ import routes from 'routes';
 import AddEditItemPopup from 'components/Popups/AddEditItemPopup';
 import { useSelector } from 'react-redux';
 import { getIsAdmin } from 'store/selectors/user';
+import { Category } from 'store/slices/categories';
 
 const ItemEditPopupMenu = ({ item, sx }: ItemEditPopupMenuProps) => {
   const isAdmin = useSelector(getIsAdmin);

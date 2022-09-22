@@ -1,6 +1,7 @@
 import { SxProps } from '@mui/system';
 
 export const rootContainer: SxProps = {
+  width: '100%',
   position: 'absolute',
   left: '50%',
   top: '50%',
