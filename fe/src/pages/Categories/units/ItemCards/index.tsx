@@ -20,14 +20,17 @@ interface Props {
 
 const ItemCards = forwardRef<HTMLDivElement, Props>(
   ({ items = [], isFetching, hidePayNotification, emptyState }, ref) => {
-    const { isSuccess: isUserSuccess, isError: isUserError } =
-      userApi.useMeQuery();
+    const {
+      isSuccess: isUserSuccess,
+      isError: isUserError,
+      isFetching: isUserFetching,
+    } = userApi.useMeQuery();
     const isGetUserFinished = isUserSuccess || isUserError;
 
     const isPaid = useSelector(getPaidStatus);
     const isAdmin = useSelector(getIsAdmin);
 
-    if (isFetching) return <Spinner />;
+    if (isFetching || isUserFetching) return <Spinner />;
 
     return (
       <>
