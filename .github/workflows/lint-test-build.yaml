@@ -2,7 +2,9 @@ name: Linter and build
 
 on:
   pull_request:
-    types: [opened, reopened]
+    branches:
+      - main
+      - master
 
 jobs:
   linter-and-test-build:
