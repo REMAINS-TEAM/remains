@@ -7,7 +7,7 @@ on:
 
 jobs:
   linter-and-test-build:
-    name: "Testing"
+    name: "Build test"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
