@@ -2,12 +2,10 @@ name: Build test
 
 on:
   pull_request:
-    branches:
-      - main
-      - master
+    branches: [ main ]
 
 jobs:
-  linter-and-test-build:
+  build:
     name: "Build test"
     runs-on: ubuntu-latest
     steps:
